@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
 </head>
 </head>
+    @include('partials.header')
     <main class="erp-menu-container">
         <div class="erp-menu">
             <div class="option">
@@ -69,6 +70,7 @@
             </div>
         </div>
     </main>
+    @include('partials.footer')
     <script src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>
