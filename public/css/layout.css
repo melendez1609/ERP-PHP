@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.erp-menu-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: #f0ece9;
+}
+
+.erp-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 1000px;
+  height: auto;
+}
+
+.option {
+  width: 24%;
+}
+
+.icon {
+  display: block;
+  width: 50%;
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+.icon:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  filter: drop-shadow(8px 8px 10px rgb(192, 187, 187));
+}
+
+.icon-name {
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  text-align: center;
+  padding: 10px;
+}
