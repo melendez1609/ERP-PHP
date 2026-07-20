@@ -1,8 +1,9 @@
 <footer class="footer-main-container">
-    <div id="clock-date" class="clock-date">
-        Cargando fecha...
+    <div class="footer-welcome">
+       Bienvenido, Elmer Melendez
     </div> 
-    <div id="clock-time" class="clock-time">
-        00:00:00
+    <div class="footer-datetime">
+        <span></span> 
+        <span></span> 
     </div>
 </footer>

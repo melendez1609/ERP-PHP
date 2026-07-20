@@ -18,7 +18,7 @@ html, body {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 5vh;
+  height: 6vh;
   border-bottom: 2px solid #DFDFE3;
   background-color: #F0F0F0;
 }
@@ -33,13 +33,42 @@ html, body {
   color: #132873;
 }
 
+.logout-session {
+  height: 80%;
+  border-radius: 10px;
+  margin: 0 2vh 0 auto;
+}
+
+.logout-session:hover {
+  filter: drop-shadow(4px 4px 6px rgb(192, 187, 187)) grayscale(100%);
+}
+
+/*************************************************************************************/
+.volume-control {
+  position: fixed;
+  width: 6vh;
+  right: 5vh;
+  bottom: 8vh;
+}
+
+.audio-control {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.audio-control:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  filter: drop-shadow(8px 8px 10px rgb(192, 187, 187)) grayscale(100%);
+}
+
 /*************************************************************************************/
 .erp-menu-container {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 90vh;
+  height: 89vh;
   background-color: #FFFFFF;
 }
 
@@ -65,7 +94,7 @@ html, body {
 .icon:hover {
   cursor: pointer;
   transform: scale(1.03);
-  filter: drop-shadow(8px 8px 10px rgb(192, 187, 187));
+  filter: drop-shadow(8px 8px 10px rgb(192, 187, 187)) grayscale(100%);
 }
 
 .icon-name {
@@ -80,8 +109,103 @@ html, body {
   justify-content: space-between;
   width: 100%;
   height: 5vh;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
   border-top: 2px solid #DFDFE3;
   background-color: #F0F0F0;
+}
+
+.footer-welcome {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-left: 2%;
+}
+
+.footer-datetime {
+  display: flex;
+  gap: 10%;
+  align-items: center;
+  height: 100%;
+  padding-right: 3%;
+}
+
+/*************************************************************************************/
+.login-main-container {
+  width: 100%;
+  height: 89vh;
+  font-family: "Montserrat", sans-serif;
+  background-color: #FFFFFF;
+}
+
+.login-section-top {
+  width: 100%;
+}
+
+.login-logo {
+  display: block;
+  width: 16%;
+  padding: 7vh 0;
+  margin: 0 auto;
+}
+
+.login-input-container {
+  display: flex;
+  gap: 5vh;
+  width: 65%;
+  background-color: #FFFFFF;
+  margin: 0 auto;
+}
+
+.login-section-left {
+  width: 70%;
+  font-weight: bold;
+  color: #132873;
+}
+
+.login-tittle {
+  font-size: 6vh;
+  padding-bottom: 4vh;
+}
+
+.login-sub-tittle-1 {
+  font-size: 4vh;
+  color: #000000;
+}
+
+.login-sub-tittle-2 {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 4vh;
+  color: #000000;
+}
+
+.login-section-right {
+  width: 30%;
+}
+
+.credentials-input {
+  width: 100%;
+  font-size: 2vh;
+  padding: 4%;
+  border: 2px solid #DFDFE3;
+  border-radius: 10px;
+}
+
+.submit-input {
+  width: 100%;
+  font-size: 2vh;
+  font-weight: bold;
+  padding: 4%;
+  color: #FFFFFF;
+  filter: drop-shadow(5px 5px 5px rgb(192, 187, 187));
+  border-radius: 10px;
+  background-color: #132873;
+}
+
+.login-disclaimer{
+  font-size: 2vh;
+  margin-top: 4vh;
 }
 
 /*************************************************************************************/

@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - ERP</title>
+    <title>G-ERP | Panel</title>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
 </head>
 </head>
     @include('partials.header')
+    <div class="volume-control">
+        <img class="audio-control" src="{{ asset('icons/audio.png') }}" alt="audio">
+    </div>
     <main class="erp-menu-container">
         <div class="erp-menu">
             <div class="option">
@@ -71,6 +74,6 @@
         </div>
     </main>
     @include('partials.footer')
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
 </html>
