@@ -23,11 +23,11 @@
                 <img class="icon" src="{{ asset('icons/invoice.png') }}" alt="invoice">
                 <h4 class="icon-name">Factura</h4>
             </div>
-            <div class="option">
+            <a class="option" href="{{ route('cash-register.index') }}">
                 <img class="icon" src="{{ asset('icons/cash-register.png') }}" alt="cash-register">
                 <h4 class="icon-name">Caja Registradora</h4>
-            </div>
-            <div class="option">
+            </a>
+            <div class="option" href="{{ route('cash-register.index') }}">
                 <img class="icon" src="{{ asset('icons/in-inventory.png') }}" alt="in-inventory">
                 <h4 class="icon-name">Inventario</h4>
             </div>

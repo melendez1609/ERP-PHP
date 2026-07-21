@@ -17,14 +17,21 @@ html, body {
 .header-main-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 6vh;
   border-bottom: 2px solid #DFDFE3;
   background-color: #F0F0F0;
 }
 
-.logo-header {
+.header-section-left {
+  display: flex;
+  align-items: center;
   height: 80%;
+}
+
+.logo-header {
+  height: 100%;
   padding: 0 20px;
 }
 
@@ -34,13 +41,41 @@ html, body {
   color: #132873;
 }
 
-.logout-session {
-  height: 80%;
+.rol-name {
+  height: 85%;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  font-size: 1.7vh;
   border-radius: 1vh;
-  margin: 0 2vh 0 auto;
+  margin: 0 1vh;
+  padding: 1vh 2vh;
+  color: #FFFFFF;
+  background-color: #132873;
 }
 
-.logout-session:hover {
+.header-section-right {
+  display: flex;
+  align-items: center;
+  height: 80%;
+}
+
+.go-back-option {
+  height: 100%;
+  border-radius: 1vh;
+}
+
+.go-back-icon {
+  height: 100%;
+  border-radius: 1vh;
+}
+
+.logout-session {
+  height: 100%;
+  border-radius: 1vh;
+  margin: 0 2vh 0 1vh;
+}
+
+.logout-session:hover, .go-back-icon:hover{
   filter: drop-shadow(4px 4px 6px rgb(192, 187, 187)) grayscale(100%);
 }
 
@@ -76,19 +111,20 @@ html, body {
 .erp-menu {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  width: 1000px;
-  height: auto;
+  gap: 1vh;
+  width: 55%;
 }
 
 .option {
-  width: 24%;
+  width: 28vh;
+  text-decoration: none;
+  color: inherit;
 }
 
 .icon {
   display: block;
   width: 50%;
-  border-radius: 20px;
+  border-radius: 2vh;
   margin: 0 auto;
 }
 
@@ -219,6 +255,13 @@ html, body {
     border-radius: 6px;
     margin-bottom: 15px;
     font-size: 14px;
+}
+
+/*************************************************************************************/
+@media screen and (max-width: 1366px) {
+  .erp-menu {
+    width: 63%;
+  }
 }
 
 /*************************************************************************************/

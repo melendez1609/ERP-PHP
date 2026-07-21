@@ -10,4 +10,6 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/cash-register', function () {return view('cash-register.index');})->name('cash-register.index');
+    
 });
