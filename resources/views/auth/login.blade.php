@@ -20,10 +20,17 @@
                 <h2 class="login-sub-tittle-1">Sistema de Gestión Empresarial y Punto de Venta</h2>
                 <h2 class="login-sub-tittle-2">Para soporte, por favor contáctenos en support@gerp.com</h2>
             </section>
-            <form class="login-section-right">
-                <input class="credentials-input" type="text" placeholder="Usuario"><br><br>
-                <input class="credentials-input" type="text" placeholder="Contraseña"><br><br>
-                <input class="submit-input" type="submit" value="Iniciar sesión ">
+            <form class="login-section-right" action="{{ route('login.post') }}" method="POST">
+                @csrf
+
+                @if ($errors->any())
+                    <div class="alert-error">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+                <input class="credentials-input" type="email" name="email" placeholder="Correo electrónico" value="{{ old('email') }}" required><br><br>
+                <input class="credentials-input" type="password" name="password" placeholder="Contraseña" required><br><br>
+                <input class="submit-input" type="submit" value="Iniciar sesión">
                 <p class="login-disclaimer"><b>Importante:</b> Sus credenciales son personales y confidenciales. No las comparta. Para reportar incidencias, contacte al área de soporte.</p>
             </form>
         </section>

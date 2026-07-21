@@ -208,5 +208,15 @@ html, body {
   margin-top: 4vh;
 }
 
+.alert-error {
+    color: #dc2626;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
 /*************************************************************************************/
 

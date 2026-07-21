@@ -1,6 +1,8 @@
 <footer class="footer-main-container">
     <div class="footer-welcome">
-       Bienvenido, Elmer Melendez
+        @auth
+            Bienvenido, {{ auth()->user()->name }}
+        @endauth
     </div> 
     <div class="footer-datetime">
         <span></span> 
