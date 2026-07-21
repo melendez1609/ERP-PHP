@@ -30,12 +30,13 @@ html, body {
 
 .logo-tittle {
   font-family: "Montserrat", sans-serif;
+  font-size: 2.8vh;
   color: #132873;
 }
 
 .logout-session {
   height: 80%;
-  border-radius: 10px;
+  border-radius: 1vh;
   margin: 0 2vh 0 auto;
 }
 
@@ -53,7 +54,7 @@ html, body {
 
 .audio-control {
   width: 100%;
-  border-radius: 20px;
+  border-radius: 1.5vh;
 }
 
 .audio-control:hover {
@@ -120,6 +121,7 @@ html, body {
   align-items: center;
   height: 100%;
   padding-left: 2%;
+  font-size: 1.9vh;
 }
 
 .footer-datetime {
@@ -128,6 +130,7 @@ html, body {
   align-items: center;
   height: 100%;
   padding-right: 3%;
+  font-size: 1.9vh;
 }
 
 /*************************************************************************************/
