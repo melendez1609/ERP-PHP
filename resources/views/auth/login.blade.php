@@ -17,8 +17,8 @@
         <section class="login-input-container">
             <section class="login-section-left">
                 <h1 class="login-tittle">Bienvenido a G-ERP</h1>
-                <h2 class="login-sub-tittle-1">Sistema de Gestión Empresarial y Punto de Venta</h2>
-                <h2 class="login-sub-tittle-2">Para soporte, por favor contáctenos en support@gerp.com</h2>
+                <h2 class="login-sub-tittle-1">Sistema de Gestión de Negocios y Punto de Venta</h2>
+                <h2 class="login-sub-tittle-2">Para soporte, por favor contáctenos en soporte@gerp.com</h2>
             </section>
             <form class="login-section-right" action="{{ route('login.post') }}" method="POST">
                 @csrf
