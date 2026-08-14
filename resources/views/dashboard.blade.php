@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +7,10 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
 </head>
-</head>
+<body>
     @include('partials.header')
     <div class="volume-control">
-        <img class="audio-control" src="{{ asset('icons/audio.png') }}" alt="audio">
+        <img class="audio-control volume-icon" src="{{ asset('icons/audio.png') }}" alt="audio">
     </div>
     <main class="erp-menu-container">
         <div class="erp-menu">
@@ -27,10 +26,10 @@
                 <img class="icon" src="{{ asset('icons/cash-register.png') }}" alt="cash-register">
                 <h4 class="icon-name">Caja Registradora</h4>
             </a>
-            <div class="option" href="{{ route('cash-register.index') }}">
+            <a class="option" href="{{ route('inventory.index') }}">
                 <img class="icon" src="{{ asset('icons/in-inventory.png') }}" alt="in-inventory">
                 <h4 class="icon-name">Inventario</h4>
-            </div>
+            </a>
             <div class="option">
                 <img class="icon" src="{{ asset('icons/sales-report.png') }}" alt="sales-report">
                 <h4 class="icon-name">Reporte de Ventas</h4>

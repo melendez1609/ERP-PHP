@@ -6,14 +6,22 @@
   box-sizing: border-box;
 }
 
-/*************************************************************************************/
-
+/* Global Styles *********************************************************************/
 html, body {
   width: 100%;
   height: 100%;
 }
 
-/*************************************************************************************/
+.erp-menu-container, .erp-cash-register-container, .erp-inventory-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 89vh;
+  background-color: #FFFFFF;
+}
+
+/* Header ***************************************************************************/ 
 .header-main-container {
   display: flex;
   align-items: center;
@@ -79,7 +87,7 @@ html, body {
   filter: drop-shadow(4px 4px 6px rgb(192, 187, 187)) grayscale(100%);
 }
 
-/*************************************************************************************/
+/* Volume ****************************************************************************/
 .volume-control {
   position: fixed;
   width: 6vh;
@@ -98,21 +106,12 @@ html, body {
   filter: drop-shadow(8px 8px 10px rgb(192, 187, 187)) grayscale(100%);
 }
 
-/*************************************************************************************/
-.erp-menu-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 89vh;
-  background-color: #FFFFFF;
-}
-
+/* Dashboard *************************************************************************/
 .erp-menu {
   display: flex;
   flex-wrap: wrap;
   gap: 1vh;
-  width: 55%;
+  width: 58%;
 }
 
 .option {
@@ -140,7 +139,7 @@ html, body {
   padding: 10px;
 }
 
-/*************************************************************************************/
+/* Footer ****************************************************************************/
 .footer-main-container {
   display: flex;
   justify-content: space-between;
@@ -169,7 +168,7 @@ html, body {
   font-size: 1.9vh;
 }
 
-/*************************************************************************************/
+/* Login *****************************************************************************/
 .login-main-container {
   width: 100%;
   height: 89vh;
@@ -257,19 +256,21 @@ html, body {
     font-size: 14px;
 }
 
-/*************************************************************************************/
+/* Inventory *************************************************************************/
+
+/* Media Query ***********************************************************************/
 @media screen and (max-width: 1366px) {
+  /* Media Query - Dashboard */
   .erp-menu {
     width: 91%;
   }
 }
 
-/*************************************************************************************/
-
 @media screen and (max-width: 1280px) {
+  /* Media Query - Dashboard */
   .erp-menu {
     width: 76%;
   }
 }
-
 /*************************************************************************************/
+

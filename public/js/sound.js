@@ -8,23 +8,32 @@ export function initHoverSounds() {
                 hoverSound.pause();
                 hoverSound.currentTime = 0;
                 isAudioUnlocked = true;
+                cleanListeners();
             }).catch(() => {});
-            
-            document.removeEventListener('click', unlockAudio);
-            document.removeEventListener('keydown', unlockAudio);
         }
+    };
+
+    const cleanListeners = () => {
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('keydown', unlockAudio);
+        document.removeEventListener('pointerdown', unlockAudio);
+        document.removeEventListener('mousemove', unlockAudio);
     };
 
     document.addEventListener('click', unlockAudio);
     document.addEventListener('keydown', unlockAudio);
+    document.addEventListener('pointerdown', unlockAudio);
+    document.addEventListener('mousemove', unlockAudio, { once: true });
 
-    const icons = document.querySelectorAll('.icon');
-    icons.forEach(icon => {
-        icon.addEventListener('mouseenter', () => {
-            if (isAudioUnlocked) {
-                hoverSound.currentTime = 0;
-                hoverSound.play().catch(e => console.log("Error al reproducir:", e));
+    const interactiveElements = document.querySelectorAll('.icon, .header-icon, .volume-icon');
+
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            if (!isAudioUnlocked) {
+                unlockAudio();
             }
+            hoverSound.currentTime = 0;
+            hoverSound.play().catch(() => {});
         });
     });
 }

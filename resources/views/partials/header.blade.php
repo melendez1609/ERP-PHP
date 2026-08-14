@@ -13,10 +13,10 @@
             </form>
             @unless(request()->routeIs('dashboard'))
                 <a class="go-back-option" href="{{ route('dashboard') }}">
-                    <img class="go-back-icon" src="{{ asset('icons/control-panel.png') }}" alt="control-panel">
+                    <img class="go-back-icon header-icon" src="{{ asset('icons/control-panel.png') }}" alt="control-panel">
                 </a>
             @endunless
-            <img class="logout-session" src="{{ asset('icons/logout.png') }}" alt="logout" 
+            <img class="logout-session header-icon" src="{{ asset('icons/logout.png') }}" alt="logout" 
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         </div>
     @endauth
