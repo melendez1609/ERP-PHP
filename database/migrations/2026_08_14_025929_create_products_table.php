@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique()->nullable();
+            $table->string('code');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('cost', 10, 2)->default(0.00);
-            $table->decimal('price', 10, 2)->default(0.00);
-            $table->integer('stock')->default(0);
-            $table->integer('min_stock')->default(5);
-            $table->boolean('status')->default(true);
+            $table->decimal('cost', 10, 2);
+            $table->decimal('price', 10, 2);
+            $table->integer('stock');
+            $table->integer('min_stock');
+            
+            // Llave foránea hacia la nueva tabla product_statuses
+            $table->foreignId('product_status_id')->constrained('product_statuses');
+
             $table->timestamps();
         });
     }

@@ -42,7 +42,7 @@
                 <img class="icon" src="{{ asset('icons/support.png') }}" alt="support">
                 <h4 class="icon-name">Soporte</h4>
             </div>
-            @if (auth()->user()?->role === 'administrador')
+            @if (auth()->user()?->role_id === 1)
                 <div class="option">
                     <img class="icon" src="{{ asset('icons/group.png') }}" alt="group">
                     <h4 class="icon-name">Usuarios</h4>

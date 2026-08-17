@@ -3,7 +3,7 @@
         <img class="logo-header" src="{{ asset('images/logo.png') }}" alt="logo-header">
         @auth
             <h2 class="logo-tittle">Workspace</h2>
-            <h2 class="rol-name">{{ auth()->user()->role }}</h2>
+            <h2 class="rol-name">{{ auth()->user()->role?->name }}</h2>
         @endauth
     </div>
     @auth

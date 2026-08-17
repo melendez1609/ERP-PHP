@@ -12,8 +12,18 @@ html, body {
   height: 100%;
 }
 
-.erp-menu-container, .erp-cash-register-container, .erp-inventory-container {
+.erp-menu-container, .erp-cash-register-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 89vh;
+  background-color: #FFFFFF;
+}
+
+.erp-inventory-container {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -257,20 +267,89 @@ html, body {
 }
 
 /* Inventory *************************************************************************/
+.inventory-section-top{
+  display: flex;
+  padding: 3.5vh 0;
+  width: 80%;
+}
+
+.inventory-section-top-tittle {
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  padding: 1vh 2vh;
+  border-radius: 1vh;
+  color: #FFFFFF;
+  background-color: #525253;
+}
+
+.inventory-create-button {
+  font-size: 2vh;
+  font-weight: bold;
+  padding: 0.80vh 2vh;
+  border-radius: 1vh;
+  color: #FFFFFF;
+  background-color: #525253;
+  cursor: pointer;
+}
+
+.inventory-section-table{
+  width: 80%;
+  overflow-y: auto;
+}
+
+.inventory-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.inventory-table th, .inventory-table td{
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 6px;
+}
+
+.inventory-table tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.inventory-table-button {
+  padding: 8px;
+  border: none;
+  border-radius: 0.55vh;
+  cursor: pointer;
+}
+
+.inventory-table-button.edit {
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #132873;
+}
+
+.inventory-table-button.delete {
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #d84130;
+}
+
+.inventory-table-button.disable {
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #ecb912;
+}
 
 /* Media Query ***********************************************************************/
 @media screen and (max-width: 1366px) {
-  /* Media Query - Dashboard */
   .erp-menu {
     width: 91%;
   }
 }
 
 @media screen and (max-width: 1280px) {
-  /* Media Query - Dashboard */
   .erp-menu {
     width: 76%;
   }
 }
+
 /*************************************************************************************/
 

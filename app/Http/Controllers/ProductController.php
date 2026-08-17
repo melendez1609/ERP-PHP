@@ -9,7 +9,8 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return view('inventory.index');
+        $products = Product::with('status')->get();
+        return view('inventory.index', compact('products'));
     }
 
     public function store(Request $request)
