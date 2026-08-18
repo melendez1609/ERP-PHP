@@ -18,7 +18,7 @@
                 <h3>Inventario</h3>
             </div>
             <div>
-                <button class="inventory-create-button">Crear</button>
+                <button class="inventory-create-button" data-modal-target="modal-create">Crear</button>
             </div>
         </section>
         <section class="inventory-section-table">
@@ -55,6 +55,9 @@
                 @endforeach
             </table>
         </section>
+            <div class="pagination-container">
+                {{ $products->links('partials.pagination') }}
+            </div>
     </main>
 
     @include('inventory.partials.modal-create')
