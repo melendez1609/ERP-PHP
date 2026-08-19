@@ -70,12 +70,11 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-
-        if (auth()->id() === $user->id) {
+        if ((int) $id === (int) auth()->id()) {
             return back()->with('error', 'No puedes eliminar tu propio usuario en sesión.');
         }
 
+        $user = User::findOrFail($id);
         $user->delete();
 
         return back()->with('success', 'Usuario eliminado correctamente.');
@@ -83,12 +82,11 @@ class UserController extends Controller
 
     public function disable($id)
     {
-        $user = User::findOrFail($id);
-
-        if (auth()->id() === $user->id && $user->is_active) {
+        if ((int) $id === (int) auth()->id() && auth()->user()->is_active) {
             return back()->with('error', 'No puedes inactivar tu propio usuario en sesión.');
         }
 
+        $user = User::findOrFail($id);
         $user->is_active = !$user->is_active;
         $user->save();
 

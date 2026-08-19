@@ -66,17 +66,17 @@
                                 data-status-id="{{ $product->product_status_id }}">
                             Editar
                         </button>
-                        <button class="inventory-table-button delete" 
-                                type="button"
-                                data-modal-target="modal-alert"
-                                data-action="{{ route('inventory.destroy', $product->id) }}"
-                                data-method="DELETE"
-                                data-title="Eliminar Producto"
-                                data-message="¿Estás seguro de que deseas eliminar el producto '{{ $product->name }}'?"
-                                data-btn-text="Eliminar"
-                                data-btn-class="btn-danger">
-                            Eliminar
-                        </button>
+<button class="inventory-table-button delete" 
+        type="button"
+        data-modal-target="modal-alert"
+        data-action="{{ route('inventory.destroy', $product->id) }}"
+        data-method="DELETE"
+        data-title="Eliminar Producto"
+        data-message="¿Estás seguro de que deseas eliminar el producto '{{ $product->name }}'?"
+        data-btn-text="Eliminar"
+        data-btn-class="btn-danger">
+    Eliminar
+</button>
                         <button class="inventory-table-button disable {{ $product->product_status_id != 1 ? 'enable' : '' }}" 
                                 type="button"
                                 data-modal-target="modal-alert"
