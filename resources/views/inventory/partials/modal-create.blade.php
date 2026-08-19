@@ -10,7 +10,15 @@
                 <label for="code">Código:</label>
                 <input type="text" name="code" id="code" required>
             </div>
-
+            <div>
+                <label for="supplier_id">Proveedor:</label>
+                <select name="supplier_id" id="supplier_id">
+                    <option value="">-- Seleccionar Proveedor --</option>
+                    @foreach($suppliers as $supplier)
+                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div>
                 <label for="name">Nombre:</label>
                 <input type="text" name="name" id="name" required>

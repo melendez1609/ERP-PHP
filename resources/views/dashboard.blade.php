@@ -43,10 +43,10 @@
                 <h4 class="icon-name">Soporte</h4>
             </div>
             @if (auth()->user()?->role_id === 1)
-                <div class="option">
+                <a href="{{ route('users.index') }}" class="option">
                     <img class="icon" src="{{ asset('icons/group.png') }}" alt="group">
                     <h4 class="icon-name">Usuarios</h4>
-                </div>
+                </a>
                 <div class="option">
                     <img class="icon" src="{{ asset('icons/purchase-order.png') }}" alt="purchase-order">
                     <h4 class="icon-name">Orden de Compra</h4>

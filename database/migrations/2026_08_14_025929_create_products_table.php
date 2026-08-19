@@ -21,8 +21,14 @@ return new class extends Migration
             $table->integer('stock');
             $table->integer('min_stock');
             
-            // Llave foránea hacia la nueva tabla product_statuses
+            // Llave foránea hacia la tabla product_statuses
             $table->foreignId('product_status_id')->constrained('product_statuses');
+
+            // Llave foránea hacia la tabla suppliers (opcional/nullable)
+            $table->foreignId('supplier_id')
+                  ->nullable()
+                  ->constrained('suppliers')
+                  ->nullOnDelete();
 
             $table->timestamps();
         });

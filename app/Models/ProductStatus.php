@@ -16,9 +16,7 @@ class ProductStatus extends Model
         'name',
     ];
 
-    /**
-     * Obtiene todos los productos asociados a este estado.
-     */
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'product_status_id');

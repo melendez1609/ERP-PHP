@@ -25,6 +25,7 @@
             <table class="inventory-table">
                 <tr>
                     <th>Código</th>
+                    <th>Proveedor</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Costo</th>
@@ -37,6 +38,9 @@
                 @foreach($products as $product)
                 <tr>
                     <td>{{ $product->code }}</td>
+                    <td>
+                        <span>{{ $product->supplier?->name ?? 'Sin proveedor' }}</span>
+                    </td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->description }}</td>
                     <td>${{ number_format($product->cost, 2) }}</td>
@@ -47,9 +51,43 @@
                         <span>{{ $product->status?->name ?? 'Sin estado' }}</span>
                     </td>
                     <td>
-                        <button class="inventory-table-button edit" type="button">Editar</button>
-                        <button class="inventory-table-button delete" type="button">Eliminar</button>
-                        <button class="inventory-table-button disable" type="button">Inactivar</button>
+                        <button class="inventory-table-button edit" 
+                                type="button" 
+                                data-modal-target="modal-edit"
+                                data-id="{{ $product->id }}"
+                                data-code="{{ $product->code }}"
+                                data-name="{{ $product->name }}"
+                                data-description="{{ $product->description }}"
+                                data-cost="{{ $product->cost }}"
+                                data-price="{{ $product->price }}"
+                                data-stock="{{ $product->stock }}"
+                                data-min-stock="{{ $product->min_stock }}"
+                                data-supplier-id="{{ $product->supplier_id }}"
+                                data-status-id="{{ $product->product_status_id }}">
+                            Editar
+                        </button>
+                        <button class="inventory-table-button delete" 
+                                type="button"
+                                data-modal-target="modal-alert"
+                                data-action="{{ route('inventory.destroy', $product->id) }}"
+                                data-method="DELETE"
+                                data-title="Eliminar Producto"
+                                data-message="¿Estás seguro de que deseas eliminar el producto '{{ $product->name }}'?"
+                                data-btn-text="Eliminar"
+                                data-btn-class="btn-danger">
+                            Eliminar
+                        </button>
+                        <button class="inventory-table-button disable {{ $product->product_status_id != 1 ? 'enable' : '' }}" 
+                                type="button"
+                                data-modal-target="modal-alert"
+                                data-action="{{ route('inventory.disable', $product->id) }}"
+                                data-method="PATCH"
+                                data-title="{{ $product->product_status_id == 1 ? 'Inactivar Producto' : 'Activar Producto' }}"
+                                data-message="¿Estás seguro de que deseas {{ $product->product_status_id == 1 ? 'inactivar' : 'activar' }} el producto '{{ $product->name }}'?"
+                                data-btn-text="{{ $product->product_status_id == 1 ? 'Inactivar' : 'Activar' }}"
+                                data-btn-class="btn-save">
+                            {{ $product->product_status_id == 1 ? 'Inactivar' : 'Activar' }}
+                        </button>
                     </td>
                 </tr>
                 @endforeach
@@ -62,6 +100,7 @@
 
     @include('inventory.partials.modal-create')
     @include('inventory.partials.modal-edit')
+    @include('partials.alert') {{-- <-- Modal reutilizable de alertas --}}
 
     @include('partials.footer')
     <script type="module" src="{{ asset('js/main.js') }}"></script> 

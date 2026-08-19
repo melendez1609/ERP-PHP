@@ -16,7 +16,7 @@ body {
   font-family: arial, sans-serif;
 }
 
-.erp-menu-container, .erp-cash-register-container {
+.erp-menu-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,7 +25,7 @@ body {
   background-color: #FFFFFF;
 }
 
-.erp-inventory-container {
+.erp-inventory-container, .erp-users-container, .erp-cash-register-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -270,39 +270,43 @@ body {
   font-size: 14px;
 }
 
-/* Inventory *************************************************************************/
-.inventory-section-top{
+/* Table ********************************************************************/
+.inventory-section-top,
+.users-section-top {
   display: flex;
   gap: 1vh;
   padding: 3.5vh 0;
   width: 80%;
 }
 
-.inventory-section-top-tittle {
+.inventory-section-top-tittle,
+.users-section-top-tittle {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
   border-radius: 1vh;
   color: #fff;
-  background-color: #2d3748;
+  background-color: #132873;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
 }
 
-.inventory-section-top-tittle h3 {
+.inventory-section-top-tittle h3,
+.users-section-top-tittle h3 {
   margin: 0;
   font-size: inherit;
 }
 
-.inventory-create-button {
+.inventory-create-button,
+.users-create-button {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
   border-radius: 1vh;
   color: #fff;
-  background-color: #2d3748;
+  background-color: #132873;
   border: none;
   outline: none;
   cursor: pointer;
@@ -312,27 +316,32 @@ body {
   box-sizing: border-box;
 }
 
-.inventory-section-table{
+.inventory-section-table,
+.users-section-table {
   width: 80%;
   overflow-y: auto;
 }
 
-.inventory-table {
+.inventory-table,
+.users-table {
   border-collapse: collapse;
   width: 100%;
 }
 
-.inventory-table th, .inventory-table td{
+.inventory-table th, .inventory-table td,
+.users-table th, .users-table td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 5px;
 }
 
-.inventory-table tr:nth-child(even) {
+.inventory-table tr:nth-child(even),
+.users-table tr:nth-child(even) {
   background-color: #dddddd;
 }
 
-.inventory-table-button {
+.inventory-table-button,
+.users-table-button {
   font-size: 1.80vh;
   padding: 1vh;
   border: none;
@@ -340,38 +349,52 @@ body {
   cursor: pointer;
 }
 
-.inventory-table-button.edit {
+.inventory-table-button.edit,
+.users-table-button.edit {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #132873;
 }
 
-.inventory-table-button.delete {
+.inventory-table-button.delete,
+.users-table-button.delete {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #d84130;
 }
 
-.inventory-table-button.disable {
+.inventory-table-button.disable,
+.users-table-button.disable {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #ecb912;
+  min-width: 11vh;
+}
+
+.inventory-table-button.disable.enable,
+.users-table-button.disable.enable {
+  background-color: #28a745;
 }
 
 /* Modal *****************************************************************************/
 .modal {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.55);
-  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   padding: 20px;
   box-sizing: border-box;
+}
+
+.modal.active,
+.modal.show {
+  display: flex;
 }
 
 .modal-content {
@@ -386,7 +409,8 @@ body {
   position: relative;
 }
 
-.close-modal {
+.close-modal,
+.modal-close {
   position: absolute;
   top: 14px;
   right: 18px;
@@ -396,9 +420,14 @@ body {
   cursor: pointer;
   line-height: 1;
   transition: color 0.2s ease;
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
 }
 
-.close-modal:hover {
+.close-modal:hover,
+.modal-close:hover {
   color: #111827;
 }
 
@@ -411,84 +440,99 @@ body {
 }
 
 .modal-content form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.modal-content form div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.modal-content form div,
+.modal-content .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .modal-content label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
 }
 
 .modal-content input,
 .modal-content textarea,
 .modal-content select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    box-sizing: border-box;
-    outline: none;
-    transition: border-color 0.2s ease;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease;
 }
 
 .modal-content input:focus,
 .modal-content textarea:focus,
 .modal-content select:focus {
-    border-color: #2d3748;
+  border-color: #2d3748;
 }
 
 .modal-content textarea {
-    resize: vertical;
-    min-height: 60px;
+  resize: vertical;
+  min-height: 60px;
 }
 
-.modal-actions {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 12px;
+.modal-actions,
+.modal-footer {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .btn-cancel,
-.btn-save {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+.btn-save,
+.btn-danger,
+.btn-alert-confirm,
+.modal-submit-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .btn-cancel {
-    background-color: #e5e7eb;
-    color: #374151;
+  background-color: #e5e7eb;
+  color: #374151;
 }
 
 .btn-cancel:hover {
-    background-color: #d1d5db;
+  background-color: #d1d5db;
 }
 
-.btn-save {
-    background-color: #2d3748;
-    color: #ffffff;
+.btn-save,
+.modal-submit-button {
+  background-color: #2d3748;
+  color: #ffffff;
 }
 
-.btn-save:hover {
-    background-color: #455168;
+.btn-save:hover,
+.modal-submit-button:hover {
+  background-color: #455168;
 }
 
+.btn-danger {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+}
 
 /* Pagination ************************************************************************/
 .pagination-container {
@@ -556,3 +600,4 @@ body {
     width: 76%;
   }
 }
+
