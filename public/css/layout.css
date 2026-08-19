@@ -25,7 +25,7 @@ body {
   background-color: #FFFFFF;
 }
 
-.erp-inventory-container, .erp-users-container, .erp-suppliers-container, .erp-cash-register-container {
+.erp-inventory-container, .erp-users-container, .erp-suppliers-container, .erp-cash-register-container, .erp-quotations-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -273,7 +273,8 @@ body {
 /* Table ********************************************************************/
 .inventory-section-top,
 .users-section-top,
-.suppliers-section-top {
+.suppliers-section-top,
+.quotations-section-top {
   display: flex;
   gap: 1vh;
   padding: 3.5vh 0;
@@ -282,7 +283,8 @@ body {
 
 .inventory-section-top-tittle,
 .users-section-top-tittle,
-.suppliers-section-top-tittle {
+.suppliers-section-top-tittle,
+.quotations-section-top-tittle {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
@@ -297,14 +299,16 @@ body {
 
 .inventory-section-top-tittle h3,
 .users-section-top-tittle h3,
-.suppliers-section-top-tittle h3 {
+.suppliers-section-top-tittle h3,
+.quotations-section-top-tittle h3 {
   margin: 0;
   font-size: inherit;
 }
 
 .inventory-create-button,
 .users-create-button,
-.suppliers-create-button {
+.suppliers-create-button,
+.quotations-create-button {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
@@ -322,21 +326,24 @@ body {
 
 .inventory-section-table,
 .users-section-table,
-.suppliers-section-table {
+.suppliers-section-table,
+.quotations-section-table {
   width: 80%;
   overflow-y: auto;
 }
 
 .inventory-table,
 .users-table,
-.suppliers-table {
+.suppliers-table,
+.quotations-table {
   border-collapse: collapse;
   width: 100%;
 }
 
 .inventory-table th, .inventory-table td,
 .users-table th, .users-table td,
-.suppliers-table th, .suppliers-table td {
+.suppliers-table th, .suppliers-table td,
+.quotations-table th, .quotations-table td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 5px;
@@ -344,13 +351,15 @@ body {
 
 .inventory-table tr:nth-child(even),
 .users-table tr:nth-child(even),
-.suppliers-table tr:nth-child(even) {
+.suppliers-table tr:nth-child(even),
+.quotations-table tr:nth-child(even) {
   background-color: #dddddd;
 }
 
 .inventory-table-button,
 .users-table-button,
-.suppliers-table-button {
+.suppliers-table-button,
+.quotations-table-button {
   font-size: 1.80vh;
   padding: 1vh;
   border: none;
@@ -360,7 +369,8 @@ body {
 
 .inventory-table-button.edit,
 .users-table-button.edit,
-.suppliers-table-button.edit {
+.suppliers-table-button.edit,
+.quotations-table-button.download {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #132873;
@@ -368,7 +378,8 @@ body {
 
 .inventory-table-button.delete,
 .users-table-button.delete,
-.suppliers-table-button.delete {
+.suppliers-table-button.delete,
+.quotations-table-button.delete {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #d84130;
@@ -376,7 +387,8 @@ body {
 
 .inventory-table-button.disable,
 .users-table-button.disable,
-.suppliers-table-button.disable {
+.suppliers-table-button.disable,
+.quotations-table-button.disable {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #ecb912;
@@ -385,7 +397,8 @@ body {
 
 .inventory-table-button.disable.enable,
 .users-table-button.disable.enable,
-.suppliers-table-button.disable.enable {
+.suppliers-table-button.disable.enable,
+.quotations-table-button.disable.enable {
   background-color: #28a745;
 }
 
@@ -599,7 +612,7 @@ body {
     width: 91%;
   }
 
-  .inventory-section-top, .inventory-section-table {
+.inventory-section-top, .users-section-top, .suppliers-section-top,.inventory-section-table, .users-section-table, .suppliers-section-table, .quotations-section-top, .quotations-section-table{
       width: 95%;
   }
 

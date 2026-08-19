@@ -14,10 +14,10 @@
     </div>
     <main class="erp-menu-container">
         <div class="erp-menu">
-            <div class="option">
+            <a href="javascript:void(0)" class="option" data-modal-target="modal-options">
                 <img class="icon" src="{{ asset('icons/estimates.png') }}" alt="estimates">
                 <h4 class="icon-name">Cotización</h4>
-            </div>
+            </a>
             <div class="option">
                 <img class="icon" src="{{ asset('icons/invoice.png') }}" alt="invoice">
                 <h4 class="icon-name">Factura</h4>
@@ -75,6 +75,8 @@
         </div>
     </main>
     @include('partials.footer')
+    @include('quotations.partials.modal-options')
+    @include('quotations.partials.modal-quotations')
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
 </html>

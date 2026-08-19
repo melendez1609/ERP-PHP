@@ -10,8 +10,12 @@
                 <label for="code">Código:</label>
                 <input type="text" name="code" id="code" required>
             </div>
+
             <div>
                 <label for="supplier_id">Proveedor:</label>
+                <!-- Buscador rápido de proveedor -->
+                <input type="text" id="supplier-search" placeholder="Escribe para buscar proveedor..." style="width: 100%; margin-top: 5px; margin-bottom: 8px; padding: 8px 12px; box-sizing: border-box;">
+                
                 <select name="supplier_id" id="supplier_id">
                     <option value="">-- Seleccionar Proveedor --</option>
                     @foreach($suppliers as $supplier)
@@ -19,6 +23,7 @@
                     @endforeach
                 </select>
             </div>
+
             <div>
                 <label for="name">Nombre:</label>
                 <input type="text" name="name" id="name" required>

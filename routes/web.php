@@ -1,18 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Models\Product;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\QuotationController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+    Route::get('/dashboard', function () { $products = Product::all(); return view('dashboard', compact('products')); })->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/cash-register', function () {return view('cash-register.index');})->name('cash-register.index');
+
+    Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
+    Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+    Route::get('/quotations/{id}/download', [QuotationController::class, 'download'])->name('quotations.download');
+    Route::delete('/quotations/{id}', [QuotationController::class, 'destroy'])->name('quotations.destroy');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
