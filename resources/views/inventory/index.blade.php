@@ -82,11 +82,11 @@
                                 data-modal-target="modal-alert"
                                 data-action="{{ route('inventory.disable', $product->id) }}"
                                 data-method="PATCH"
-                                data-title="{{ $product->product_status_id == 1 ? 'Inactivar Producto' : 'Activar Producto' }}"
-                                data-message="¿Estás seguro de que deseas {{ $product->product_status_id == 1 ? 'inactivar' : 'activar' }} el producto '{{ $product->name }}'?"
-                                data-btn-text="{{ $product->product_status_id == 1 ? 'Inactivar' : 'Activar' }}"
+                                data-title="{{ $product->product_status_id == 1 ? 'Desactivar Producto' : 'Activar Producto' }}"
+                                data-message="¿Estás seguro de que deseas {{ $product->product_status_id == 1 ? 'Desactivar' : 'activar' }} el producto '{{ $product->name }}'?"
+                                data-btn-text="{{ $product->product_status_id == 1 ? 'Desactivar' : 'Activar' }}"
                                 data-btn-class="btn-save">
-                            {{ $product->product_status_id == 1 ? 'Inactivar' : 'Activar' }}
+                            {{ $product->product_status_id == 1 ? 'Desactivar' : 'Activar' }}
                         </button>
                     </td>
                 </tr>

@@ -80,7 +80,7 @@
     @include('quotations.partials.modal-quotations')
     @include('purchase-order.partials.modal-options')
     @include('purchase-order.partials.modal-purchase-order')
-    
+
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
 </html>

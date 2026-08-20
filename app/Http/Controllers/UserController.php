@@ -83,7 +83,7 @@ class UserController extends Controller
     public function disable($id)
     {
         if ((int) $id === (int) auth()->id() && auth()->user()->is_active) {
-            return back()->with('error', 'No puedes inactivar tu propio usuario en sesión.');
+            return back()->with('error', 'No puedes inhabilitar tu propio usuario en sesión.');
         }
 
         $user = User::findOrFail($id);

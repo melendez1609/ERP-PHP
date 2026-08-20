@@ -2,33 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PurchaseOrder extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'supplier_id',
         'user_id',
-        'requested_date',
+        'order_number',
+        'products',
+        'subtotal',
         'total',
         'status',
-        'email_sent',
     ];
 
-    public function supplier(): BelongsTo
+    protected $casts = [
+        'products' => 'array',
+        'subtotal' => 'decimal:2',
+        'total' => 'decimal:2',
+    ];
+
+    public function supplier()
     {
         return $this->belongsTo(Supplier::class);
     }
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function items(): HasMany
-    {
-        return $this->hasMany(PurchaseOrderItem::class);
     }
 }
