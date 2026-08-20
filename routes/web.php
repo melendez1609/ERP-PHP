@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Models\Product;
+use App\Models\Supplier;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
@@ -14,7 +15,11 @@ Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () { $products = Product::all(); return view('dashboard', compact('products')); })->name('dashboard');
+    Route::get('/dashboard', function () { $products = Product::with('supplier')->get(); 
+                                           $suppliers = Supplier::all(); 
+        
+        return view('dashboard', compact('products', 'suppliers')); // <-- Pasarlos a la vista
+    })->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/cash-register', function () {return view('cash-register.index');})->name('cash-register.index');
 
@@ -22,6 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
     Route::get('/quotations/{id}/download', [QuotationController::class, 'download'])->name('quotations.download');
     Route::delete('/quotations/{id}', [QuotationController::class, 'destroy'])->name('quotations.destroy');
+
+    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+    Route::post('/purchase-orders/{id}/receive', [PurchaseOrderController::class, 'receive'])->name('purchase-orders.receive');
+    Route::post('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

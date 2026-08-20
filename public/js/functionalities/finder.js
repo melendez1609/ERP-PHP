@@ -1,36 +1,36 @@
 export function initSelectFinder(inputId, selectId) {
-    const searchInput = document.getElementById(inputId);
-    const selectElement = document.getElementById(selectId);
+    const input = document.getElementById(inputId);
+    const select = document.getElementById(selectId);
 
-    if (!searchInput || !selectElement) return;
+    if (!input || !select) return;
 
-    const originalOptions = Array.from(selectElement.options).map(opt => ({
-        value: opt.value,
-        text: opt.text,
-        dataset: { ...opt.dataset }
-    }));
+    input.addEventListener('input', (e) => {
+        const filter = e.target.value.toLowerCase().trim();
+        const options = select.options;
 
-    searchInput.addEventListener('input', function() {
-        const searchText = this.value.toLowerCase().trim();
+        let firstMatchIndex = -1;
 
-        selectElement.innerHTML = '';
+        for (let i = 0; i < options.length; i++) {
+            const option = options[i];
+            if (option.value === '') continue;
 
-        originalOptions.forEach(optData => {
-            const textLower = optData.text.toLowerCase();
-            
-            if (optData.value === "" || textLower.includes(searchText)) {
-                const newOption = document.createElement('option');
-                newOption.value = optData.value;
-                newOption.text = optData.text;
-
-                Object.keys(optData.dataset).forEach(key => {
-                    newOption.dataset[key] = optData.dataset[key];
-                });
-
-                selectElement.appendChild(newOption);
+            const text = option.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                option.style.display = '';
+                if (firstMatchIndex === -1 && filter !== '') {
+                    firstMatchIndex = i;
+                }
+            } else {
+                option.style.display = 'none';
             }
-        });
+        }
 
-        selectElement.value = "";
+        if (firstMatchIndex !== -1) {
+            select.selectedIndex = firstMatchIndex;
+            select.dispatchEvent(new Event('change'));
+        } else if (filter === '') {
+            select.selectedIndex = 0;
+            select.dispatchEvent(new Event('change'));
+        }
     });
 }

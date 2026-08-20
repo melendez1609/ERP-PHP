@@ -47,10 +47,10 @@
                     <img class="icon" src="{{ asset('icons/group.png') }}" alt="group">
                     <h4 class="icon-name">Usuarios</h4>
                 </a>
-                <div class="option">
+                <a href="javascript:void(0)" class="option" data-modal-target="modal-purchase-options">
                     <img class="icon" src="{{ asset('icons/purchase-order.png') }}" alt="purchase-order">
                     <h4 class="icon-name">Orden de Compra</h4>
-                </div>
+                </a>
                 <div class="option">
                     <img class="icon" src="{{ asset('icons/report-file.png') }}" alt="report-file">
                     <h4 class="icon-name">Reporte del Sistema</h4>
@@ -74,9 +74,14 @@
             @endif
         </div>
     </main>
+
     @include('partials.footer')
     @include('quotations.partials.modal-options')
     @include('quotations.partials.modal-quotations')
+    @include('purchase-order.partials.modal-options')
+    @include('purchase-order.partials.modal-purchase-order')
+    
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
 </html>
+
