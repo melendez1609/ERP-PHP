@@ -1,7 +1,7 @@
 <div id="modal-purchase-options" class="modal">
     <div class="modal-content">
         <span class="close-modal" data-modal-close>&times;</span>
-        <h3>Opciones de Órdenes de Compra</h3>
+        <h3>Órdenes de Compra</h3>
 
         <div class="modal-body">
             <div class="modal-actions" style="justify-content: center; gap: 15px; margin-top: 20px;">

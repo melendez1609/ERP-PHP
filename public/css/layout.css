@@ -415,6 +415,24 @@ body {
   background-color: #28a745;
 }
 
+.table-action-select {
+  font-size: 1.80vh;
+  padding: 0.8vh 1vh;
+  border: 1px solid #132873;
+  border-radius: 0.55vh;
+  background-color: #132873;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+.table-action-select option {
+  background-color: #ffffff;
+  color: #333333;
+  font-weight: normal;
+}
+
 /* Modal *****************************************************************************/
 .modal {
   display: none;

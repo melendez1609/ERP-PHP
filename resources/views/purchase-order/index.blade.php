@@ -22,8 +22,9 @@
             <table class="purchase-orders-table">
                 <thead>
                     <tr>
-                        <th>N° Orden</th>
+                        <th>Orden de Compra</th>
                         <th>Proveedor</th>
+                        <th>Creado por</th>
                         <th>Total</th>
                         <th>Fecha</th>
                         <th>Estado</th>
@@ -32,33 +33,56 @@
                 </thead>
                 <tbody>
                     @foreach($purchaseOrders as $order)
+                    @php
+                        $orderCode = $order->order_number ?? '#' . str_pad($order->id, 5, '0', STR_PAD_LEFT);
+                    @endphp
                     <tr>
-                        <td>#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</td>
+                        <td>{{ $orderCode }}</td>
                         <td>{{ $order->supplier?->name ?? 'Sin proveedor' }}</td>
+                        <td>{{ $order->user?->name ?? 'Sistema' }}</td>
                         <td>${{ number_format($order->total, 2) }}</td>
                         <td>{{ $order->created_at ? $order->created_at->format('d/m/Y') : '-' }}</td>
                         <td>
-                            <span>{{ $order->status?->name ?? 'Completada' }}</span>
+                            <span>{{ $order->status?->name ?? 'Pendiente' }}</span>
                         </td>
                         <td>
-                            {{-- {{ route('purchase-orders.pdf', $order->id) }} --}}
-                            <button class="purchase-orders-table-button download" 
-                                    type="button">
-                                PDF
-                            </button>
+                            <select class="table-action-select po-action-select" 
+                                    data-order-id="{{ $order->id }}"
+                                    data-order-number="{{ $orderCode }}">
+                                <option value="">Opciones</option>
+                                
+                                {{-- Ruta PDF comentada temporalmente --}}
+                                {{-- {{ route('purchase-orders.pdf', $order->id) }} --}}
+                                <option value="pdf" data-pdf-url="#">
+                                    PDF
+                                </option>
 
-                            {{-- {{ route('purchase-orders.destroy', $order->id) }} --}}
-                            <button class="purchase-orders-table-button delete" 
-                                    type="button"
-                                    data-modal-target="modal-alert"
-                                    data-action="#"
-                                    data-method="DELETE"
-                                    data-title="Eliminar Órden"
-                                    data-message="¿Estás seguro de que deseas eliminar la orden #{{ $order->id }}?"
-                                    data-btn-text="Eliminar"
-                                    data-btn-class="btn-danger">
-                                Eliminar
-                            </button>
+                                {{-- Ruta Recibir comentada temporalmente --}}
+                                {{-- {{ route('purchase-orders.receive', $order->id) }} --}}
+                                <option value="receive"
+                                        data-modal-target="modal-alert"
+                                        data-action="#"
+                                        data-method="PATCH"
+                                        data-title="Recibir Órden de Compra"
+                                        data-message="¿Deseas marcar la orden {{ $orderCode }} como RECIBIDA? Esto actualizará el stock en inventario."
+                                        data-btn-text="Recibir"
+                                        data-btn-class="btn-save">
+                                    Recibir
+                                </option>
+
+                                {{-- Ruta Cancelar comentada temporalmente --}}
+                                {{-- {{ route('purchase-orders.cancel', $order->id) }} --}}
+                                <option value="cancel"
+                                        data-modal-target="modal-alert"
+                                        data-action="#"
+                                        data-method="PATCH"
+                                        data-title="Cancelar Órden de Compra"
+                                        data-message="¿Estás seguro de que deseas CANCELAR la orden {{ $orderCode }}?"
+                                        data-btn-text="Cancelar Órden"
+                                        data-btn-class="btn-danger">
+                                    Cancelar
+                                </option>
+                            </select>
                         </td>
                     </tr>
                     @endforeach
