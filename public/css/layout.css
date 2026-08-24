@@ -663,7 +663,8 @@ body {
 .suppliers-section-top, .quotations-section-top,
 .inventory-section-table, .users-section-table,
 .suppliers-section-table, .quotations-section-table,
-.purchase-orders-section-top, .purchase-orders-section-table {
+.purchase-orders-section-top, .purchase-orders-section-table,
+.settings-section-top, .settings-section-table {
       width: 95%;
   }
 

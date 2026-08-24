@@ -30,6 +30,7 @@
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Costo</th>
+                        <th>IVA</th>
                         <th>Precio</th>
                         <th>Stock</th>
                         <th>Stock Mín.</th>
@@ -45,6 +46,7 @@
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->description }}</td>
                         <td>${{ number_format($product->cost, 2) }}</td>
+                        <td>{{ $product->vat?->rate ?? 0 }}%</td>
                         <td>${{ number_format($product->price, 2) }}</td>
                         <td>{{ $product->stock }}</td>
                         <td>{{ $product->min_stock }}</td>
@@ -61,6 +63,8 @@
                                     data-price="{{ $product->price }}"
                                     data-stock="{{ $product->stock }}"
                                     data-min-stock="{{ $product->min_stock }}"
+                                    data-vat-id="{{ $product->vat_id }}"
+                                    data-profit-percentage="{{ $product->profitMargin?->percentage ?? 0 }}"
                                     data-supplier-id="{{ $product->supplier_id }}"
                                     data-status-id="{{ $product->product_status_id }}">
                                 Editar
@@ -91,7 +95,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="10" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
+                        <td colspan="11" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
                             No hay productos registrados en el inventario.
                         </td>
                     </tr>
@@ -99,14 +103,14 @@
                 </tbody>
             </table>
         </section>
-            <div class="pagination-container">
-                {{ $products->links('partials.pagination') }}
-            </div>
+        <div class="pagination-container">
+            {{ $products->links('partials.pagination') }}
+        </div>
     </main>
 
     @include('inventory.partials.modal-create')
     @include('inventory.partials.modal-edit')
-    @include('partials.alert') {{-- <-- Modal reutilizable de alertas --}}
+    @include('partials.alert')
 
     @include('partials.footer')
     <script type="module" src="{{ asset('js/main.js') }}"></script> 

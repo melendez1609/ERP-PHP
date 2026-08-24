@@ -18,6 +18,11 @@ return new class extends Migration
             $table->integer('stock');
             $table->integer('min_stock');
             
+            $table->foreignId('vat_id')
+                  ->nullable()
+                  ->constrained('vats')
+                  ->nullOnDelete();
+
             $table->foreignId('product_status_id')->constrained('product_statuses');
 
             $table->foreignId('supplier_id')

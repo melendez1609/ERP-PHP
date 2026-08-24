@@ -20,6 +20,13 @@ export function initEditInventory() {
             const minStockInput = document.getElementById('edit-min-stock');
             if (minStockInput) minStockInput.value = button.dataset.minStock || '';
 
+            // Asignación de IVA y Porcentaje de Ganancia
+            const vatSelect = document.getElementById('edit-vat-id');
+            if (vatSelect) vatSelect.value = button.dataset.vatId || '';
+
+            const profitInput = document.getElementById('edit-profit-percentage');
+            if (profitInput) profitInput.value = button.dataset.profitPercentage || '';
+
             const supplierSelect = document.getElementById('edit-supplier-id');
             if (supplierSelect) supplierSelect.value = button.dataset.supplierId || '';
 

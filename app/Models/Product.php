@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -17,17 +19,28 @@ class Product extends Model
         'price',
         'stock',
         'min_stock',
+        'vat_id',
         'product_status_id',
         'supplier_id',
     ];
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(ProductStatus::class, 'product_status_id');
     }
 
-    public function supplier()
+    public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function vat(): BelongsTo
+    {
+        return $this->belongsTo(Vat::class);
+    }
+
+    public function profitMargin(): HasOne
+    {
+        return $this->hasOne(ProfitMargin::class);
     }
 }

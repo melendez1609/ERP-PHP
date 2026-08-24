@@ -52,7 +52,7 @@ class PurchaseOrderController extends Controller
             mkdir($directory, 0755, true);
         }
 
-        // PDF con el logo original B/N
+        // PDF sin cambios (mantiene la lógica original)
         $logoPath = public_path('images/dvariedad-logo-bn.png');
         $logoBase64 = '';
         if (file_exists($logoPath)) {
@@ -103,10 +103,17 @@ class PurchaseOrderController extends Controller
             $supplierEmail = $purchaseOrder->supplier?->email ?? 'proveedor@ejemplo.com';
             $mail->addAddress($supplierEmail, $purchaseOrder->supplier?->name);
 
-            // Adjuntar imagen CID para el correo sin sobrecargar el HTML
+            // Verificación flexible de la ruta de la imagen (mayúsculas / minúsculas)
             $emailLogoPath = public_path('Images/dvariedad-logo-cl.png');
+            if (!file_exists($emailLogoPath)) {
+                $emailLogoPath = public_path('images/dvariedad-logo-cl.png');
+            }
+            if (!file_exists($emailLogoPath)) {
+                $emailLogoPath = public_path('images/dvariedad-logo-bn.png');
+            }
+
             if (file_exists($emailLogoPath)) {
-                $mail->addEmbeddedImage($emailLogoPath, 'company_logo');
+                $mail->addEmbeddedImage($emailLogoPath, 'company_logo', 'logo.png');
             }
 
             if ($pdfPath && file_exists($pdfPath)) {

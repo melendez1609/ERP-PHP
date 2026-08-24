@@ -29,7 +29,7 @@
       margin-bottom: 25px;
     }
     .logo-container img {
-      max-width: 180px;
+      max-width: 200px;
       width: 100%;
       height: auto;
       display: inline-block;
@@ -107,7 +107,7 @@
     </div>
 
     <div class="footer">
-      Este es un mensaje automático generado por el sistema {{ config('app.name', 'G-ERP') }}.
+      Este es un mensaje automático generado por el sistema {{ config('app.name', 'DVariedades G-ERP') }}.
     </div>
   </div>
 

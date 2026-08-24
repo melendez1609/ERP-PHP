@@ -13,7 +13,6 @@
 
             <div>
                 <label for="supplier_id">Proveedor:</label>
-                <!-- Buscador rápido de proveedor -->
                 <input type="text" id="supplier-search" placeholder="Escribe para buscar proveedor..." style="width: 100%; margin-top: 5px; margin-bottom: 8px; padding: 8px 12px; box-sizing: border-box;">
                 
                 <select name="supplier_id" id="supplier_id">
@@ -40,12 +39,29 @@
             </div>
 
             <div>
-                <label for="price">Precio ($):</label>
+                <label for="vat_id">IVA:</label>
+                <select name="vat_id" id="vat_id" required>
+                    <option value="">-- Seleccionar IVA --</option>
+                    @foreach($vats as $vat)
+                        <option value="{{ $vat->id }}" {{ old('vat_id', 1) == $vat->id ? 'selected' : '' }}>
+                            {{ $vat->name }} ({{ $vat->rate }}%)
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label for="profit_percentage">Porcentaje de Ganancia (%):</label>
+                <input type="number" step="0.01" name="profit_percentage" id="profit_percentage" min="0" required>
+            </div>
+
+            <div>
+                <label for="price">Precio Venta ($):</label>
                 <input type="number" step="0.01" name="price" id="price" min="0" required>
             </div>
 
             <div>
-                <label for="stock">Stock Inicial:</label>
+                <label for="stock">Stock:</label>
                 <input type="number" name="stock" id="stock" min="0" required>
             </div>
 

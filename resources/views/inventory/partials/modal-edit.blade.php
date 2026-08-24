@@ -29,6 +29,21 @@
             </div>
 
             <div class="form-group">
+                <label for="edit-vat-id">IVA</label>
+                <select id="edit-vat-id" name="vat_id" required>
+                    <option value="">-- Seleccionar IVA --</option>
+                    @foreach($vats as $vat)
+                        <option value="{{ $vat->id }}">{{ $vat->name }} ({{ $vat->rate }}%)</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-profit-percentage">Porcentaje de Ganancia (%)</label>
+                <input type="number" step="0.01" id="edit-profit-percentage" name="profit_percentage" min="0" required>
+            </div>
+
+            <div class="form-group">
                 <label for="edit-price">Precio</label>
                 <input type="number" step="0.01" id="edit-price" name="price" required>
             </div>
