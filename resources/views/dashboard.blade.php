@@ -55,10 +55,10 @@
                     <img class="icon" src="{{ asset('icons/report-file.png') }}" alt="report-file">
                     <h4 class="icon-name">Reporte del Sistema</h4>
                 </div>
-                <div class="option">
+                <a href="javascript:void(0);" class="option" data-modal-target="modal-settings">
                     <img class="icon" src="{{ asset('icons/settings.png') }}" alt="settings">
-                    <h4 class="icon-name">Configuracion</h4>
-                </div>
+                    <h4 class="icon-name">Configuración</h4>
+                </a>
                 <div class="option">
                     <img class="icon" src="{{ asset('icons/share.png') }}" alt="share">
                     <h4 class="icon-name">Compartir</h4>
@@ -80,6 +80,7 @@
     @include('quotations.partials.modal-quotations')
     @include('purchase-order.partials.modal-options')
     @include('purchase-order.partials.modal-purchase-order')
+    @include('settings.partials.modal-options')
 
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>

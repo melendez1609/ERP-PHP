@@ -10,9 +10,10 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('customer_name');
-            $table->decimal('total', 10, 2)->default(0.00);
-            $table->string('pdf_path');
+            $table->decimal('total', 10, 2);
+            $table->string('pdf_path')->nullable();
             $table->timestamps();
         });
     }

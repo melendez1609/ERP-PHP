@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($purchaseOrders as $order)
+                    @forelse($purchaseOrders as $order)
                     @php
                         $orderCode = $order->order_number ?? '#' . str_pad($order->id, 5, '0', STR_PAD_LEFT);
                     @endphp
@@ -109,7 +109,13 @@
                             </select>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
+                            No hay ordenes de compra registradas en el sistema.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </section>

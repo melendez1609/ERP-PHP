@@ -12,7 +12,8 @@ class QuotationController extends Controller
 {
     public function index()
     {
-        $quotations = Quotation::orderBy('id', 'desc')
+        $quotations = Quotation::with('user')
+            ->orderBy('id', 'desc')
             ->paginate(10)
             ->withQueryString();
 
@@ -49,15 +50,16 @@ class QuotationController extends Controller
         }
 
         $quotation = Quotation::create([
+            'user_id'       => auth()->id(),
             'customer_name' => $request->customer_name,
-            'total' => $total,
-            'pdf_path' => '',
+            'total'         => $total,
+            'pdf_path'      => '',
         ]);
 
         $fileName = 'cotizacion_' . $quotation->id . '_' . time() . '.pdf';
         $relativePath = 'quotations/' . $fileName;
 
-        $logoPath = public_path('images/dvariedad-logo.png');
+        $logoPath = public_path('images/dvariedad-logo-bn.png');
         $logoBase64 = null;
         if (file_exists($logoPath)) {
             $type = pathinfo($logoPath, PATHINFO_EXTENSION);

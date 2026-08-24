@@ -52,7 +52,8 @@ class PurchaseOrderController extends Controller
             mkdir($directory, 0755, true);
         }
 
-        $logoPath = public_path('images/dvariedad-logo.png');
+        // PDF con el logo original B/N
+        $logoPath = public_path('images/dvariedad-logo-bn.png');
         $logoBase64 = '';
         if (file_exists($logoPath)) {
             $type = pathinfo($logoPath, PATHINFO_EXTENSION);
@@ -79,20 +80,11 @@ class PurchaseOrderController extends Controller
 
     public function sendPurchaseOrderEmail($purchaseOrder, $pdfPath = null)
     {
-        $logoPath = public_path('images/dvariedad-logo.png');
-        $logoBase64 = '';
-
-        if (file_exists($logoPath)) {
-            $type = pathinfo($logoPath, PATHINFO_EXTENSION);
-            $data = file_get_contents($logoPath);
-            $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        }
-
         $pdfUrl = \Route::has('purchase-orders.pdf') 
             ? route('purchase-orders.pdf', $purchaseOrder->id) 
             : '#';
 
-        $htmlContent = view('purchase-order.partials.purchase-order-email', compact('purchaseOrder', 'pdfUrl', 'logoBase64'))->render();
+        $htmlContent = view('purchase-order.partials.purchase-order-email', compact('purchaseOrder', 'pdfUrl'))->render();
 
         $mail = new PHPMailer(true);
 
@@ -110,6 +102,12 @@ class PurchaseOrderController extends Controller
             
             $supplierEmail = $purchaseOrder->supplier?->email ?? 'proveedor@ejemplo.com';
             $mail->addAddress($supplierEmail, $purchaseOrder->supplier?->name);
+
+            // Adjuntar imagen CID para el correo sin sobrecargar el HTML
+            $emailLogoPath = public_path('Images/dvariedad-logo-cl.png');
+            if (file_exists($emailLogoPath)) {
+                $mail->addEmbeddedImage($emailLogoPath, 'company_logo');
+            }
 
             if ($pdfPath && file_exists($pdfPath)) {
                 $mail->addAttachment($pdfPath, "Orden_de_Compra_{$purchaseOrder->order_number}.pdf");
@@ -131,7 +129,7 @@ class PurchaseOrderController extends Controller
     {
         $purchaseOrder = PurchaseOrder::with(['supplier', 'user'])->findOrFail($id);
 
-        $logoPath = public_path('images/dvariedad-logo.png');
+        $logoPath = public_path('images/dvariedad-logo-bn.png');
         $logoBase64 = '';
 
         if (file_exists($logoPath)) {

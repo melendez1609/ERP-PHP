@@ -24,16 +24,18 @@
                     <tr>
                         <th># Cotización</th>
                         <th>Cliente</th>
+                        <th>Atendido por</th>
                         <th>Total</th>
                         <th>Fecha</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($quotations as $quotation)
+                    @forelse($quotations as $quotation)
                     <tr>
                         <td>COT-{{ str_pad($quotation->id, 5, '0', STR_PAD_LEFT) }}</td>
                         <td>{{ $quotation->customer_name }}</td>
+                        <td>{{ $quotation->user?->name ?? 'N/A' }}</td>
                         <td>${{ number_format($quotation->total, 2) }}</td>
                         <td>{{ $quotation->created_at->format('Y-m-d H:i') }}</td>
                         <td>
@@ -56,7 +58,13 @@
                             </button>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
+                            No hay cotizaciones registradas en el sistema.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </section>

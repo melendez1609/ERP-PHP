@@ -13,6 +13,8 @@ import { initCreateQuotation } from './actions/quotation/CreateQuotation.js';
 import { initCreatePurchaseOrder } from './actions/purchase-order/CreatePurchaseOrder.js';
 import { initPurchaseOrderActions } from './actions/purchase-order/PurchaseOrderActions.js';
 
+import { initVatSet } from './actions/vat/VatSet.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
     initDateTime();
@@ -31,4 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');
     initSelectFinder('po-product-search', 'po-select-product');
+    
+    initVatSet();
 });

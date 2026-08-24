@@ -24,6 +24,16 @@
     .content {
       padding: 35px 40px;
     }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .logo-container img {
+      max-width: 180px;
+      width: 100%;
+      height: auto;
+      display: inline-block;
+    }
     .greeting {
       font-size: 18px;
       font-weight: bold;
@@ -65,6 +75,11 @@
 
   <div class="email-container">
     <div class="content">
+
+      <div class="logo-container">
+        <img src="cid:company_logo" alt="Logo DVariedades">
+      </div>
+
       <div class="greeting">
         Estimado(a) {{ $purchaseOrder->supplier?->name ?? 'Proveedor' }},
       </div>

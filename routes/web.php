@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\SettingController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -36,6 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
     Route::get('/purchase-orders/{id}/pdf', [PurchaseOrderController::class, 'streamPdf'])->name('purchase-orders.pdf');
     Route::patch('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
+
+    Route::get('/settings/profits', [SettingController::class, 'profits'])->name('settings.profits');
+    Route::get('/settings/vat', [SettingController::class, 'vat'])->name('settings.vat');
+    Route::put('/settings/vat/{vat}', [SettingController::class, 'updateVat'])->name('settings.vat.update');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

@@ -25,7 +25,10 @@ body {
   background-color: #FFFFFF;
 }
 
-.erp-inventory-container, .erp-users-container, .erp-suppliers-container, .erp-cash-register-container, .erp-quotations-container, .erp-purchase-orders-container {
+.erp-inventory-container, .erp-users-container, 
+.erp-suppliers-container, .erp-cash-register-container, 
+.erp-quotations-container, .erp-purchase-orders-container,
+.settings-container, .settings-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -275,18 +278,20 @@ body {
 .users-section-top,
 .suppliers-section-top,
 .quotations-section-top,
-.purchase-orders-section-top {
+.purchase-orders-section-top,
+.settings-section-top {
   display: flex;
   gap: 1vh;
   padding: 3.5vh 0;
-  width: 80%;
+  width: 85%;
 }
 
 .inventory-section-top-tittle,
 .users-section-top-tittle,
 .suppliers-section-top-tittle,
 .quotations-section-top-tittle,
-.purchase-orders-section-top-tittle {
+.purchase-orders-section-top-tittle,
+.settings-section-top-tittle {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
@@ -303,7 +308,8 @@ body {
 .users-section-top-tittle h3,
 .suppliers-section-top-tittle h3,
 .quotations-section-top-tittle h3,
-.purchase-orders-section-top-tittle h3 {
+.purchase-orders-section-top-tittle h3,
+.settings-section-top-tittle h3 {
   margin: 0;
   font-size: inherit;
 }
@@ -312,7 +318,8 @@ body {
 .users-create-button,
 .suppliers-create-button,
 .quotations-create-button,
-.purchase-orders-create-button {
+.purchase-orders-create-button,
+.settings-create-button {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
@@ -332,8 +339,9 @@ body {
 .users-section-table,
 .suppliers-section-table,
 .quotations-section-table,
-.purchase-orders-section-table {
-  width: 80%;
+.purchase-orders-section-table,
+.settings-section-table {
+  width: 85%;
   overflow-y: auto;
 }
 
@@ -341,7 +349,8 @@ body {
 .users-table,
 .suppliers-table,
 .quotations-table,
-.purchase-orders-table {
+.purchase-orders-table,
+.settings-table {
   border-collapse: collapse;
   width: 100%;
 }
@@ -350,7 +359,8 @@ body {
 .users-table th, .users-table td,
 .suppliers-table th, .suppliers-table td,
 .quotations-table th, .quotations-table td,
-.purchase-orders-table th, .purchase-orders-table td {
+.purchase-orders-table th, .purchase-orders-table td,
+.settings-table th, .settings-table td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 5px;
@@ -360,7 +370,8 @@ body {
 .users-table tr:nth-child(even),
 .suppliers-table tr:nth-child(even),
 .quotations-table tr:nth-child(even),
-.purchase-orders-table tr:nth-child(even) {
+.purchase-orders-table tr:nth-child(even),
+.settings-table tr:nth-child(even) {
   background-color: #dddddd;
 }
 
@@ -368,7 +379,8 @@ body {
 .users-table-button,
 .suppliers-table-button,
 .quotations-table-button,
-.purchase-orders-table-button {
+.purchase-orders-table-button,
+.settings-table-button {
   font-size: 1.80vh;
   padding: 1vh;
   border: none;
@@ -380,7 +392,8 @@ body {
 .users-table-button.edit,
 .suppliers-table-button.edit,
 .quotations-table-button.download,
-.purchase-orders-table-button.download {
+.purchase-orders-table-button.download,
+.settings-table-button.edit {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #132873;
@@ -390,7 +403,8 @@ body {
 .users-table-button.delete,
 .suppliers-table-button.delete,
 .quotations-table-button.delete,
-.purchase-orders-table-button.delete {
+.purchase-orders-table-button.delete,
+.settings-table-button.delete {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #d84130;
@@ -400,7 +414,8 @@ body {
 .users-table-button.disable,
 .suppliers-table-button.disable,
 .quotations-table-button.disable,
-.purchase-orders-table-button.disable {
+.purchase-orders-table-button.disable,
+.settings-table-button.disable {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #ecb912;
@@ -411,7 +426,8 @@ body {
 .users-table-button.disable.enable,
 .suppliers-table-button.disable.enable,
 .quotations-table-button.disable.enable,
-.purchase-orders-table-button.disable.enable {
+.purchase-orders-table-button.disable.enable,
+.settings-table-button.disable.enable {
   background-color: #28a745;
 }
 
@@ -457,7 +473,7 @@ body {
 .modal-content {
   background-color: #ffffff;
   width: 100%;
-  max-width: 60vh;
+  max-width: 70vh;
   max-height: 90vh;
   overflow-y: auto;
   padding: 24px;
@@ -647,7 +663,7 @@ body {
 .suppliers-section-top, .quotations-section-top,
 .inventory-section-table, .users-section-table,
 .suppliers-section-table, .quotations-section-table,
-.purchase-orders-section-top, .purchase-orders-table {
+.purchase-orders-section-top, .purchase-orders-section-table {
       width: 95%;
   }
 

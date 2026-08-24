@@ -23,47 +23,57 @@
         </section>
         <section class="suppliers-section-table">
             <table class="suppliers-table">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Contacto</th>
-                    <th>Teléfono</th>
-                    <th>Correo</th>
-                    <th>Dirección</th>
-                    <th>Acciones</th>
-                </tr>
-                @foreach($suppliers as $supplier)
-                <tr>
-                    <td>{{ $supplier->name }}</td>
-                    <td>{{ $supplier->contact_name }}</td>
-                    <td>{{ $supplier->phone }}</td>
-                    <td>{{ $supplier->email }}</td>
-                    <td>{{ $supplier->address }}</td>
-                    <td>
-                        <button class="suppliers-table-button edit" 
-                                type="button" 
-                                data-modal-target="modal-edit"
-                                data-id="{{ $supplier->id }}"
-                                data-name="{{ $supplier->name }}"
-                                data-contact_name="{{ $supplier->contact_name }}"
-                                data-phone="{{ $supplier->phone }}"
-                                data-email="{{ $supplier->email }}"
-                                data-address="{{ $supplier->address }}">
-                            Editar
-                        </button>
-                        <button class="suppliers-table-button delete" 
-                                type="button"
-                                data-modal-target="modal-alert"
-                                data-action="{{ route('suppliers.destroy', $supplier->id) }}"
-                                data-method="DELETE"
-                                data-title="Eliminar Proveedor"
-                                data-message="¿Estás seguro de que deseas eliminar al proveedor '{{ $supplier->name }}'?"
-                                data-btn-text="Eliminar"
-                                data-btn-class="btn-danger">
-                            Eliminar
-                        </button>
-                    </td>
-                </tr>
-                @endforeach
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Contacto</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Dirección</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($suppliers as $supplier)
+                    <tr>
+                        <td>{{ $supplier->name }}</td>
+                        <td>{{ $supplier->contact }}</td>
+                        <td>{{ $supplier->phone }}</td>
+                        <td>{{ $supplier->email }}</td>
+                        <td>{{ $supplier->address }}</td>
+                        <td>
+                            <button class="suppliers-table-button edit" 
+                                    type="button" 
+                                    data-modal-target="modal-edit"
+                                    data-id="{{ $supplier->id }}"
+                                    data-name="{{ $supplier->name }}"
+                                    data-contact_name="{{ $supplier->contact_name }}"
+                                    data-phone="{{ $supplier->phone }}"
+                                    data-email="{{ $supplier->email }}"
+                                    data-address="{{ $supplier->address }}">
+                                Editar
+                            </button>
+                            <button class="suppliers-table-button delete" 
+                                    type="button"
+                                    data-modal-target="modal-alert"
+                                    data-action="{{ route('suppliers.destroy', $supplier->id) }}"
+                                    data-method="DELETE"
+                                    data-title="Eliminar Proveedor"
+                                    data-message="¿Estás seguro de que deseas eliminar al proveedor '{{ $supplier->name }}'?"
+                                    data-btn-text="Eliminar"
+                                    data-btn-class="btn-danger">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
+                            No hay proveedores registrados en el sistema.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
             </table>
         </section>
         <div class="pagination-container">
