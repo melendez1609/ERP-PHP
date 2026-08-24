@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/cash-register', function () {return view('cash-register.index');})->name('cash-register.index');
+    Route::get('/cash-register', function () { return view('cash-register.index'); })->name('cash-register.index');
 
     Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
     Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
     Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+    Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
+    Route::get('/purchase-orders/{id}/pdf', [PurchaseOrderController::class, 'streamPdf'])->name('purchase-orders.pdf');
+    Route::patch('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

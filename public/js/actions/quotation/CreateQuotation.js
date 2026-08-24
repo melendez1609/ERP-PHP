@@ -18,7 +18,6 @@ export function initCreateQuotation() {
         totalDisplay.textContent = total.toFixed(2);
     }
 
-    // Agregar producto a la lista
     btnAdd.addEventListener('click', function() {
         const select = document.getElementById('select-product');
         const quantityInput = document.getElementById('input-quantity');

@@ -8,7 +8,7 @@ export function initCreatePurchaseOrder() {
     const poTotalSpan = document.getElementById('po-total');
     const formPurchaseOrder = document.getElementById('form-purchase-order');
 
-    if (!supplierSelect || !productSelect) return;
+    if (!supplierSelect || !productSelect || !poItemsBody) return;
 
     const allProductOptions = Array.from(productSelect.options).slice(1);
 
@@ -42,63 +42,83 @@ export function initCreatePurchaseOrder() {
         }
     });
 
-    btnAddProduct.addEventListener('click', function () {
-        const selectedOption = productSelect.options[productSelect.selectedIndex];
-        const productId = productSelect.value;
-        const quantity = parseInt(quantityInput.value) || 1;
+    if (productSearchInput) {
+        productSearchInput.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+            const options = Array.from(productSelect.options);
 
-        if (!productId) {
-            alert('Por favor, selecciona un producto.');
-            return;
-        }
+            options.forEach((option, index) => {
+                if (index === 0) return; // Omitir placeholder
+                const text = option.textContent.toLowerCase();
+                option.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+    }
 
-        const name = selectedOption.getAttribute('data-name');
-        const cost = parseFloat(selectedOption.getAttribute('data-cost')) || 0;
-        const subtotal = cost * quantity;
+    if (btnAddProduct) {
+        btnAddProduct.addEventListener('click', function () {
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const productId = productSelect.value;
+            const rawQty = parseInt(quantityInput.value) || 1;
+            const quantity = Math.max(1, rawQty);
 
-        if (document.querySelector(`tr[data-product-id="${productId}"]`)) {
-            alert('El producto ya está agregado en la orden.');
-            return;
-        }
+            if (!productId) {
+                alert('Por favor, selecciona un producto.');
+                return;
+            }
 
-        const row = document.createElement('tr');
-        row.setAttribute('data-product-id', productId);
-        row.style.borderBottom = '1px solid #eee';
+            const name = selectedOption.getAttribute('data-name') || selectedOption.textContent;
+            const cost = parseFloat(selectedOption.getAttribute('data-cost')) || 0;
+            const subtotal = cost * quantity;
 
-        row.innerHTML = `
-            <td style="padding: 8px 0;">
-                ${name}
-                <input type="hidden" name="products[${productId}][id]" value="${productId}">
-                <input type="hidden" name="products[${productId}][name]" value="${name}">
-                <input type="hidden" name="products[${productId}][cost]" value="${cost}">
-            </td>
-            <td style="padding: 8px 0; text-align: center;">
-                <input type="number" name="products[${productId}][quantity]" value="${quantity}" min="1" class="item-qty" style="width: 60px; text-align: center;">
-            </td>
-            <td style="padding: 8px 0; text-align: right;">$${cost.toFixed(2)}</td>
-            <td style="padding: 8px 0; text-align: right;" class="item-subtotal">$${subtotal.toFixed(2)}</td>
-            <td style="padding: 8px 0; text-align: center;">
-                <button type="button" class="btn-cancel btn-remove-item" style="padding: 2px 6px; font-size: 12px;">X</button>
-            </td>
-        `;
+            if (poItemsBody.querySelector(`tr[data-product-id="${productId}"]`)) {
+                alert('El producto ya está agregado en la orden.');
+                return;
+            }
 
-        poItemsBody.appendChild(row);
-        updateTotal();
+            const row = document.createElement('tr');
+            row.setAttribute('data-product-id', productId);
+            row.style.borderBottom = '1px solid #eee';
 
-        productSelect.value = '';
-        if (productSearchInput) productSearchInput.value = '';
-        quantityInput.value = 1;
-    });
+            row.innerHTML = `
+                <td style="padding: 8px 0;">
+                    ${name}
+                    <input type="hidden" name="products[${productId}][id]" value="${productId}">
+                    <input type="hidden" name="products[${productId}][name]" value="${name}">
+                    <input type="hidden" name="products[${productId}][cost]" value="${cost}">
+                </td>
+                <td style="padding: 8px 0; text-align: center;">
+                    <input type="number" name="products[${productId}][quantity]" value="${quantity}" min="1" class="item-qty" style="width: 60px; text-align: center;">
+                </td>
+                <td style="padding: 8px 0; text-align: right;">$${cost.toFixed(2)}</td>
+                <td style="padding: 8px 0; text-align: right;" class="item-subtotal">$${subtotal.toFixed(2)}</td>
+                <td style="padding: 8px 0; text-align: center;">
+                    <button type="button" class="btn-cancel btn-remove-item" style="padding: 2px 6px; font-size: 12px;">X</button>
+                </td>
+            `;
+
+            poItemsBody.appendChild(row);
+            updateTotal();
+
+            productSelect.value = '';
+            if (productSearchInput) productSearchInput.value = '';
+            quantityInput.value = 1;
+        });
+    }
 
     poItemsBody.addEventListener('input', function (e) {
         if (e.target.classList.contains('item-qty')) {
             const row = e.target.closest('tr');
             const costInput = row.querySelector(`input[name*="[cost]"]`);
-            const cost = parseFloat(costInput.value) || 0;
-            const qty = parseInt(e.target.value) || 1;
+            const cost = parseFloat(costInput ? costInput.value : 0) || 0;
+            const qty = Math.max(1, parseInt(e.target.value) || 1);
+            
+            e.target.value = qty;
             const subtotal = cost * qty;
 
-            row.querySelector('.item-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            const subtotalCell = row.querySelector('.item-subtotal');
+            if (subtotalCell) subtotalCell.textContent = `$${subtotal.toFixed(2)}`;
+            
             updateTotal();
         }
     });
@@ -122,13 +142,17 @@ export function initCreatePurchaseOrder() {
             }
         });
 
-        poTotalSpan.textContent = total.toFixed(2);
+        if (poTotalSpan) {
+            poTotalSpan.textContent = total.toFixed(2);
+        }
     }
 
-    formPurchaseOrder.addEventListener('submit', function (e) {
-        if (poItemsBody.children.length === 0) {
-            e.preventDefault();
-            alert('Debes agregar al menos un producto a la orden de compra.');
-        }
-    });
+    if (formPurchaseOrder) {
+        formPurchaseOrder.addEventListener('submit', function (e) {
+            if (poItemsBody.children.length === 0) {
+                e.preventDefault();
+                alert('Debes agregar al menos un producto a la orden de compra.');
+            }
+        });
+    }
 }

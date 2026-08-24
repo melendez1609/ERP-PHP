@@ -9,7 +9,9 @@ import { initEditUser } from './actions/users/EditUser.js';
 import { initEditSupplier } from './actions/supplier/EditSupplier.js';
 
 import { initCreateQuotation } from './actions/quotation/CreateQuotation.js';
+
 import { initCreatePurchaseOrder } from './actions/purchase-order/CreatePurchaseOrder.js';
+import { initPurchaseOrderActions } from './actions/purchase-order/PurchaseOrderActions.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -22,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initEditUser();
 
     initCreateQuotation();
+
     initCreatePurchaseOrder();
+    initPurchaseOrderActions();
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');

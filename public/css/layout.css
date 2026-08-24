@@ -643,7 +643,11 @@ body {
     width: 91%;
   }
 
-.inventory-section-top, .users-section-top, .suppliers-section-top,.inventory-section-table, .users-section-table, .suppliers-section-table, .quotations-section-top, .quotations-section-table{
+.inventory-section-top, .users-section-top, 
+.suppliers-section-top, .quotations-section-top,
+.inventory-section-table, .users-section-table,
+.suppliers-section-table, .quotations-section-table,
+.purchase-orders-section-top, .purchase-orders-table {
       width: 95%;
   }
 

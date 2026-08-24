@@ -26,7 +26,6 @@ export function initAlertModal() {
                 confirmBtn.style.display = 'inline-block';
                 confirmBtn.textContent = trigger.dataset.btnText || 'Confirmar';
                 
-                // Reset de clases y aplicación de estilo dinámico (ej: btn-danger, btn-save)
                 confirmBtn.className = 'btn btn-alert-confirm';
                 if (trigger.dataset.btnClass) {
                     confirmBtn.classList.add(trigger.dataset.btnClass);
