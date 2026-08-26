@@ -13,10 +13,16 @@ use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SettingController;
 
+// Rutas Públicas / Autenticación
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [AuthController::class, 'showLoginForm']); // Permite GET en /login
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::middleware(['auth', 'active.user'])->group(function () {
+
+    Route::get('/check-status', function () {
+        return response()->json(['status' => 'active']);
+    });
 
     Route::get('/dashboard', function () { 
         $products = Product::all(); 
@@ -43,7 +49,12 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::put('/settings/vat/{vat}', [SettingController::class, 'updateVat'])->name('settings.vat.update');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin', 'active.user'])->group(function () {
+
+    Route::get('/check-status', function () {
+        return response()->json(['status' => 'active']);
+    });
+
     Route::get('/inventory', [ProductController::class, 'index'])->name('inventory.index');
     Route::post('/inventory', [ProductController::class, 'store'])->name('inventory.store');
     Route::put('/inventory/{id}', [ProductController::class, 'update'])->name('inventory.update');

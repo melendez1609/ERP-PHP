@@ -18,6 +18,8 @@ import { initPurchaseOrderActions } from './actions/purchase-order/PurchaseOrder
 
 import { initVatSet } from './actions/vat/VatSet.js';
 
+import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
     initDateTime();
@@ -30,10 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initCreateQuotation();
     initCreatePurchaseOrder();
     initPurchaseOrderActions();
+    initVatSet();
+    initUserStatusMonitor();
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');
     initSelectFinder('po-product-search', 'po-select-product');
     
-    initVatSet();
 });
