@@ -292,12 +292,10 @@ body {
 .quotations-section-top-tittle,
 .purchase-orders-section-top-tittle,
 .settings-section-top-tittle {
-  font-size: 2vh;
+  font-size: 3vh;
   font-weight: bold;
-  padding: 1vh 2vh;
-  border-radius: 1vh;
-  color: #fff;
-  background-color: #132873;
+  padding-right: 1.5vh;
+  color: #132873;;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -500,6 +498,10 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 /* Modal *****************************************************************************/
 .modal {
   display: none;
@@ -576,6 +578,15 @@ input:checked + .slider:before {
   gap: 4px;
 }
 
+.dynamic-field-input, .dynamic-field-select {
+  margin-bottom: 12px;
+}
+
+.dynamic-field-label {
+  display: block;
+  margin-top: 12px;
+}
+
 .modal-content label {
   font-size: 0.875rem;
   font-weight: 600;
@@ -605,6 +616,8 @@ input:checked + .slider:before {
   resize: vertical;
   min-height: 60px;
 }
+
+
 
 .modal-actions,
 .modal-footer {
@@ -729,5 +742,4 @@ input:checked + .slider:before {
     width: 76%;
   }
 }
-
 

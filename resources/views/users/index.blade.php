@@ -67,7 +67,7 @@
                         </td>
                         <td>{{ $user->created_at?->format('Y-m-d H:i') ?? 'N/A' }}</td>
                         <td>{{ $user->updated_at?->format('Y-m-d H:i') ?? 'N/A' }}</td>
-                        <td>
+                        <td class="no-wrap">
                             <button class="users-table-button edit" 
                                     type="button" 
                                     data-modal-target="modal-edit"

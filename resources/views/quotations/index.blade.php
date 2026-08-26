@@ -38,7 +38,7 @@
                         <td>{{ $quotation->user?->name ?? 'N/A' }}</td>
                         <td>${{ number_format($quotation->total, 2) }}</td>
                         <td>{{ $quotation->created_at->format('Y-m-d H:i') }}</td>
-                        <td>
+                        <td class="no-wrap">
                             <a href="{{ route('quotations.download', $quotation->id) }}" 
                                target="_blank" 
                                class="quotations-table-button download" 

@@ -41,7 +41,7 @@
                         <td>{{ $supplier->phone }}</td>
                         <td>{{ $supplier->email }}</td>
                         <td>{{ $supplier->address }}</td>
-                        <td>
+                        <td class="no-wrap">
                             <button class="suppliers-table-button edit" 
                                     type="button" 
                                     data-modal-target="modal-edit"

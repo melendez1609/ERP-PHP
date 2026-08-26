@@ -4,7 +4,9 @@ import { initDateTime } from './functionalities/datetime.js';
 import { initAlertModal } from './functionalities/alert.js';
 import { initSelectFinder } from './functionalities/finder.js';
 
+import { initAddInventory } from './actions/inventory/AddInventory.js';
 import { initEditInventory } from './actions/inventory/EditInventory.js';
+import { initBatchesInventory } from './actions/inventory/BatchesInventory.js';
 
 import { initEditUser } from './actions/users/EditUser.js';
 import { initStatusUser } from './actions/users/StatusUser.js';
@@ -25,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initDateTime();
     initModals();
     initAlertModal();
+    initAddInventory();
     initEditInventory();
+    initBatchesInventory();
     initEditSupplier();
     initEditUser();
     initStatusUser();

@@ -17,8 +17,9 @@
             <div class="inventory-section-top-tittle">
                 <h3>Inventario</h3>
             </div>
-            <div>
+            <div style="display: flex; gap: 10px;">
                 <button class="inventory-create-button" data-modal-target="modal-create">Crear</button>
+                <button class="inventory-create-button" data-modal-target="modal-restock" onclick="window.openRestockModal && window.openRestockModal()">Agregar</button>
             </div>
         </section>
         <section class="inventory-section-table">
@@ -51,7 +52,15 @@
                         <td>{{ $product->stock }}</td>
                         <td>{{ $product->min_stock }}</td>
                         <td>{{ $product->status?->name ?? 'Sin estado' }}</td>
-                        <td>
+                        <td class="no-wrap">
+                            <button class="inventory-table-button view-batches" 
+                                    type="button" 
+                                    data-modal-target="modal-batches" 
+                                    data-id="{{ $product->id }}"
+                                    data-name="{{ $product->name }}"
+                                    data-code="{{ $product->code }}">
+                                Lotes
+                            </button>
                             <button class="inventory-table-button edit" 
                                     type="button" 
                                     data-modal-target="modal-edit"
@@ -69,17 +78,6 @@
                                     data-status-id="{{ $product->product_status_id }}">
                                 Editar
                             </button>
-                            <button class="inventory-table-button delete" 
-                                    type="button"
-                                    data-modal-target="modal-alert"
-                                    data-action="{{ route('inventory.destroy', $product->id) }}"
-                                    data-method="DELETE"
-                                    data-title="Eliminar Producto"
-                                    data-message="¿Estás seguro de que deseas eliminar el producto '{{ $product->name }}'?"
-                                    data-btn-text="Eliminar"
-                                    data-btn-class="btn-danger">
-                                Eliminar
-                            </button>
                             <button class="inventory-table-button disable {{ $product->product_status_id != 1 ? 'enable' : '' }}" 
                                     type="button"
                                     data-modal-target="modal-alert"
@@ -90,6 +88,17 @@
                                     data-btn-text="{{ $product->product_status_id == 1 ? 'Desactivar' : 'Activar' }}"
                                     data-btn-class="btn-save">
                                 {{ $product->product_status_id == 1 ? 'Desactivar' : 'Activar' }}
+                            </button>
+                            <button class="inventory-table-button delete" 
+                                    type="button"
+                                    data-modal-target="modal-alert"
+                                    data-action="{{ route('inventory.destroy', $product->id) }}"
+                                    data-method="DELETE"
+                                    data-title="Eliminar Producto"
+                                    data-message="¿Estás seguro de que deseas eliminar el producto '{{ $product->name }}'?"
+                                    data-btn-text="Eliminar"
+                                    data-btn-class="btn-danger">
+                                Eliminar
                             </button>
                         </td>
                     </tr>
@@ -110,7 +119,9 @@
 
     @include('inventory.partials.modal-create')
     @include('inventory.partials.modal-edit')
+    @include('inventory.partials.modal-restock')
     @include('partials.alert')
+    @include('inventory.partials.modal-batches')
 
     @include('partials.footer')
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
