@@ -20,7 +20,7 @@
 
             <div class="setting-option-row" style="display: flex; justify-content: space-between; align-items: center; gap: 20px;">
                 <div class="setting-info">
-                    <h5 style="margin: 0 0 4px 0; font-size: 1rem;">Impuesto (IVA)</h5>
+                    <h5 style="margin: 0 0 4px 0; font-size: 1rem;">Impuestos y Tasas</h5>
                     <p style="margin: 0; font-size: 0.85rem; color: #666;">Gestión de tasa de impuesto aplicable al sistema.</p>
                 </div>
                 <div class="setting-action">

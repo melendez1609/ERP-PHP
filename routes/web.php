@@ -16,7 +16,7 @@ use App\Http\Controllers\SettingController;
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active.user'])->group(function () {
 
     Route::get('/dashboard', function () { 
         $products = Product::all(); 

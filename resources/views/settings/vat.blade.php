@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-ERP | Impuesto (IVA)</title>
+    <title>G-ERP | Impuestos y Tasas</title>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
 </head>
@@ -15,7 +15,7 @@
     <main class="settings-container">
         <section class="settings-section-top">
             <div class="settings-section-top-tittle">
-                <h3>Impuesto (IVA)</h3>
+                <h3>Impuestos y Tasas</h3>
             </div>
         </section>
         <section class="settings-section-table">

@@ -83,6 +83,12 @@ class UserController extends Controller
     public function disable($id)
     {
         if ((int) $id === (int) auth()->id() && auth()->user()->is_active) {
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => 'No puedes desactivar tu propio usuario en sesión.'
+                ], 403);
+            }
             return back()->with('error', 'No puedes inhabilitar tu propio usuario en sesión.');
         }
 
@@ -91,6 +97,14 @@ class UserController extends Controller
         $user->save();
 
         $estado = $user->is_active ? 'activado' : 'inactivado';
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'is_active' => $user->is_active,
+                'message' => "Usuario {$estado} correctamente."
+            ]);
+        }
 
         return back()->with('success', "Usuario {$estado} correctamente.");
     }

@@ -24,7 +24,7 @@
                     <tr>
                         <th># Cotización</th>
                         <th>Cliente</th>
-                        <th>Atendido por</th>
+                        <th>Creada por</th>
                         <th>Total</th>
                         <th>Fecha</th>
                         <th>Acciones</th>
