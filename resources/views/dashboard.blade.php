@@ -71,6 +71,10 @@
                     <img class="icon" src="{{ asset('icons/email.png') }}" alt="email">
                     <h4 class="icon-name">Correo</h4>
                 </div>
+                <a href="#" class="option" data-modal-target="modal-barcodes">
+                    <img class="icon" src="{{ asset('icons/barcode.png') }}" alt="barcode">
+                    <h4 class="icon-name">Códigos de Barras</h4>
+                </a>
             @endif
         </div>
     </main>
@@ -81,6 +85,7 @@
     @include('purchase-order.partials.modal-options')
     @include('purchase-order.partials.modal-purchase-order')
     @include('settings.partials.modal-options')
+    @include('barcodes.partials.modal-options')
 
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>

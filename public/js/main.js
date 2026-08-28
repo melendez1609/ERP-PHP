@@ -22,6 +22,8 @@ import { initVatSet } from './actions/vat/VatSet.js';
 
 import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
 
+import { initBarcodes } from './actions/barcodes/barcodes.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
     initDateTime();
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPurchaseOrderActions();
     initVatSet();
     initUserStatusMonitor();
+    initBarcodes();
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');

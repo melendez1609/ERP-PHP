@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductBatch;
+use App\Models\ProductSku;
 use App\Models\ProductStatus;
 use App\Models\Supplier;
 use App\Models\Vat;
@@ -89,19 +90,21 @@ class ProductController extends Controller
             ]);
 
             if ($validated['stock'] > 0) {
-                ProductBatch::create([
-                    'product_id'         => $product->id,
+                $batch = ProductBatch::create([
+                    'product_id'        => $product->id,
                     'purchase_order_id'  => null,
-                    'cost'               => $validated['cost'],
+                    'cost'              => $validated['cost'],
                     'margin_percentage'  => $validated['profit_percentage'],
-                    'price'              => $validated['price'],
+                    'price'             => $validated['price'],
                     'quantity_received'  => $validated['stock'],
                     'quantity_remaining' => $validated['stock'],
                 ]);
+
+                $this->generateSkusForBatch($product->id, $batch->id, $validated['stock']);
             }
         });
 
-        return back()->with('success', 'Producto y lote inicial creados exitosamente.');
+        return back()->with('success', 'Producto, lote e identificadores SKU creados exitosamente.');
     }
 
     public function addStock(Request $request)
@@ -118,18 +121,20 @@ class ProductController extends Controller
         DB::transaction(function () use ($validated) {
             $product = Product::findOrFail($validated['product_id']);
 
-            ProductBatch::create([
-                'product_id'         => $product->id,
+            $batch = ProductBatch::create([
+                'product_id'        => $product->id,
                 'purchase_order_id'  => null,
-                'cost'               => $validated['cost'],
+                'cost'              => $validated['cost'],
                 'margin_percentage'  => $validated['profit_percentage'],
-                'price'              => $validated['price'],
+                'price'             => $validated['price'],
                 'quantity_received'  => $validated['stock'],
                 'quantity_remaining' => $validated['stock'],
             ]);
 
+            $this->generateSkusForBatch($product->id, $batch->id, $validated['stock']);
+
             $product->increment('stock', $validated['stock']);
-            
+
             $product->update([
                 'cost'  => $validated['cost'],
                 'price' => $validated['price'],
@@ -141,7 +146,7 @@ class ProductController extends Controller
             );
         });
 
-        return back()->with('success', 'Stock y nuevo lote agregados exitosamente.');
+        return back()->with('success', 'Stock, nuevo lote y SKUs agregados exitosamente.');
     }
 
     public function update(Request $request, $id)
@@ -259,5 +264,35 @@ class ProductController extends Controller
         $estado = ($product->product_status_id == 1) ? 'activado' : 'inactivado';
 
         return back()->with('success', "Producto {$estado} correctamente.");
+    }
+
+    private function generateSkusForBatch(int $productId, int $batchId, int $quantity): void
+    {
+        $skus = [];
+        $lastId = ProductSku::max('id') ?? 0;
+        $now = now();
+
+        for ($i = 1; $i <= $quantity; $i++) {
+            $nextId = $lastId + $i;
+            $number = '2' . str_pad($nextId, 11, '0', STR_PAD_LEFT);
+
+            $sum = 0;
+            for ($j = 0; $j < 12; $j++) {
+                $digit = (int) $number[$j];
+                $sum += ($j % 2 === 0) ? $digit : $digit * 3;
+            }
+            $checksum = (10 - ($sum % 10)) % 10;
+
+            $skus[] = [
+                'product_id'       => $productId,
+                'product_batch_id' => $batchId,
+                'sku'              => $number . $checksum,
+                'status'           => 'available',
+                'created_at'       => $now,
+                'updated_at'       => $now,
+            ];
+        }
+
+        ProductSku::insert($skus);
     }
 }

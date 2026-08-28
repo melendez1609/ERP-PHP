@@ -12,10 +12,10 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\BarcodeController;
 
-// Rutas Públicas / Autenticación
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
-Route::get('/login', [AuthController::class, 'showLoginForm']); // Permite GET en /login
+Route::get('/login', [AuthController::class, 'showLoginForm']);
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::middleware(['auth', 'active.user'])->group(function () {
@@ -25,7 +25,7 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     });
 
     Route::get('/dashboard', function () { 
-        $products = Product::all(); 
+        $products = Product::with('batches')->get(); 
         $suppliers = Supplier::all(); 
         return view('dashboard', compact('products', 'suppliers')); 
     })->name('dashboard');
@@ -74,4 +74,7 @@ Route::middleware(['auth', 'admin', 'active.user'])->group(function () {
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+
+    Route::post('/barcodes/generate', [BarcodeController::class, 'generate'])->name('barcodes.generate');
+    Route::get('/barcodes/search', [BarcodeController::class, 'search'])->name('barcodes.search');
 });

@@ -49,4 +49,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductBatch::class);
     }
+
+    public function skus()
+    {
+        return $this->hasMany(ProductSku::class);
+    }
 }

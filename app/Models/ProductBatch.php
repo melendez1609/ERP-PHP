@@ -26,4 +26,9 @@ class ProductBatch extends Model
     {
         return $this->belongsTo(PurchaseOrder::class);
     }
+
+    public function skus()
+    {
+        return $this->hasMany(ProductSku::class);
+    }
 }
