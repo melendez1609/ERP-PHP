@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use App\Events\ScheduleActionBroadcast;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -33,6 +34,10 @@ class ScheduleController extends Controller
         $validated['user_id'] = auth()->id();
 
         $schedule = Schedule::create($validated);
+        
+        $schedule->load('user');
+
+        broadcast(new ScheduleActionBroadcast($schedule, 'created'))->toOthers();
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true, 'event' => $schedule]);
@@ -57,6 +62,10 @@ class ScheduleController extends Controller
         ]);
 
         $schedule->update($validated);
+        
+        $schedule->load('user');
+
+        broadcast(new ScheduleActionBroadcast($schedule, 'updated'))->toOthers();
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true, 'event' => $schedule]);
@@ -72,7 +81,11 @@ class ScheduleController extends Controller
             abort(403, 'No autorizado.');
         }
 
+        $scheduleData = $schedule->load('user');
+
         $schedule->delete();
+
+        broadcast(new ScheduleActionBroadcast($scheduleData, 'deleted'))->toOthers();
 
         if (request()->ajax() || request()->wantsJson()) {
             return response()->json(['success' => true]);

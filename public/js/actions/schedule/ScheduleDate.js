@@ -148,7 +148,6 @@ export function initScheduleDate() {
         renderEventsListForDate(date);
     }
 
-
     function renderEventsListForDate(date) {
         if (!eventsContainer) return;
 
@@ -166,7 +165,6 @@ export function initScheduleDate() {
             return;
         }
 
-        // Crear menú flotante global una sola vez para evitar recortes por overflow
         let globalDropdown = document.getElementById('cal06-global-dropdown');
         if (!globalDropdown) {
             globalDropdown = document.createElement('div');
@@ -220,21 +218,17 @@ export function initScheduleDate() {
                 </div>
             `;
 
-            // Clic en el cuerpo del evento abre la vista
             evItem.querySelector('.cal06__ev-body').addEventListener('click', (evt) => {
                 evt.stopPropagation();
                 globalDropdown.style.display = 'none';
                 openViewModal(event);
             });
 
-            // Botón de tres puntos (⋮)
             const optionsBtn = evItem.querySelector('.cal06__ev-options-btn');
             optionsBtn.addEventListener('click', (evt) => {
                 evt.stopPropagation();
                 activeEventForDropdown = event;
                 const rect = optionsBtn.getBoundingClientRect();
-
-                // Mostrar y posicionar el menú flotante en la pantalla con coordenadas fijas
                 globalDropdown.style.display = 'block';
                 globalDropdown.style.top = `${rect.bottom + 4}px`;
                 globalDropdown.style.left = `${rect.right - 100}px`;
@@ -243,7 +237,6 @@ export function initScheduleDate() {
             eventsContainer.appendChild(evItem);
         });
 
-        // Cerrar menú global al hacer clic en cualquier otra parte
         document.addEventListener('click', () => {
             if (globalDropdown) globalDropdown.style.display = 'none';
         });
@@ -397,7 +390,6 @@ export function initScheduleDate() {
         }
     }
 
-    // Escuchadores de cierre para todos los modales (incluyendo el de vista)
     document.querySelectorAll('#modal-create-event [data-modal-close], #modal-edit-event [data-modal-close], #modal-view-schedule [data-modal-close], #modal-alert [data-modal-close]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -506,6 +498,32 @@ export function initScheduleDate() {
             renderCalendar();
             updateSideCard(selectedDate);
         });
+    }
+
+    // Listener de Laravel Reverb en tiempo real
+    if (window.Echo) {
+        window.Echo.channel('schedules-channel')
+            .listen('.ScheduleActionBroadcast', (e) => {
+                const { schedule, action } = e;
+
+                if (action === 'created') {
+                    if (!eventsData.find(ev => ev.id === schedule.id)) {
+                        eventsData.push(schedule);
+                    }
+                } else if (action === 'updated') {
+                    const index = eventsData.findIndex(ev => ev.id === schedule.id);
+                    if (index !== -1) {
+                        eventsData[index] = schedule;
+                    } else {
+                        eventsData.push(schedule);
+                    }
+                } else if (action === 'deleted') {
+                    eventsData = eventsData.filter(ev => ev.id !== schedule.id);
+                }
+
+                renderCalendar();
+                updateSideCard(selectedDate);
+            });
     }
 
     loadEvents();
