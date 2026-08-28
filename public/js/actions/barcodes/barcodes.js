@@ -1,7 +1,6 @@
 export function initBarcodes() {
     const productSelects = document.querySelectorAll('.product-select');
 
-    // Escuchar el cambio de producto en cualquiera de los formularios
     productSelects.forEach(productSelect => {
         productSelect.addEventListener('change', function() {
             updateBatchOptions(this);
@@ -11,7 +10,7 @@ export function initBarcodes() {
     const generateForm = document.getElementById('form-generate-barcodes') || document.querySelector('form[action*="barcodes.generate"]');
 
     if (generateForm) {
-        generateForm.addEventListener('submit', function() {
+        generateForm.addEventListener('submit', function(e) {
             const productSelect = this.querySelector('.product-select');
             const batchSelect = this.querySelector('.batch-select');
 
@@ -22,34 +21,107 @@ export function initBarcodes() {
 
             if (!selectedProductCode || !selectedBatchId) return;
 
-            document.querySelectorAll('.product-select option').forEach(option => {
-                if (option.value === selectedProductCode) {
-                    try {
-                        const rawBatches = option.getAttribute('data-batches') || option.dataset.batches || '[]';
-                        let batches = JSON.parse(rawBatches);
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            let hasPdf = false;
+            try {
+                const rawBatches = selectedOption.getAttribute('data-batches') || selectedOption.dataset.batches || '[]';
+                const batches = JSON.parse(rawBatches);
+                const currentBatch = batches.find(batch => String(batch.id) === String(selectedBatchId));
+                hasPdf = Boolean(currentBatch && currentBatch.has_pdf);
+            } catch (err) {
+                console.error('Error al verificar PDF:', err);
+            }
 
-                        // Marcar el lote recién generado como con PDF (has_pdf: true)
-                        batches = batches.map(batch => {
-                            if (String(batch.id) === String(selectedBatchId)) {
-                                return { ...batch, has_pdf: true };
-                            }
-                            return batch;
-                        });
+            if (hasPdf) {
+                e.preventDefault();
 
-                        const updatedJson = JSON.stringify(batches);
-                        option.setAttribute('data-batches', updatedJson);
-                        option.dataset.batches = updatedJson;
-                    } catch (e) {
-                        console.error('Error actualizando lote generado:', e);
-                    }
+                const alertModal = document.getElementById('modal-alert');
+                if (!alertModal) return;
+
+                const titleEl = alertModal.querySelector('.modal-title');
+                const messageEl = alertModal.querySelector('.modal-message');
+                const confirmBtn = alertModal.querySelector('.btn-alert-confirm');
+                const alertForm = alertModal.querySelector('form');
+
+                if (alertForm) {
+                    alertForm.onsubmit = function(evt) {
+                        evt.preventDefault();
+                    };
                 }
-            });
 
-            const searchProductSelect = document.querySelector('.product-select[data-filter-pdf="true"]');
-            if (searchProductSelect) {
-                updateBatchOptions(searchProductSelect);
+                if (titleEl) titleEl.textContent = 'Sobrescribir PDF';
+                if (messageEl) messageEl.textContent = `El lote #${selectedBatchId} ya cuenta con un PDF generado. ¿Deseas rehacerlo?`;
+
+                if (confirmBtn) {
+                    confirmBtn.textContent = 'Rehacer PDF';
+
+                    const newConfirmBtn = confirmBtn.cloneNode(true);
+                    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+                    newConfirmBtn.addEventListener('click', function(evt) {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+
+                        closeCustomModal(alertModal);
+                        updateMemoryAndSearch(selectedProductCode, selectedBatchId);
+                        generateForm.submit();
+                    });
+                }
+
+                const closeBtns = alertModal.querySelectorAll('[data-modal-close]');
+                closeBtns.forEach(btn => {
+                    btn.onclick = function(evt) {
+                        evt.preventDefault();
+                        closeCustomModal(alertModal);
+                    };
+                });
+
+                openCustomModal(alertModal);
+            } else {
+                updateMemoryAndSearch(selectedProductCode, selectedBatchId);
             }
         });
+    }
+}
+
+function openCustomModal(modal) {
+    modal.classList.add('active', 'show');
+    modal.style.display = 'flex';
+    modal.style.zIndex = '9999';
+}
+
+function closeCustomModal(modal) {
+    modal.classList.remove('active', 'show');
+    modal.style.display = 'none';
+    modal.style.zIndex = '';
+}
+
+function updateMemoryAndSearch(selectedProductCode, selectedBatchId) {
+    document.querySelectorAll('.product-select option').forEach(option => {
+        if (option.value === selectedProductCode) {
+            try {
+                const rawBatches = option.getAttribute('data-batches') || option.dataset.batches || '[]';
+                let batches = JSON.parse(rawBatches);
+
+                batches = batches.map(batch => {
+                    if (String(batch.id) === String(selectedBatchId)) {
+                        return { ...batch, has_pdf: true };
+                    }
+                    return batch;
+                });
+
+                const updatedJson = JSON.stringify(batches);
+                option.setAttribute('data-batches', updatedJson);
+                option.dataset.batches = updatedJson;
+            } catch (e) {
+                console.error('Error actualizando lote generado:', e);
+            }
+        }
+    });
+
+    const searchProductSelect = document.querySelector('.product-select[data-filter-pdf="true"]');
+    if (searchProductSelect) {
+        updateBatchOptions(searchProductSelect);
     }
 }
 

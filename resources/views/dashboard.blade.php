@@ -80,6 +80,7 @@
     </main>
 
     @include('partials.footer')
+    @include('partials.alert')
     @include('quotations.partials.modal-options')
     @include('quotations.partials.modal-quotations')
     @include('purchase-order.partials.modal-options')
