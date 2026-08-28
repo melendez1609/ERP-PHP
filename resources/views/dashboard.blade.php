@@ -34,10 +34,10 @@
                 <img class="icon" src="{{ asset('icons/sales-report.png') }}" alt="sales-report">
                 <h4 class="icon-name">Reporte de Ventas</h4>
             </div>
-            <div class="option">
-                <img class="icon" src="{{ asset('icons/clock.png') }}" alt="clock">
-                <h4 class="icon-name">Reloj</h4>
-            </div>
+            <a href="javascript:void(0)" class="option" data-modal-target="modal-schedule">
+                <img class="icon" src="{{ asset('icons/schedule.png') }}" alt="schedule">
+                <h4 class="icon-name">Agenda</h4>
+            </a>
             <div class="option">
                 <img class="icon" src="{{ asset('icons/support.png') }}" alt="support">
                 <h4 class="icon-name">Soporte</h4>
@@ -87,6 +87,10 @@
     @include('purchase-order.partials.modal-purchase-order')
     @include('settings.partials.modal-options')
     @include('barcodes.partials.modal-options')
+    @include('schedule.partials.modal-schedule')
+    @include('schedule.partials.modal-create') 
+    @include('schedule.partials.modal-edit')  
+    @include('schedule.partials.modal-content')
 
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>

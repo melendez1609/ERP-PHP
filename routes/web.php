@@ -13,6 +13,7 @@ use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\ScheduleController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/login', [AuthController::class, 'showLoginForm']);
@@ -47,6 +48,11 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::get('/settings/profits', [SettingController::class, 'profits'])->name('settings.profits');
     Route::get('/settings/vat', [SettingController::class, 'vat'])->name('settings.vat');
     Route::put('/settings/vat/{vat}', [SettingController::class, 'updateVat'])->name('settings.vat.update');
+
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
+    Route::put('/schedules/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
+    Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
 });
 
 Route::middleware(['auth', 'admin', 'active.user'])->group(function () {
