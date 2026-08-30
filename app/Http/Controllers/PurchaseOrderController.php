@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\PurchaseOrder;
 use App\Models\Supplier;
+use App\Models\Product;
+use App\Models\ProductBatch;
+use App\Models\ProductSku;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -13,7 +17,36 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $purchaseOrders = PurchaseOrder::with('supplier')->paginate(10);
-        return view('purchase-order.index', compact('purchaseOrders'));
+        $suppliers = Supplier::all();
+
+        return view('purchase-order.index', compact('purchaseOrders', 'suppliers'));
+    }
+
+    public function activeProducts()
+    {
+        $products = Product::query()
+            ->where('product_status_id', 1)
+            ->leftJoin('product_batches', 'products.id', '=', 'product_batches.product_id')
+            ->select('products.id', 'products.code', 'products.name', 'products.cost')
+            ->selectRaw('MAX(product_batches.cost) as max_batch_cost')
+            ->groupBy('products.id', 'products.code', 'products.name', 'products.cost')
+            ->orderBy('products.name')
+            ->get()
+            ->map(function ($product) {
+                $highestCost = max(
+                    (float) $product->cost,
+                    (float) ($product->max_batch_cost ?? 0)
+                );
+
+                return [
+                    'id' => $product->id,
+                    'code' => $product->code,
+                    'name' => $product->name,
+                    'cost' => number_format($highestCost, 2, '.', ''),
+                ];
+            });
+
+        return response()->json($products);
     }
 
     public function store(Request $request)
@@ -52,7 +85,6 @@ class PurchaseOrderController extends Controller
             mkdir($directory, 0755, true);
         }
 
-        // PDF sin cambios (mantiene la lógica original)
         $logoPath = public_path('images/dvariedad-logo-bn.png');
         $logoBase64 = '';
         if (file_exists($logoPath)) {
@@ -75,7 +107,119 @@ class PurchaseOrderController extends Controller
             : 'Orden de Compra creada correctamente, pero no se pudo enviar el correo.';
 
         return redirect()->route('purchase-orders.index')
-            ->with('success', $message);
+            ->with('success', $message)
+            ->with('pdf_url', route('purchase-orders.pdf', $purchaseOrder->id));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $purchaseOrder = PurchaseOrder::findOrFail($id);
+
+        if ($purchaseOrder->status !== 'pendiente') {
+            return redirect()->back()->with('error', 'Solo se pueden editar órdenes en estado pendiente.');
+        }
+
+        $request->validate([
+            'supplier_id' => 'required|exists:suppliers,id',
+            'products'    => 'required|array|min:1',
+        ]);
+
+        $productsData = array_values($request->products);
+        $subtotal = 0;
+
+        foreach ($productsData as $item) {
+            $subtotal += ($item['cost'] * $item['quantity']);
+        }
+
+        $total = $subtotal;
+
+        DB::transaction(function () use ($purchaseOrder, $request, $productsData, $subtotal, $total) {
+            $purchaseOrder->update([
+                'supplier_id' => $request->supplier_id,
+                'products'    => $productsData,
+                'subtotal'    => $subtotal,
+                'total'       => $total,
+            ]);
+
+            $purchaseOrder->load('supplier');
+
+            $directory = storage_path('app/private/purchase-orders');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            $logoPath = public_path('images/dvariedad-logo-bn.png');
+            $logoBase64 = '';
+            if (file_exists($logoPath)) {
+                $type = pathinfo($logoPath, PATHINFO_EXTENSION);
+                $data = file_get_contents($logoPath);
+                $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            }
+
+            if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
+                $pdfPath = $directory . '/' . "Orden_de_Compra_{$purchaseOrder->order_number}.pdf";
+                $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('purchase-order.partials.purchase-order-invoice', compact('purchaseOrder', 'logoBase64'));
+                $pdf->save($pdfPath);
+            }
+        });
+
+        return redirect()->route('purchase-orders.index')
+            ->with('success', 'Orden de Compra actualizada y PDF regenerado correctamente.');
+    }
+
+    public function receive($id)
+    {
+        $purchaseOrder = PurchaseOrder::findOrFail($id);
+
+        if ($purchaseOrder->status !== 'pendiente') {
+            return redirect()->back()->with('error', 'Solo se pueden recibir órdenes que estén en estado pendiente.');
+        }
+
+        DB::transaction(function () use ($purchaseOrder) {
+            $productsList = is_array($purchaseOrder->products) 
+                ? $purchaseOrder->products 
+                : json_decode($purchaseOrder->products, true);
+
+            foreach ($productsList as $item) {
+                $product = Product::findOrFail($item['product_id']);
+                $cost = (float) $item['cost'];
+                $price = (float) ($item['price'] ?? $product->price);
+                $quantity = (int) $item['quantity'];
+
+                $vatRate = $product->vat?->rate ?? 13.00;
+                $priceWithoutVat = $price / (1 + ($vatRate / 100));
+                $marginPercentage = $cost > 0 ? round((($priceWithoutVat / $cost) - 1) * 100, 2) : 0;
+                if ($marginPercentage < 0) $marginPercentage = 0;
+
+                $batch = ProductBatch::create([
+                    'product_id'        => $product->id,
+                    'purchase_order_id' => $purchaseOrder->id,
+                    'cost'              => $cost,
+                    'margin_percentage' => $marginPercentage,
+                    'price'             => $price,
+                    'quantity_received' => $quantity,
+                    'quantity_remaining'=> $quantity,
+                ]);
+
+                $this->generateSkusForBatch($product->id, $batch->id, $quantity);
+
+                $product->increment('stock', $quantity);
+                $product->update([
+                    'cost'  => $cost,
+                    'price' => $price,
+                ]);
+
+                $product->profitMargin()->updateOrCreate(
+                    ['product_id' => $product->id],
+                    ['percentage' => $marginPercentage]
+                );
+            }
+
+            $purchaseOrder->update(['status' => 'recibido']);
+        });
+
+        return redirect()->route('purchase-orders.index')
+            ->with('success', 'Orden de Compra recibida exitosamente. Stock, lotes e identificadores SKU agregados al inventario.');
     }
 
     public function sendPurchaseOrderEmail($purchaseOrder, $pdfPath = null)
@@ -103,7 +247,6 @@ class PurchaseOrderController extends Controller
             $supplierEmail = $purchaseOrder->supplier?->email ?? 'proveedor@ejemplo.com';
             $mail->addAddress($supplierEmail, $purchaseOrder->supplier?->name);
 
-            // Verificación flexible de la ruta de la imagen (mayúsculas / minúsculas)
             $emailLogoPath = public_path('Images/dvariedad-logo-cl.png');
             if (!file_exists($emailLogoPath)) {
                 $emailLogoPath = public_path('images/dvariedad-logo-cl.png');
@@ -172,10 +315,6 @@ class PurchaseOrderController extends Controller
     {
         $purchaseOrder = PurchaseOrder::findOrFail($id);
 
-        if ($purchaseOrder->status === 'cancelado') {
-            return redirect()->back()->with('error', 'La orden ya se encuentra cancelada.');
-        }
-
         $purchaseOrder->update([
             'status' => 'cancelado'
         ]);
@@ -198,5 +337,36 @@ class PurchaseOrderController extends Controller
 
         return redirect()->route('purchase-orders.index')
             ->with('success', 'La Orden de Compra y su archivo PDF fueron eliminados correctamente.');
+    }
+
+    private function generateSkusForBatch(int $productId, int $batchId, int $quantity): void
+    {
+        $skus = [];
+        $lastId = ProductSku::max('id') ?? 0;
+        $now = now();
+
+        for ($i = 1; $i <= $quantity; $i++) {
+            $nextId = $lastId + $i;
+            $number = '2' . str_pad($nextId, 11, '0', STR_PAD_LEFT);
+
+            $sum = 0;
+            $for = 0;
+            for ($j = 0; $j < 12; $j++) {
+                $digit = (int) $number[$j];
+                $sum += ($j % 2 === 0) ? $digit : $digit * 3;
+            }
+            $checksum = (10 - ($sum % 10)) % 10;
+
+            $skus[] = [
+                'product_id'       => $productId,
+                'product_batch_id' => $batchId,
+                'sku'              => $number . $checksum,
+                'status'           => 'available',
+                'created_at'       => $now,
+                'updated_at'       => $now,
+            ];
+        }
+
+        ProductSku::insert($skus);
     }
 }
