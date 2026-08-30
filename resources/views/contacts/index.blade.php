@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-ERP | Proveedores</title>
+    <title>G-ERP | Contactos</title>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
 </head>
@@ -12,21 +12,21 @@
     <div class="volume-control">
         <img class="audio-control volume-icon" src="{{ asset('icons/audio.png') }}" alt="audio">
     </div>
-    <main class="erp-suppliers-container">
-        <section class="suppliers-section-top">
-            <div class="suppliers-section-top-tittle">
-                <h3>Proveedores</h3>
+    <main class="erp-contacts-container">
+        <section class="contacts-section-top" style="display: flex; align-items: center; gap: 15px;">
+            <div class="contacts-section-top-tittle">
+                <h3 style="margin: 0;">Contactos</h3>
             </div>
             <div>
-                <button class="suppliers-create-button" data-modal-target="modal-create">Crear</button>
+                <button class="contacts-create-button" data-modal-target="modal-create">Crear</button>
             </div>
         </section>
-        <section class="suppliers-section-table">
-            <table class="suppliers-table">
+        <section class="contacts-section-table">
+            <table class="contacts-table">
                 <thead>
                     <tr>
-                        <th>Empresa</th>
-                        <th>Contacto</th>
+                        <th>Nombre</th>
+                        <th>Medio de Contacto</th>
                         <th>Teléfono</th>
                         <th>Correo</th>
                         <th>Dirección</th>
@@ -34,32 +34,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($suppliers as $supplier)
+                    @forelse($contacts as $contact)
                     <tr>
-                        <td>{{ $supplier->name }}</td>
-                        <td>{{ $supplier->contact_name ?? 'N/A' }}</td>
-                        <td>{{ $supplier->phone }}</td>
-                        <td>{{ $supplier->email }}</td>
-                        <td>{{ $supplier->address }}</td>
+                        <td>{{ $contact->name }}</td>
+                        <td>{{ $contact->contact_type ?? 'N/A' }}</td>
+                        <td>{{ $contact->phone ?? 'N/A' }}</td>
+                        <td>{{ $contact->email ?? 'N/A' }}</td>
+                        <td>{{ $contact->address ?? 'N/A' }}</td>
                         <td class="no-wrap">
-                            <button class="suppliers-table-button edit" 
+                            <button class="contacts-table-button edit" 
                                     type="button" 
                                     data-modal-target="modal-edit"
-                                    data-id="{{ $supplier->id }}"
-                                    data-name="{{ $supplier->name }}"
-                                    data-contact_name="{{ $supplier->contact_name }}"
-                                    data-phone="{{ $supplier->phone }}"
-                                    data-email="{{ $supplier->email }}"
-                                    data-address="{{ $supplier->address }}">
+                                    data-id="{{ $contact->id }}"
+                                    data-name="{{ $contact->name }}"
+                                    data-contact_type="{{ $contact->contact_type }}"
+                                    data-phone="{{ $contact->phone }}"
+                                    data-email="{{ $contact->email }}"
+                                    data-address="{{ $contact->address }}">
                                 Editar
                             </button>
-                            <button class="suppliers-table-button delete" 
+                            <button class="contacts-table-button delete" 
                                     type="button"
                                     data-modal-target="modal-alert"
-                                    data-action="{{ route('suppliers.destroy', $supplier->id) }}"
+                                    data-action="{{ route('contacts.destroy', $contact->id) }}"
                                     data-method="DELETE"
-                                    data-title="Eliminar Proveedor"
-                                    data-message="¿Estás seguro de que deseas eliminar al proveedor '{{ $supplier->name }}'?"
+                                    data-title="Eliminar Contacto"
+                                    data-message="¿Estás seguro de que deseas eliminar el contacto '{{ $contact->name }}'?"
                                     data-btn-text="Eliminar"
                                     data-btn-class="btn-danger">
                                 Eliminar
@@ -69,7 +69,7 @@
                     @empty
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
-                            No hay proveedores registrados en el sistema.
+                            No hay contactos registrados en el sistema.
                         </td>
                     </tr>
                     @endforelse
@@ -77,12 +77,12 @@
             </table>
         </section>
         <div class="pagination-container">
-            {{ $suppliers->links('partials.pagination') }}
+            {{ $contacts->links('partials.pagination') }}
         </div>
     </main>
 
-    @include('suppliers.partials.modal-create')
-    @include('suppliers.partials.modal-edit')
+    @include('contacts.partials.modal-create')
+    @include('contacts.partials.modal-edit')
     @include('partials.alert')
 
     @include('partials.footer')

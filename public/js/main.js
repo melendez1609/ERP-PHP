@@ -19,6 +19,7 @@ import { initBarcodes } from './actions/barcodes/barcodes.js';
 import { initEcho } from './reverb/echo.js';
 import { initScheduleDate } from './actions/schedule/ScheduleDate.js';
 import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
+import { initEditContact } from './actions/contacts/EditContact.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initEcho();
     initScheduleDate();
     initUserStatusMonitor();
+    initEditContact();
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');

@@ -14,6 +14,7 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/login', [AuthController::class, 'showLoginForm']);
@@ -49,6 +50,11 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
+    Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
+    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
     Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
 });

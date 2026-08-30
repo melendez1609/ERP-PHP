@@ -28,7 +28,7 @@ body {
 .erp-inventory-container, .erp-users-container, 
 .erp-suppliers-container, .erp-cash-register-container, 
 .erp-quotations-container, .erp-purchase-orders-container,
-.settings-container, .settings-container {
+.settings-container, .erp-contacts-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -279,7 +279,8 @@ body {
 .suppliers-section-top,
 .quotations-section-top,
 .purchase-orders-section-top,
-.settings-section-top {
+.settings-section-top,
+.contacts-section-top {
   display: flex;
   gap: 1vh;
   padding: 3.5vh 0;
@@ -291,11 +292,12 @@ body {
 .suppliers-section-top-tittle,
 .quotations-section-top-tittle,
 .purchase-orders-section-top-tittle,
-.settings-section-top-tittle {
+.settings-section-top-tittle,
+.contacts-section-top-tittle {
   font-size: 3vh;
   font-weight: bold;
   padding-right: 1.5vh;
-  color: #132873;;
+  color: #132873;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -307,7 +309,8 @@ body {
 .suppliers-section-top-tittle h3,
 .quotations-section-top-tittle h3,
 .purchase-orders-section-top-tittle h3,
-.settings-section-top-tittle h3 {
+.settings-section-top-tittle h3,
+.contacts-section-top-tittle h3 {
   margin: 0;
   font-size: inherit;
 }
@@ -317,7 +320,8 @@ body {
 .suppliers-create-button,
 .quotations-create-button,
 .purchase-orders-create-button,
-.settings-create-button {
+.settings-create-button,
+.contacts-create-button {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
@@ -338,7 +342,8 @@ body {
 .suppliers-section-table,
 .quotations-section-table,
 .purchase-orders-section-table,
-.settings-section-table {
+.settings-section-table,
+.contacts-section-table {
   width: 85%;
   overflow-y: auto;
 }
@@ -348,7 +353,8 @@ body {
 .suppliers-table,
 .quotations-table,
 .purchase-orders-table,
-.settings-table {
+.settings-table,
+.contacts-table {
   border-collapse: collapse;
   width: 100%;
 }
@@ -358,7 +364,8 @@ body {
 .suppliers-table th, .suppliers-table td,
 .quotations-table th, .quotations-table td,
 .purchase-orders-table th, .purchase-orders-table td,
-.settings-table th, .settings-table td {
+.settings-table th, .settings-table td,
+.contacts-table th, .contacts-table td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 5px;
@@ -369,7 +376,8 @@ body {
 .suppliers-table tr:nth-child(even),
 .quotations-table tr:nth-child(even),
 .purchase-orders-table tr:nth-child(even),
-.settings-table tr:nth-child(even) {
+.settings-table tr:nth-child(even),
+.contacts-table tr:nth-child(even) {
   background-color: #dddddd;
 }
 
@@ -378,7 +386,8 @@ body {
 .suppliers-table-button,
 .quotations-table-button,
 .purchase-orders-table-button,
-.settings-table-button {
+.settings-table-button,
+.contacts-table-button {
   font-size: 1.80vh;
   padding: 1vh;
   border: none;
@@ -391,7 +400,8 @@ body {
 .suppliers-table-button.edit,
 .quotations-table-button.download,
 .purchase-orders-table-button.download,
-.settings-table-button.edit {
+.settings-table-button.edit,
+.contacts-table-button.edit {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #132873;
@@ -402,7 +412,8 @@ body {
 .suppliers-table-button.delete,
 .quotations-table-button.delete,
 .purchase-orders-table-button.delete,
-.settings-table-button.delete {
+.settings-table-button.delete,
+.contacts-table-button.delete {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #d84130;
@@ -413,7 +424,8 @@ body {
 .suppliers-table-button.disable,
 .quotations-table-button.disable,
 .purchase-orders-table-button.disable,
-.settings-table-button.disable {
+.settings-table-button.disable,
+.contacts-table-button.disable {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #ecb912;
@@ -425,7 +437,8 @@ body {
 .suppliers-table-button.disable.enable,
 .quotations-table-button.disable.enable,
 .purchase-orders-table-button.disable.enable,
-.settings-table-button.disable.enable {
+.settings-table-button.disable.enable,
+.contacts-table-button.disable.enable {
   background-color: #28a745;
 }
 
@@ -617,8 +630,6 @@ input:checked + .slider:before {
   min-height: 60px;
 }
 
-
-
 .modal-actions,
 .modal-footer {
   display: flex !important;
@@ -723,13 +734,14 @@ input:checked + .slider:before {
     width: 91%;
   }
 
-.inventory-section-top, .users-section-top, 
-.suppliers-section-top, .quotations-section-top,
-.inventory-section-table, .users-section-table,
-.suppliers-section-table, .quotations-section-table,
-.purchase-orders-section-top, .purchase-orders-section-table,
-.settings-section-top, .settings-section-table {
-      width: 95%;
+  .inventory-section-top, .inventory-section-table,
+  .users-section-top, .users-section-table, 
+  .suppliers-section-top, .suppliers-section-table,
+  .quotations-section-top, .quotations-section-table,
+  .purchase-orders-section-top, .purchase-orders-section-table,
+  .settings-section-top, .settings-section-table,
+  .contacts-section-top, .contacts-section-table {
+    width: 95%;
   }
 
   .modal-content {
@@ -742,4 +754,3 @@ input:checked + .slider:before {
     width: 76%;
   }
 }
-

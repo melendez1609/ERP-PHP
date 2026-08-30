@@ -63,10 +63,10 @@
                     <img class="icon" src="{{ asset('icons/settings.png') }}" alt="settings">
                     <h4 class="icon-name">Configuración</h4>
                 </a>
-                <div class="option">
-                    <img class="icon" src="{{ asset('icons/share.png') }}" alt="share">
-                    <h4 class="icon-name">Compartir</h4>
-                </div>
+                <a class="option" href="{{ route('contacts.index') }}">
+                    <img class="icon" src="{{ asset('icons/contacts.png') }}" alt="contacts">
+                    <h4 class="icon-name">Contactos</h4>
+                </a>
                 <a href="{{ route('suppliers.index') }}" class="option">
                     <img class="icon" src="{{ asset('icons/supplier.png') }}" alt="supplier">
                     <h4 class="icon-name">Proveedor</h4>

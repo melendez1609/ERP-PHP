@@ -7,7 +7,7 @@
             @csrf
 
             <div>
-                <label for="name">Nombre:</label>
+                <label for="name">Empresa:</label>
                 <input type="text" name="name" id="name" required>
             </div>
 
