@@ -3,7 +3,7 @@
         <span class="modal-close" data-modal-close>&times;</span>
         <h3>Crear Usuario</h3>
         
-        <form action="{{ route('users.store') }}" method="POST">
+        <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div>
@@ -29,6 +29,11 @@
                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div>
+                <label for="image">Fotografía:</label>
+                <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/jpg,image/webp">
             </div>
 
             <div class="modal-actions">

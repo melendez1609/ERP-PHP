@@ -26,6 +26,7 @@
             <table class="inventory-table">
                 <thead>
                     <tr>
+                        <th>Imagen</th>
                         <th>Código</th>
                         <th>Proveedor</th>
                         <th>Nombre</th>
@@ -42,6 +43,15 @@
                 <tbody>
                     @forelse($products as $product)
                     <tr>
+                        <td style="text-align: center;">
+                            @if($product->image)
+                                <a href="{{ asset('storage/' . $product->image) }}" target="_blank" title="Ver fotografía del producto" style="display: inline-flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset('icons/picture.png') }}" alt="Ver foto" class="product-image">
+                                </a>
+                            @else
+                                <span style="color: #9ca3af; font-size: 1.5vh;">Sin foto</span>
+                            @endif
+                        </td>
                         <td>{{ $product->code }}</td>
                         <td>{{ $product->supplier?->name ?? 'Sin proveedor' }}</td>
                         <td>{{ $product->name }}</td>
@@ -58,7 +68,8 @@
                                     data-modal-target="modal-batches" 
                                     data-id="{{ $product->id }}"
                                     data-name="{{ $product->name }}"
-                                    data-code="{{ $product->code }}">
+                                    data-code="{{ $product->code }}"
+                                    data-image="{{ $product->image }}">
                                 Lotes
                             </button>
                             <button class="inventory-table-button edit" 
@@ -68,6 +79,7 @@
                                     data-code="{{ $product->code }}"
                                     data-name="{{ $product->name }}"
                                     data-description="{{ $product->description }}"
+                                    data-image="{{ $product->image }}"
                                     data-cost="{{ $product->cost }}"
                                     data-price="{{ $product->price }}"
                                     data-stock="{{ $product->stock }}"
@@ -104,7 +116,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="11" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
+                        <td colspan="12" style="text-align: center; padding: 20px; color: #666; background-color: #fff;">
                             No hay productos registrados en el inventario.
                         </td>
                     </tr>

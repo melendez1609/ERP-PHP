@@ -10,9 +10,10 @@ export function initBatchesInventory() {
             const productId = button.dataset.id;
             const productName = button.dataset.name;
             const productCode = button.dataset.code;
+            const productImage = button.dataset.image;
 
             if (modalTitle) modalTitle.textContent = `Lotes: ${productCode} - ${productName}`;
-            if (tableBody) tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Cargando lotes...</td></tr>';
+            if (tableBody) tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Cargando lotes...</td></tr>';
 
             try {
                 const response = await fetch(`/inventory/${productId}/batches`);
@@ -21,25 +22,37 @@ export function initBatchesInventory() {
                 const batches = await response.json();
 
                 if (batches.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No hay lotes con stock disponible.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No hay lotes con stock disponible.</td></tr>';
                     return;
                 }
 
-                tableBody.innerHTML = batches.map(batch => `
-                    <tr>
-                        <td>#${batch.id}</td>
-                        <td>${batch.quantity_received}</td>
-                        <td><strong>${batch.quantity_remaining}</strong></td>
-                        <td>$${parseFloat(batch.cost).toFixed(2)}</td>
-                        <td>${batch.margin_percentage}%</td>
-                        <td>$${parseFloat(batch.price).toFixed(2)}</td>
-                        <td>${new Date(batch.created_at).toLocaleDateString()}</td>
-                    </tr>
-                `).join('');
+                tableBody.innerHTML = batches.map(batch => {
+                    let imageHtml = '<span style="color: #9ca3af; font-size: 1.5vh;">Sin foto</span>';
+                    
+                    if (productImage && productImage !== '') {
+                        const imageUrl = `/storage/${productImage}`;
+                            imageHtml = `<a href="${imageUrl}" target="_blank" title="Ver fotografía del producto" style="display: inline-flex; align-items: center; justify-content: center;">
+                                            <img src="/icons/picture.png" alt="Ver foto" class="product-image">
+                                        </a>`;
+                    }
+
+                    return `
+                        <tr>
+                            <td style="text-align: center;">${imageHtml}</td>
+                            <td>#${batch.id}</td>
+                            <td>${batch.quantity_received}</td>
+                            <td><strong>${batch.quantity_remaining}</strong></td>
+                            <td>$${parseFloat(batch.cost).toFixed(2)}</td>
+                            <td>${batch.margin_percentage}%</td>
+                            <td>$${parseFloat(batch.price).toFixed(2)}</td>
+                            <td>${new Date(batch.created_at).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                }).join('');
 
             } catch (error) {
                 console.error(error);
-                tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Error al cargar la información.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Error al cargar la información.</td></tr>';
             }
         });
     });

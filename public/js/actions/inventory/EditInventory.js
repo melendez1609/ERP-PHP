@@ -1,15 +1,16 @@
 export function initEditInventory() {
     const editButtons = document.querySelectorAll('.inventory-table-button.edit');
     const scopeRadios = document.querySelectorAll('input[name="price_update_scope"]');
-    const batchContainer = document.getElementById('specific-batch-container');
-    const batchSelect = document.getElementById('edit-batch-id');
-    const pricingStockContainer = document.getElementById('pricing-stock-container');
+    const batchContainer = document.getElementById('batch-selection-container');
+    const batchSelect = document.getElementById('edit_batch_id');
+    const pricingStockContainer = document.getElementById('pricing-fields-container');
 
-    const costInput = document.getElementById('edit-cost');
-    const profitInput = document.getElementById('edit-profit-percentage');
-    const priceInput = document.getElementById('edit-price');
-    const stockInput = document.getElementById('edit-stock');
-    const stockGroup = document.getElementById('edit-stock-group');
+    const costInput = document.getElementById('edit_cost');
+    const profitInput = document.getElementById('edit_profit_percentage');
+    const priceInput = document.getElementById('edit_price');
+    const stockInput = document.getElementById('edit_stock');
+    const stockContainer = document.getElementById('edit-stock-container');
+    const imageInput = document.getElementById('edit_image');
 
     if (!editButtons.length) return;
 
@@ -19,7 +20,7 @@ export function initEditInventory() {
     function togglePricingStockSection(scope) {
         if (!pricingStockContainer) return;
 
-        const priceVatInputs = pricingStockContainer.querySelectorAll('#edit-cost, #edit-vat-id, #edit-profit-percentage, #edit-price');
+        const priceVatInputs = pricingStockContainer.querySelectorAll('#edit_cost, #edit_vat_id, #edit_profit_percentage, #edit_price');
 
         if (scope === 'none') {
             pricingStockContainer.style.display = 'none';
@@ -42,7 +43,7 @@ export function initEditInventory() {
                 stockInput.disabled = true;
                 stockInput.removeAttribute('required');
             }
-            if (stockGroup) stockGroup.style.display = 'none';
+            if (stockContainer) stockContainer.style.display = 'none';
 
         } else if (scope === 'specific_batch') {
             pricingStockContainer.style.display = 'block';
@@ -55,7 +56,7 @@ export function initEditInventory() {
                 stockInput.disabled = false;
                 stockInput.setAttribute('required', 'true');
             }
-            if (stockGroup) stockGroup.style.display = 'block';
+            if (stockContainer) stockContainer.style.display = 'block';
         }
     }
 
@@ -96,14 +97,13 @@ export function initEditInventory() {
 
     editButtons.forEach(button => {
         button.addEventListener('click', async () => {
-            const form = document.getElementById('form-edit');
+            const form = document.getElementById('edit-inventory-form');
             if (!form) return;
 
             const id = button.dataset.id;
             form.action = `/inventory/${id}`;
 
-            const hiddenId = document.getElementById('edit-id');
-            if (hiddenId) hiddenId.value = id;
+            if (imageInput) imageInput.value = '';
 
             initialProductData = {
                 cost: button.dataset.cost || '',
@@ -112,25 +112,22 @@ export function initEditInventory() {
                 stock: button.dataset.stock || ''
             };
 
-            const fields = ['code', 'name', 'description', 'cost', 'price', 'stock'];
-            fields.forEach(field => {
-                const input = document.getElementById(`edit-${field}`);
-                if (input) input.value = button.dataset[field] || '';
-            });
+            const inputCode = document.getElementById('edit_code');
+            const inputName = document.getElementById('edit_name');
+            const inputDescription = document.getElementById('edit_description');
+            const inputMinStock = document.getElementById('edit_min_stock');
+            const vatSelect = document.getElementById('edit_vat_id');
+            const profitInputElem = document.getElementById('edit_profit_percentage');
+            const supplierSelect = document.getElementById('edit_supplier_id');
+            const statusSelect = document.getElementById('edit_product_status_id');
 
-            const minStockInput = document.getElementById('edit-min-stock');
-            if (minStockInput) minStockInput.value = button.dataset.minStock || '';
-
-            const vatSelect = document.getElementById('edit-vat-id');
+            if (inputCode) inputCode.value = button.dataset.code || '';
+            if (inputName) inputName.value = button.dataset.name || '';
+            if (inputDescription) inputDescription.value = button.dataset.description || '';
+            if (inputMinStock) inputMinStock.value = button.dataset.minStock || '';
             if (vatSelect) vatSelect.value = button.dataset.vatId || '';
-
-            const profitInput = document.getElementById('edit-profit-percentage');
-            if (profitInput) profitInput.value = button.dataset.profitPercentage || '';
-
-            const supplierSelect = document.getElementById('edit-supplier-id');
+            if (profitInputElem) profitInputElem.value = button.dataset.profitPercentage || '';
             if (supplierSelect) supplierSelect.value = button.dataset.supplierId || '';
-
-            const statusSelect = document.getElementById('edit-status-id');
             if (statusSelect) statusSelect.value = button.dataset.statusId || '';
 
             const defaultScope = document.querySelector('input[name="price_update_scope"][value="none"]');

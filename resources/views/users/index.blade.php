@@ -27,6 +27,7 @@
             <table class="users-table">
                 <thead>
                     <tr>
+                        <th>Imagen</th>
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Correo Electrónico</th>
@@ -44,6 +45,15 @@
                         $isSelf = (int) auth()->id() === (int) $user->id;
                     @endphp
                     <tr>
+                        <td style="text-align: center;">
+                            @if($user->image)
+                                <a href="{{ route('user.image', basename($user->image)) }}" target="_blank" title="Ver fotografía del usuario" style="display: inline-flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset('icons/picture.png') }}" alt="Ver foto" class="profile-image">
+                                </a>
+                            @else
+                                <span style="color: #9ca3af; font-size: 1.5vh;">Sin foto</span>
+                            @endif
+                        </td>
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
@@ -74,7 +84,9 @@
                                     data-id="{{ $user->id }}"
                                     data-name="{{ $user->name }}"
                                     data-email="{{ $user->email }}"
-                                    data-role-id="{{ $user->role_id }}">
+                                    data-role-id="{{ $user->role_id }}"
+                                    data-url="{{ route('users.update', $user->id) }}"
+                                    data-image="{{ $user->image }}">
                                 Editar
                             </button>
 

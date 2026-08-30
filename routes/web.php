@@ -81,12 +81,14 @@ Route::middleware(['auth', 'admin', 'active.user', 'session.not_locked'])->group
     Route::get('/inventory/{product}/batches', [ProductController::class, 'getBatches'])->name('inventory.batches');
     Route::get('/inventory/active-products', [ProductController::class, 'getActiveProducts'])->name('inventory.activeProducts');
     Route::post('/inventory/add-stock', [ProductController::class, 'addStock'])->name('inventory.addStock');
+    Route::get('/storage/products/{filename}', [ProductController::class, 'showImage'])->name('product.image');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::patch('/users/{id}/disable', [UserController::class, 'disable'])->name('users.disable');
+    Route::get('/storage/users/{filename}', [App\Http\Controllers\UserController::class, 'showImage'])->name('user.image');
 
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');

@@ -1,26 +1,14 @@
 <div id="modal-create" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close-modal" data-modal-close>&times;</span>
-        <h3>Nuevo Producto</h3>
+        <h3>Crear Producto</h3>
 
-        <form action="{{ route('inventory.store') }}" method="POST">
+        <form action="{{ route('inventory.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div>
                 <label for="code">Código:</label>
                 <input type="text" name="code" id="code" required>
-            </div>
-
-            <div>
-                <label for="supplier_id">Proveedor:</label>
-                <input type="text" id="supplier-search" placeholder="Escribe para buscar proveedor..." style="width: 100%; margin-top: 5px; margin-bottom: 8px; padding: 8px 12px; box-sizing: border-box;">
-                
-                <select name="supplier_id" id="supplier_id">
-                    <option value="">-- Seleccionar Proveedor --</option>
-                    @foreach($suppliers as $supplier)
-                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                    @endforeach
-                </select>
             </div>
 
             <div>
@@ -31,6 +19,21 @@
             <div>
                 <label for="description">Descripción:</label>
                 <textarea name="description" id="description"></textarea>
+            </div>
+
+            <div>
+                <label for="image">Fotografía del Producto:</label>
+                <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/jpg,image/webp">
+            </div>
+
+            <div>
+                <label for="supplier_id">Proveedor:</label>
+                <select name="supplier_id" id="supplier_id">
+                    <option value="">-- Seleccionar Proveedor --</option>
+                    @foreach($suppliers as $supplier)
+                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>
@@ -61,7 +64,7 @@
             </div>
 
             <div>
-                <label for="stock">Stock:</label>
+                <label for="stock">Stock Inicial:</label>
                 <input type="number" name="stock" id="stock" min="0" required>
             </div>
 

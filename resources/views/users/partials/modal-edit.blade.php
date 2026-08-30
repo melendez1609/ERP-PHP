@@ -3,9 +3,9 @@
         <span class="modal-close" data-modal-close>&times;</span>
         <h3>Editar Usuario</h3>
         
-        <form id="form-edit-user" method="POST" action="">
+        <form id="form-edit-user" method="POST" action="" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            <input type="hidden" name="_method" value="PUT">
             
             <input type="hidden" name="id" id="edit_user_id">
 
@@ -32,6 +32,11 @@
                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div>
+                <label for="edit_image">Actualizar Fotografía:</label>
+                <input type="file" name="image" id="edit_image" accept="image/jpeg,image/png,image/jpg,image/webp">
             </div>
 
             <div class="modal-actions">

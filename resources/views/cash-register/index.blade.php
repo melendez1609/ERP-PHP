@@ -17,8 +17,6 @@
 
     </main>
 
-    @include('inventory.partials.modal-create')
-    @include('inventory.partials.modal-edit')
 
     @include('partials.footer')
     <script type="module" src="{{ asset('js/main.js') }}"></script> 

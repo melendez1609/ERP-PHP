@@ -515,6 +515,11 @@ input:checked + .slider:before {
   white-space: nowrap;
 }
 
+.product-image, .profile-image{
+  width: 4vh;
+  border-radius: 8px;
+}
+
 /* Modal *****************************************************************************/
 .modal {
   display: none;

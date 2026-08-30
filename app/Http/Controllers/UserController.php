@@ -7,6 +7,8 @@ use App\Models\Role;
 use App\Events\UserStatusBroadcast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 
 class UserController extends Controller
@@ -24,22 +26,51 @@ class UserController extends Controller
         return view('users.index', compact('users', 'roles'));
     }
 
+    public function showImage($filename)
+    {
+        $path = 'users/' . $filename;
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        return Storage::disk('public')->response($path);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'email'    => 'required|email',
             'password' => 'required|string|min:6',
             'role_id'  => 'required|exists:roles,id',
+            'image'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'role_id'   => $request->role_id,
-            'is_active' => true,
-        ]);
+        // Verificación explícita para evitar correos duplicados al crear
+        if (User::where('email', $request->email)->exists()) {
+            return back()->with('error', 'El correo electrónico ingresado ya se encuentra registrado en el sistema.')->withInput();
+        }
+
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name'      => $request->name,
+                'email'     => $request->email,
+                'password'  => Hash::make($request->password),
+                'role_id'   => $request->role_id,
+                'is_active' => true,
+            ]);
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $imageName = 'user-' . $user->id . '-IMG.' . $extension;
+                $imagePath = $file->storeAs('users', $imageName, 'public');
+                
+                $user->image = $imagePath;
+                $user->save();
+            }
+        });
 
         return back()->with('success', 'Usuario creado correctamente.');
     }
@@ -88,28 +119,47 @@ class UserController extends Controller
 
         $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $id,
+            'email'    => 'required|email',
             'role_id'  => 'required|exists:roles,id',
             'password' => 'nullable|min:6',
+            'image'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $oldRoleId = (int) $user->role_id;
-
-        $data = [
-            'name'    => $request->name,
-            'email'   => $request->email,
-            'role_id' => $request->role_id,
-        ];
-
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        // Verificación explícita para evitar correos duplicados al actualizar (excluyendo al usuario actual)
+        if (User::where('email', $request->email)->where('id', '!=', $id)->exists()) {
+            return back()->with('error', 'El correo electrónico ingresado ya pertenece a otro usuario registrado en el sistema.')->withInput();
         }
 
-        $user->update($data);
+        DB::transaction(function () use ($request, $user, $id) {
+            $oldRoleId = (int) $user->role_id;
+            $imagePath = $user->image;
 
-        if ($oldRoleId !== (int) $request->role_id) {
-            broadcast(new UserStatusBroadcast($user->id, 'role_updated'));
-        }
+            if ($request->hasFile('image')) {
+                if ($user->image && Storage::disk('public')->exists($user->image)) {
+                    Storage::disk('public')->delete($user->image);
+                }
+
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $imageName = 'user-' . $id . '-IMG.' . $extension;
+                $imagePath = $file->storeAs('users', $imageName, 'public');
+            }
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->role_id = $request->role_id;
+            $user->image = $imagePath;
+
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
+
+            $user->save();
+
+            if ($oldRoleId !== (int) $request->role_id) {
+                broadcast(new UserStatusBroadcast($user->id, 'role_updated'));
+            }
+        });
 
         return back()->with('success', 'Usuario actualizado correctamente.');
     }
@@ -129,6 +179,10 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         try {
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+
             $user->delete();
 
             broadcast(new UserStatusBroadcast($user->id, 'logout'));

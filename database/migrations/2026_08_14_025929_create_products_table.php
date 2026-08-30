@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('code');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('image')->nullable();
             $table->decimal('cost', 10, 2);
             $table->decimal('price', 10, 2);
             $table->integer('stock');
