@@ -18,10 +18,10 @@
                 <img class="icon" src="{{ asset('icons/estimates.png') }}" alt="estimates">
                 <h4 class="icon-name">Cotización</h4>
             </a>
-            <div class="option">
+            <a class="option">
                 <img class="icon" src="{{ asset('icons/invoice.png') }}" alt="invoice">
-                <h4 class="icon-name">Factura</h4>
-            </div>
+                <h4 class="icon-name">Facturas</h4>
+            </a>
             <a class="option" href="{{ route('cash-register.index') }}">
                 <img class="icon" src="{{ asset('icons/cash-register.png') }}" alt="cash-register">
                 <h4 class="icon-name">Caja Registradora</h4>
@@ -30,18 +30,18 @@
                 <img class="icon" src="{{ asset('icons/in-inventory.png') }}" alt="in-inventory">
                 <h4 class="icon-name">Inventario</h4>
             </a>
-            <div class="option">
+            <a class="option">
                 <img class="icon" src="{{ asset('icons/sales-report.png') }}" alt="sales-report">
                 <h4 class="icon-name">Reporte de Ventas</h4>
-            </div>
+            </a>
             <a href="javascript:void(0)" class="option" data-modal-target="modal-schedule">
                 <img class="icon" src="{{ asset('icons/schedule.png') }}" alt="schedule">
                 <h4 class="icon-name">Agenda</h4>
             </a>
-            <div class="option">
-                <img class="icon" src="{{ asset('icons/support.png') }}" alt="support">
-                <h4 class="icon-name">Soporte</h4>
-            </div>
+            <a class="option" href="{{ route('lockscreen.lock') }}">
+                <img class="icon" src="{{ asset('icons/lock.png') }}" alt="lock">
+                <h4 class="icon-name">Bloquear Sesión</h4>
+            </a>
             <a class="option" data-modal-target="modal-password" style="cursor: pointer;">
                 <img class="icon" src="{{ asset('icons/password.png') }}" alt="password">
                 <h4 class="icon-name">Cambiar Contraseña</h4>
@@ -55,10 +55,10 @@
                     <img class="icon" src="{{ asset('icons/purchase-order.png') }}" alt="purchase-order">
                     <h4 class="icon-name">Orden de Compra</h4>
                 </a>
-                <div class="option">
+                <a class="option">
                     <img class="icon" src="{{ asset('icons/report-file.png') }}" alt="report-file">
                     <h4 class="icon-name">Reporte del Sistema</h4>
-                </div>
+                </a>
                 <a href="javascript:void(0);" class="option" data-modal-target="modal-settings">
                     <img class="icon" src="{{ asset('icons/settings.png') }}" alt="settings">
                     <h4 class="icon-name">Configuración</h4>

@@ -728,6 +728,139 @@ input:checked + .slider:before {
     cursor: not-allowed;
 }
 
+/* Lockscreen ************************************************************************/
+.lockscreen-main-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+}
+
+.lockscreen-section-left {
+  width: 30%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4vh 2vh;
+  background-color: #FFFFFF;
+  position: relative;
+  z-index: 2;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.lockscreen-header-logo {
+  position: absolute;
+  top: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.lockscreen-logo-img {
+  height: 10vh;
+  width: auto;
+  display: block;
+}
+
+.lockscreen-card {
+  width: 85%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lockscreen-tittle {
+  font-size: 2.4vh;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 3vh;
+  text-align: center;
+}
+
+.lockscreen-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5vh;
+}
+
+.lockscreen-avatar {
+  width: 9vh;
+  height: 9vh;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #DFDFE3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5vh;
+}
+
+.lockscreen-username {
+  font-size: 2vh;
+  font-weight: 700;
+  color: #132873;
+}
+
+.lockscreen-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.lockscreen-btn {
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.lockscreen-btn:hover {
+  background-color: #0e1e56;
+  transform: scale(1.01);
+}
+
+.lockscreen-footer-link {
+  margin-top: 2vh;
+  text-align: center;
+  font-size: 1.6vh;
+  color: #666666;
+}
+
+.lockscreen-footer-link a {
+  color: #132873;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lockscreen-footer-link a:hover {
+  text-decoration: underline;
+}
+
+.lockscreen-section-right {
+  width: 70%;
+  height: 100vh;
+  position: relative;
+  background-color: #132873;
+  background-image: url('/images/lockscreen-image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.lockscreen-section-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(19, 40, 115, 0.75) 0%, rgba(14, 30, 86, 0.90) 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 /* Media Query ***********************************************************************/
 @media screen and (max-width: 1366px) {
   .erp-menu {
@@ -752,5 +885,15 @@ input:checked + .slider:before {
 @media screen and (max-width: 1280px) {
   .erp-menu {
     width: 76%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .lockscreen-section-left {
+    width: 100%;
+  }
+
+  .lockscreen-section-right {
+    display: none;
   }
 }

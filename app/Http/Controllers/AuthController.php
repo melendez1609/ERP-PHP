@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -42,6 +43,7 @@ class AuthController extends Controller
             }
 
             $request->session()->regenerate();
+            $request->session()->forget('is_locked');
 
             return redirect()->intended('/dashboard');
         }
@@ -59,5 +61,38 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function lock()
+    {
+        session(['is_locked' => true]);
+        return redirect()->route('lockscreen.show');
+    }
+
+    public function showLockscreen()
+    {
+        if (!session('is_locked', false)) {
+            return redirect()->route('dashboard');
+        }
+        return view('auth.lockscreen');
+    }
+
+    public function unlock(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ], [
+            'password.required' => 'Por favor ingrese su contraseña.',
+        ]);
+
+        if (!Hash::check($request->password, Auth::user()->password)) {
+            return back()->withErrors([
+                'password' => 'La contraseña ingresada es incorrecta.',
+            ]);
+        }
+
+        session()->forget('is_locked');
+
+        return redirect()->route('dashboard');
     }
 }

@@ -20,6 +20,7 @@ import { initEcho } from './reverb/echo.js';
 import { initScheduleDate } from './actions/schedule/ScheduleDate.js';
 import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
 import { initEditContact } from './actions/contacts/EditContact.js';
+import { initLockscreen } from './actions/auth/lockscreen.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScheduleDate();
     initUserStatusMonitor();
     initEditContact();
+    initLockscreen();
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');

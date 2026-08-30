@@ -17,49 +17,57 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ContactController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/', [AuthController::class, 'login']);
 Route::get('/login', [AuthController::class, 'showLoginForm']);
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::middleware(['auth', 'active.user'])->group(function () {
 
-    Route::get('/dashboard', function () { 
-        $products = Product::with('batches')->get(); 
-        $suppliers = Supplier::all(); 
-        return view('dashboard', compact('products', 'suppliers')); 
-    })->name('dashboard');
-
+    Route::get('/lockscreen/lock', [AuthController::class, 'lock'])->name('lockscreen.lock');
+    Route::get('/lockscreen', [AuthController::class, 'showLockscreen'])->name('lockscreen.show');
+    Route::post('/lockscreen/unlock', [AuthController::class, 'unlock'])->name('lockscreen.unlock');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/cash-register', function () { return view('cash-register.index'); })->name('cash-register.index');
 
-    Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
-    Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
-    Route::get('/quotations/{id}/download', [QuotationController::class, 'download'])->name('quotations.download');
-    Route::delete('/quotations/{id}', [QuotationController::class, 'destroy'])->name('quotations.destroy');
+    Route::middleware(['session.not_locked'])->group(function () {
 
-    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
-    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
-    Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
-    Route::get('/purchase-orders/{id}/pdf', [PurchaseOrderController::class, 'streamPdf'])->name('purchase-orders.pdf');
-    Route::patch('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
+        Route::get('/dashboard', function () { 
+            $products = Product::with('batches')->get(); 
+            $suppliers = Supplier::all(); 
+            return view('dashboard', compact('products', 'suppliers')); 
+        })->name('dashboard');
 
-    Route::get('/settings/vat', [SettingController::class, 'vat'])->name('settings.vat');
-    Route::post('/settings/vat', [SettingController::class, 'storeVat'])->name('settings.vat.store');
-    Route::delete('/settings/vat/{id}', [SettingController::class, 'destroyVat'])->name('settings.vat.destroy');
+        Route::get('/cash-register', function () { return view('cash-register.index'); })->name('cash-register.index');
 
-    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
-    Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
-    Route::put('/schedules/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
-    Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+        Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
+        Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+        Route::get('/quotations/{id}/download', [QuotationController::class, 'download'])->name('quotations.download');
+        Route::delete('/quotations/{id}', [QuotationController::class, 'destroy'])->name('quotations.destroy');
 
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
-    Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
-    Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
-    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+        Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders.index');
+        Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+        Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
+        Route::get('/purchase-orders/{id}/pdf', [PurchaseOrderController::class, 'streamPdf'])->name('purchase-orders.pdf');
+        Route::patch('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
 
-    Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
+        Route::get('/settings/vat', [SettingController::class, 'vat'])->name('settings.vat');
+        Route::post('/settings/vat', [SettingController::class, 'storeVat'])->name('settings.vat.store');
+        Route::delete('/settings/vat/{id}', [SettingController::class, 'destroyVat'])->name('settings.vat.destroy');
+
+        Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+        Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
+        Route::put('/schedules/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
+        Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
+        Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+        Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
+        Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
+        Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+
+        Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
+    });
 });
 
-Route::middleware(['auth', 'admin', 'active.user'])->group(function () {
+Route::middleware(['auth', 'admin', 'active.user', 'session.not_locked'])->group(function () {
 
     Route::get('/check-status', function () {
         return response()->json(['status' => 'active']);
