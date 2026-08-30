@@ -21,10 +21,6 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::middleware(['auth', 'active.user'])->group(function () {
 
-    Route::get('/check-status', function () {
-        return response()->json(['status' => 'active']);
-    });
-
     Route::get('/dashboard', function () { 
         $products = Product::with('batches')->get(); 
         $suppliers = Supplier::all(); 
@@ -53,6 +49,8 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
     Route::put('/schedules/{schedule}', [ScheduleController::class, 'update'])->name('schedules.update');
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
+    Route::put('/profile/password', [UserController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 Route::middleware(['auth', 'admin', 'active.user'])->group(function () {

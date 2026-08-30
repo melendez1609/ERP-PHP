@@ -42,6 +42,10 @@
                 <img class="icon" src="{{ asset('icons/support.png') }}" alt="support">
                 <h4 class="icon-name">Soporte</h4>
             </div>
+            <a class="option" data-modal-target="modal-password" style="cursor: pointer;">
+                <img class="icon" src="{{ asset('icons/password.png') }}" alt="password">
+                <h4 class="icon-name">Cambiar Contraseña</h4>
+            </a>
             @if (auth()->user()?->role_id === 1)
                 <a href="{{ route('users.index') }}" class="option">
                     <img class="icon" src="{{ asset('icons/group.png') }}" alt="group">
@@ -67,10 +71,6 @@
                     <img class="icon" src="{{ asset('icons/supplier.png') }}" alt="supplier">
                     <h4 class="icon-name">Proveedor</h4>
                 </a>
-                <div class="option">
-                    <img class="icon" src="{{ asset('icons/email.png') }}" alt="email">
-                    <h4 class="icon-name">Correo</h4>
-                </div>
                 <a href="#" class="option" data-modal-target="modal-barcodes">
                     <img class="icon" src="{{ asset('icons/barcode.png') }}" alt="barcode">
                     <h4 class="icon-name">Códigos de Barras</h4>
@@ -91,6 +91,7 @@
     @include('schedule.partials.modal-create') 
     @include('schedule.partials.modal-edit')  
     @include('schedule.partials.modal-content')
+    @include('users.partials.modal-password')
 
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>

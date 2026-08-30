@@ -3,29 +3,22 @@ import { initHoverSounds } from './functionalities/sound.js';
 import { initDateTime } from './functionalities/datetime.js';
 import { initAlertModal } from './functionalities/alert.js';
 import { initSelectFinder } from './functionalities/finder.js';
-
 import { initAddInventory } from './actions/inventory/AddInventory.js';
 import { initEditInventory } from './actions/inventory/EditInventory.js';
 import { initBatchesInventory } from './actions/inventory/BatchesInventory.js';
-
 import { initEditUser } from './actions/users/EditUser.js';
 import { initStatusUser } from './actions/users/StatusUser.js';
-
+import { initPasswordUser } from './actions/users/PasswordUser.js';
+import { initDeleteUser } from './actions/users/DeleteAlert.js';
 import { initEditSupplier } from './actions/supplier/EditSupplier.js';
-
 import { initCreateQuotation } from './actions/quotation/CreateQuotation.js';
-
 import { initCreatePurchaseOrder } from './actions/purchase-order/CreatePurchaseOrder.js';
 import { initPurchaseOrderActions } from './actions/purchase-order/PurchaseOrderActions.js';
-
 import { initVatSet } from './actions/vat/VatSet.js';
-
-import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
-
 import { initBarcodes } from './actions/barcodes/barcodes.js';
-
 import { initEcho } from './reverb/echo.js';
 import { initScheduleDate } from './actions/schedule/ScheduleDate.js';
+import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -38,15 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initEditSupplier();
     initEditUser();
     initStatusUser();
+    initDeleteUser();
+    initPasswordUser();
     initCreateQuotation();
     initCreatePurchaseOrder();
     initPurchaseOrderActions();
     initVatSet();
-    initUserStatusMonitor();
     initBarcodes();
     initEcho();
     initScheduleDate();
-
+    initUserStatusMonitor();
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');
