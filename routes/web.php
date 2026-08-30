@@ -30,8 +30,7 @@ Route::middleware(['auth', 'active.user'])->group(function () {
 
             Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
 
-
-    Route::middleware(['session.not_locked'])->group(function () {
+Route::middleware(['session.not_locked'])->group(function () {
 
         Route::get('/dashboard', function () { 
             $products = Product::with('batches')->get(); 
@@ -88,6 +87,7 @@ Route::middleware(['auth', 'admin', 'active.user', 'session.not_locked'])->group
     Route::get('/inventory/active-products', [ProductController::class, 'getActiveProducts'])->name('inventory.activeProducts');
     Route::post('/inventory/add-stock', [ProductController::class, 'addStock'])->name('inventory.addStock');
     Route::get('/inventory/image/{filename}', [ProductController::class, 'showImage'])->name('product.image');
+    Route::delete('/inventory/batches/{id}', [ProductController::class, 'destroyBatch'])->name('inventory.batches.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');

@@ -324,4 +324,28 @@ class ProductController extends Controller
 
         ProductSku::insert($skus);
     }
+
+    public function destroyBatch($id)
+    {
+        $batch = ProductBatch::findOrFail($id);
+
+        DB::transaction(function () use ($batch) {
+            $product = Product::findOrFail($batch->product_id);
+            $quantityToRemove = $batch->quantity_remaining;
+
+            if ($quantityToRemove > 0) {
+                $product->decrement('stock', $quantityToRemove);
+            }
+
+            ProductSku::where('product_batch_id', $batch->id)->delete();
+
+            $batch->delete();
+
+            if ($product->stock < 0) {
+                $product->update(['stock' => 0]);
+            }
+        });
+
+        return back()->with('success', 'Lote eliminado y stock descontado exitosamente del inventario.');
+    }
 }

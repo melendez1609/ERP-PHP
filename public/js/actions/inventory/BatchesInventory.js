@@ -13,7 +13,7 @@ export function initBatchesInventory() {
             const productImage = button.dataset.image;
 
             if (modalTitle) modalTitle.textContent = `Lotes: ${productCode} - ${productName}`;
-            if (tableBody) tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Cargando lotes...</td></tr>';
+            if (tableBody) tableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Cargando lotes...</td></tr>';
 
             try {
                 const response = await fetch(`/inventory/${productId}/batches`);
@@ -22,7 +22,7 @@ export function initBatchesInventory() {
                 const batches = await response.json();
 
                 if (batches.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No hay lotes con stock disponible.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="9" style="text-align:center;">No hay lotes con stock disponible.</td></tr>';
                     return;
                 }
 
@@ -31,10 +31,12 @@ export function initBatchesInventory() {
                     
                     if (productImage && productImage !== '') {
                         const imageUrl = `/storage/${productImage}`;
-                            imageHtml = `<a href="${imageUrl}" target="_blank" title="Ver fotografía del producto" style="display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/icons/picture.png" alt="Ver foto" class="product-image">
-                                        </a>`;
+                        imageHtml = `<a href="${imageUrl}" target="_blank" title="Ver fotografía del producto" style="display: inline-flex; align-items: center; justify-content: center;">
+                                        <img src="/icons/picture.png" alt="Ver foto" class="product-image">
+                                    </a>`;
                     }
+
+                    const deleteUrl = `/inventory/batches/${batch.id}`;
 
                     return `
                         <tr>
@@ -46,13 +48,28 @@ export function initBatchesInventory() {
                             <td>${batch.margin_percentage}%</td>
                             <td>$${parseFloat(batch.price).toFixed(2)}</td>
                             <td>${new Date(batch.created_at).toLocaleDateString()}</td>
+                            <td style="text-align: center;">
+                                <button type="button" 
+                                        class="btn-danger" 
+                                        style="padding: 6px 14px; font-size: 13px; cursor: pointer; border-radius: 4px;"
+                                        data-modal-target="modal-alert"
+                                        data-action="${deleteUrl}"
+                                        data-method="DELETE"
+                                        data-title="Eliminar Lote"
+                                        data-message="¿Estás seguro de eliminar el Lote #${batch.id}? Esto descontará ${batch.quantity_remaining} unidades del stock actual del producto."
+                                        data-btn-text="Eliminar Lote"
+                                        data-btn-class="btn-danger"
+                                        onclick="document.getElementById('modal-batches').style.display='none';">
+                                    Eliminar
+                                </button>
+                            </td>
                         </tr>
                     `;
                 }).join('');
 
             } catch (error) {
                 console.error(error);
-                tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">Error al cargar la información.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Error al cargar la información.</td></tr>';
             }
         });
     });

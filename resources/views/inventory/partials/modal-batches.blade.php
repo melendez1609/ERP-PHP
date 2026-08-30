@@ -1,5 +1,5 @@
 <div id="modal-batches" class="modal" style="display: none;">
-    <div class="modal-content" style="max-width: 800px;">
+    <div class="modal-content" style="max-width: 900px;">
         <span class="close-modal" data-modal-close>&times;</span>
         <h3 id="batches-modal-title">Lotes del Producto</h3>
 
@@ -14,11 +14,12 @@
                     <th>Ganancia</th>
                     <th>Precio U.</th>
                     <th>Fecha Ingreso</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="batches-table-body">
                 <tr>
-                    <td colspan="8" style="text-align: center;">Cargando lotes...</td>
+                    <td colspan="9" style="text-align: center;">Cargando lotes...</td>
                 </tr>
             </tbody>
         </table>
