@@ -44,6 +44,9 @@ class ProductController extends Controller
     {
         $batches = $product->batches()
             ->where('quantity_remaining', '>', 0)
+            ->where(function($query) {
+                $query->whereNull('status')->orWhere('status', '!=', 'eliminado');
+            })
             ->orderBy('created_at', 'desc')
             ->get([
                 'id', 
@@ -52,7 +55,8 @@ class ProductController extends Controller
                 'cost', 
                 'margin_percentage', 
                 'price', 
-                'created_at'
+                'created_at',
+                'status'
             ]);
 
         return response()->json($batches);
@@ -325,7 +329,7 @@ class ProductController extends Controller
         ProductSku::insert($skus);
     }
 
-    public function destroyBatch($id)
+public function destroyBatch($id)
     {
         $batch = ProductBatch::findOrFail($id);
 
@@ -337,15 +341,18 @@ class ProductController extends Controller
                 $product->decrement('stock', $quantityToRemove);
             }
 
-            ProductSku::where('product_batch_id', $batch->id)->delete();
+            ProductSku::where('product_batch_id', $batch->id)->update(['status' => 'deleted']);
 
-            $batch->delete();
+            $batch->update([
+                'quantity_remaining' => 0,
+                'status'             => 'eliminado'
+            ]);
 
             if ($product->stock < 0) {
                 $product->update(['stock' => 0]);
             }
         });
 
-        return back()->with('success', 'Lote eliminado y stock descontado exitosamente del inventario.');
+        return back()->with('success', 'Lote marcado como eliminado correctamente para auditoría del sistema.');
     }
 }

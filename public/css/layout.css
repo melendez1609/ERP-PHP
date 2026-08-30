@@ -866,6 +866,241 @@ input:checked + .slider:before {
   pointer-events: none;
 }
 
+/* Cash Register *********************************************************************/
+.erp-cash-register-container {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 15px;
+    padding: 15px;
+    height: calc(100vh - 110px);
+    background-color: #f4f6f9;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.pos-left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+}
+
+.pos-cart-section {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 200px;
+    max-height: 65vh;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.pos-ticket-header {
+    display: grid;
+    grid-template-columns: 50px 1fr 60px 60px;
+    background: #1e293b;
+    color: white;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.pos-ticket-items {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.ticket-item {
+    display: grid;
+    grid-template-columns: 50px 1fr 60px 60px;
+    padding: 8px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    align-items: center;
+    text-align: center;
+}
+
+.ticket-item .col-name {
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pos-ticket-footer {
+    background: #f8fafc;
+    padding: 10px 15px;
+    text-align: right;
+    border-top: 1px solid #cbd5e1;
+}
+
+.pos-total-text {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.15rem;
+}
+
+.total-amount {
+    color: #d97706;
+    font-weight: bold;
+}
+
+.pos-keypad-section {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.pos-keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.key-btn {
+    background: #f8f9fa;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    height: 42px;
+    cursor: pointer;
+    color: #334155;
+    transition: background 0.1s;
+}
+
+.key-btn:hover {
+    background: #e2e8f0;
+}
+
+.key-btn:active {
+    background: #cbd5e1;
+}
+
+.action-key {
+    background: #2563eb;
+    color: white;
+    border-color: #1d4ed8;
+}
+
+.action-key:hover {
+    background: #1d4ed8;
+}
+
+.pay-key {
+    background: #059669;
+    border-color: #047857;
+}
+
+.pay-key:hover {
+    background: #047857;
+}
+
+.print-key {
+    background: #d97706;
+    border-color: #b45309;
+}
+
+.print-key:hover {
+    background: #b45309;
+}
+
+.zero-btn {
+    grid-column: span 2;
+}
+
+.pos-right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+}
+
+.pos-finder-section {
+    background: #ffffff;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.pos-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.pos-search-input:focus {
+    border-color: #2563eb;
+}
+
+.pos-catalog-section {
+    flex-grow: 1;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+    overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    align-content: start;
+}
+
+.pos-product-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 105px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: transform 0.1s, box-shadow 0.1s, border-color 0.1s;
+}
+
+.pos-product-card:hover {
+    transform: translateY(-2px);
+    border-color: #2563eb;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+}
+
+.product-icon {
+    font-size: 1.8rem;
+}
+
+.product-name {
+    font-size: 0.8rem;
+    text-align: center;
+    color: #1e293b;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #059669;
+}
+
 /* Media Query ***********************************************************************/
 @media screen and (max-width: 1366px) {
   .erp-menu {
@@ -901,4 +1136,18 @@ input:checked + .slider:before {
   .lockscreen-section-right {
     display: none;
   }
+}
+
+@media (max-width: 1024px) {
+    .erp-cash-register-container {
+        grid-template-columns: 340px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .erp-cash-register-container {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+    }
 }
