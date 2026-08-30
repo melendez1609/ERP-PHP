@@ -794,8 +794,8 @@ input:checked + .slider:before {
 }
 
 .lockscreen-avatar {
-  width: 9vh;
-  height: 9vh;
+  width: 15vh;
+  height: 15vh;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #DFDFE3;

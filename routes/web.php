@@ -28,6 +28,9 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::post('/lockscreen/unlock', [AuthController::class, 'unlock'])->name('lockscreen.unlock');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+            Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
+
+
     Route::middleware(['session.not_locked'])->group(function () {
 
         Route::get('/dashboard', function () { 
@@ -91,7 +94,6 @@ Route::middleware(['auth', 'admin', 'active.user', 'session.not_locked'])->group
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::patch('/users/{id}/disable', [UserController::class, 'disable'])->name('users.disable');
-    Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
 
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');

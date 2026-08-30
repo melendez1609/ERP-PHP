@@ -19,7 +19,19 @@
                 <h4 class="lockscreen-tittle">Pantalla de Bloqueo</h4>
                 
                 <div class="lockscreen-user-info">
-                    <img src="{{ asset('icons/user.png') }}" class="lockscreen-avatar" alt="Usuario">
+                    @php
+                        $avatarSrc = asset('icons/user.png');
+                        if (auth()->check() && !empty(auth()->user()->image)) {
+                            $imagePath = storage_path('app/public/' . auth()->user()->image);
+                            if (file_exists($imagePath)) {
+                                $type = pathinfo($imagePath, PATHINFO_EXTENSION);
+                                $data = file_get_contents($imagePath);
+                                $avatarSrc = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                            }
+                        }
+                    @endphp
+
+                    <img src="{{ $avatarSrc }}" class="lockscreen-avatar" alt="{{ auth()->user()->name ?? 'Usuario' }}">
                     <h5 class="lockscreen-username">{{ auth()->user()->name ?? 'Usuario del Sistema' }}</h5>
                 </div>
 

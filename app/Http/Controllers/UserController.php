@@ -28,7 +28,8 @@ class UserController extends Controller
 
     public function showImage($filename)
     {
-        $path = 'users/' . $filename;
+        $cleanFilename = basename($filename);
+        $path = 'users/' . $cleanFilename;
 
         if (!Storage::disk('public')->exists($path)) {
             abort(404);
@@ -47,7 +48,6 @@ class UserController extends Controller
             'image'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Verificación explícita para evitar correos duplicados al crear
         if (User::where('email', $request->email)->exists()) {
             return back()->with('error', 'El correo electrónico ingresado ya se encuentra registrado en el sistema.')->withInput();
         }
@@ -61,12 +61,12 @@ class UserController extends Controller
                 'is_active' => true,
             ]);
 
-            if ($request->hasFile('image')) {
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
                 $imageName = 'user-' . $user->id . '-IMG.' . $extension;
                 $imagePath = $file->storeAs('users', $imageName, 'public');
-                
+
                 $user->image = $imagePath;
                 $user->save();
             }
@@ -125,7 +125,6 @@ class UserController extends Controller
             'image'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Verificación explícita para evitar correos duplicados al actualizar (excluyendo al usuario actual)
         if (User::where('email', $request->email)->where('id', '!=', $id)->exists()) {
             return back()->with('error', 'El correo electrónico ingresado ya pertenece a otro usuario registrado en el sistema.')->withInput();
         }
@@ -134,7 +133,7 @@ class UserController extends Controller
             $oldRoleId = (int) $user->role_id;
             $imagePath = $user->image;
 
-            if ($request->hasFile('image')) {
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
                 if ($user->image && Storage::disk('public')->exists($user->image)) {
                     Storage::disk('public')->delete($user->image);
                 }
