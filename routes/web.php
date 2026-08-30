@@ -41,9 +41,9 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::get('/purchase-orders/{id}/pdf', [PurchaseOrderController::class, 'streamPdf'])->name('purchase-orders.pdf');
     Route::patch('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
 
-    Route::get('/settings/profits', [SettingController::class, 'profits'])->name('settings.profits');
     Route::get('/settings/vat', [SettingController::class, 'vat'])->name('settings.vat');
-    Route::put('/settings/vat/{vat}', [SettingController::class, 'updateVat'])->name('settings.vat.update');
+    Route::post('/settings/vat', [SettingController::class, 'storeVat'])->name('settings.vat.store');
+    Route::delete('/settings/vat/{id}', [SettingController::class, 'destroyVat'])->name('settings.vat.destroy');
 
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');

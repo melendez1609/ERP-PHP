@@ -92,6 +92,7 @@
     @include('schedule.partials.modal-edit')  
     @include('schedule.partials.modal-content')
     @include('users.partials.modal-password')
+    @include('settings.partials.modal-volume')
 
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
