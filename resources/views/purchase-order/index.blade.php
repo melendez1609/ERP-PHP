@@ -39,6 +39,7 @@
                         $status = strtolower($order->status ?? 'pendiente');
                         $isCancelled = in_array($status, ['cancelado', 'cancelada']);
                         $isPending = ($status === 'pendiente');
+                        $isReceived = in_array($status, ['recibido', 'recibida']);
                     @endphp
                     <tr>
                         <td>{{ $orderCode }}</td>
@@ -56,16 +57,14 @@
                                     data-order-number="{{ $orderCode }}">
                                 <option value="">Opciones</option>
 
-                                {{-- Acciones para órdenes NO canceladas --}}
+                                {{-- Opción PDF para órdenes NO canceladas --}}
                                 @if(!$isCancelled)
-                                    {{-- Opción PDF --}}
                                     <option value="pdf" data-pdf-url="{{ route('purchase-orders.pdf', $order->id) }}">
                                         PDF
                                     </option>
                                     
                                     {{-- Opciones exclusivas para estado PENDIENTE --}}
                                     @if($isPending)
-                                        {{-- Ruta Recibir --}}
                                         <option value="receive"
                                                 data-modal-target="modal-alert"
                                                 data-action="{{ route('purchase-orders.receive', $order->id) }}"
@@ -77,7 +76,6 @@
                                             Recibir
                                         </option>
 
-                                        {{-- Ruta Editar (CORREGIDA CON COMILLAS SIMPLES Y @json) --}}
                                         <option value="edit"
                                                 data-modal-target="modal-edit-purchase-order"
                                                 data-url="{{ route('purchase-orders.update', $order->id) }}"
@@ -86,7 +84,6 @@
                                             Editar
                                         </option>
 
-                                        {{-- Ruta Cancelar --}}
                                         <option value="cancel"
                                                 data-modal-target="modal-alert"
                                                 data-action="{{ route('purchase-orders.cancel', $order->id) }}"
@@ -100,17 +97,19 @@
                                     @endif
                                 @endif
 
-                                {{-- Ruta Eliminar (Siempre disponible) --}}
-                                <option value="delete"
-                                        data-modal-target="modal-alert"
-                                        data-action="{{ route('purchase-orders.destroy', $order->id) }}"
-                                        data-method="DELETE"
-                                        data-title="Eliminar Orden de Compra"
-                                        data-message="¿Estás seguro de que deseas ELIMINAR la orden {{ $orderCode }}? Esta acción borrará el registro y el archivo PDF asociado."
-                                        data-btn-text="Eliminar"
-                                        data-btn-class="btn-danger">
-                                    Eliminar
-                                </option>
+                                {{-- Ruta Eliminar (Solo disponible si NO ha sido recibida) --}}
+                                @if(!$isReceived)
+                                    <option value="delete"
+                                            data-modal-target="modal-alert"
+                                            data-action="{{ route('purchase-orders.destroy', $order->id) }}"
+                                            data-method="DELETE"
+                                            data-title="Eliminar Orden de Compra"
+                                            data-message="¿Estás seguro de que deseas ELIMINAR la orden {{ $orderCode }}? Esta acción borrará el registro y el archivo PDF asociado."
+                                            data-btn-text="Eliminar"
+                                            data-btn-class="btn-danger">
+                                        Eliminar
+                                    </option>
+                                @endif
                             </select>
                         </td>
                     </tr>

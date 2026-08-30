@@ -171,7 +171,7 @@ class PurchaseOrderController extends Controller
     {
         $purchaseOrder = PurchaseOrder::findOrFail($id);
 
-        if ($purchaseOrder->status !== 'pendiente') {
+        if (strtolower($purchaseOrder->status) !== 'pendiente') {
             return redirect()->back()->with('error', 'Solo se pueden recibir órdenes que estén en estado pendiente.');
         }
 
@@ -180,16 +180,19 @@ class PurchaseOrderController extends Controller
                 ? $purchaseOrder->products 
                 : json_decode($purchaseOrder->products, true);
 
-            foreach ($productsList as $item) {
-                $product = Product::findOrFail($item['product_id']);
-                $cost = (float) $item['cost'];
-                $price = (float) ($item['price'] ?? $product->price);
-                $quantity = (int) $item['quantity'];
+                foreach ($productsList as $item) {
+                    $productId = $item['product_id'] ?? $item['id'] ?? null;
+                    $product = Product::findOrFail($productId);
+                    
+                    $cost = (float) $item['cost'];
+                    $quantity = (int) $item['quantity'];
+
+                $profitMargin = $product->profitMargin;
+                $marginPercentage = $profitMargin ? $profitMargin->percentage : 0;
 
                 $vatRate = $product->vat?->rate ?? 13.00;
-                $priceWithoutVat = $price / (1 + ($vatRate / 100));
-                $marginPercentage = $cost > 0 ? round((($priceWithoutVat / $cost) - 1) * 100, 2) : 0;
-                if ($marginPercentage < 0) $marginPercentage = 0;
+                $priceWithoutVat = $cost * (1 + ($marginPercentage / 100));
+                $price = round($priceWithoutVat * (1 + ($vatRate / 100)), 2);
 
                 $batch = ProductBatch::create([
                     'product_id'        => $product->id,
@@ -350,7 +353,6 @@ class PurchaseOrderController extends Controller
             $number = '2' . str_pad($nextId, 11, '0', STR_PAD_LEFT);
 
             $sum = 0;
-            $for = 0;
             for ($j = 0; $j < 12; $j++) {
                 $digit = (int) $number[$j];
                 $sum += ($j % 2 === 0) ? $digit : $digit * 3;
