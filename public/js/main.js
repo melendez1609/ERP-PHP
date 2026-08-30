@@ -49,5 +49,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');
     initSelectFinder('po-product-search', 'po-select-product');
-    
 });

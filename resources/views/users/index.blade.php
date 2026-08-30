@@ -10,9 +10,11 @@
 </head>
 <body>
     @include('partials.header')
+
     <div class="volume-control">
         <img class="audio-control volume-icon" src="{{ asset('icons/audio.png') }}" alt="audio">
     </div>
+
     <main class="erp-users-container">
         <section class="users-section-top">
             <div class="users-section-top-tittle">
