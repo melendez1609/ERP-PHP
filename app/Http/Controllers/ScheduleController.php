@@ -10,13 +10,7 @@ class ScheduleController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-
-        if ($user && $user->role_id === 1) {
-            $events = Schedule::with('user')->get();
-        } else {
-            $events = Schedule::where('user_id', $user->id)->with('user')->get();
-        }
+        $events = Schedule::with('user')->get();
 
         return response()->json($events);
     }
@@ -49,6 +43,7 @@ class ScheduleController extends Controller
     public function update(Request $request, Schedule $schedule)
     {
         $user = auth()->user();
+        
         if ($user->role_id !== 1 && $schedule->user_id !== $user->id) {
             abort(403, 'No autorizado.');
         }
@@ -77,6 +72,7 @@ class ScheduleController extends Controller
     public function destroy(Schedule $schedule)
     {
         $user = auth()->user();
+        
         if ($user->role_id !== 1 && $schedule->user_id !== $user->id) {
             abort(403, 'No autorizado.');
         }

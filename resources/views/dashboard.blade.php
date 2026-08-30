@@ -95,34 +95,8 @@
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
 
-<!-- Pusher JS y Laravel Echo por CDN -->
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
 
-<!-- Pusher JS y Laravel Echo por CDN -->
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
-
-<!-- Pusher JS y Laravel Echo por CDN -->
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
-
-<!-- Pusher JS y Laravel Echo por CDN -->
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
-
-<script>
-    window.Pusher = Pusher;
-
-    window.Echo = new Echo({
-        broadcaster: 'reverb',
-        key: '8etrutdaproxb3ctmjdx',
-        wsHost: '127.0.0.1',
-        wsPort: 8080,
-        wssPort: 8080,
-        forceTLS: false,
-        enabledTransports: ['ws', 'wss'],
-    });
-</script>
 </html>
 

@@ -245,10 +245,10 @@
 }
 </style>
 
-<div id="modal-schedule" class="modal" data-user-id="{{ auth()->id() }}">
+<div id="modal-schedule" class="modal" data-user-id="{{ auth()->id() }}" data-user-role="{{ auth()->user()->role_id }}">
     <div class="modal-content" style="max-width: 860px; width: 95%;">
         <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 15px;">
-            <h3 style="margin: 0;">Agenda de Eventos</h3>
+            <h3 style="margin: 0;">Agenda de Actividades</h3>
             <span class="close btn-cancel" data-modal-close style="cursor: pointer; font-size: 1.5rem; line-height: 1; background: transparent; border: none; padding: 0;">&times;</span>
         </div>
 
@@ -289,7 +289,7 @@
                             <div class="cal06__date-info" id="cal06DateInfo"></div>
                         </div>
                         <div class="cal06__side-card">
-                            <div class="cal06__side-label">Próximos eventos</div>
+                            <div class="cal06__side-label">Próximas actividades</div>
                             <div id="cal06Events">
                                 @forelse($events ?? [] as $event)
                                     <div class="cal06__ev" data-id="{{ $event->id }}">
@@ -302,7 +302,7 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="cal06__empty">No hay eventos agendados</div>
+                                    <div class="cal06__empty">No hay actividades agendadas</div>
                                 @endforelse
                             </div>
                         </div>

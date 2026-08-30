@@ -3,6 +3,7 @@ export function initScheduleDate() {
     if (!modal) return;
 
     const authUserId = modal.dataset.userId ? parseInt(modal.dataset.userId) : null;
+    const authUserRole = modal.dataset.userRole ? parseInt(modal.dataset.userRole) : null;
 
     const monthEl = document.getElementById('cal06Month');
     const yearEl = document.getElementById('cal06Year');
@@ -229,6 +230,14 @@ export function initScheduleDate() {
                 evt.stopPropagation();
                 activeEventForDropdown = event;
                 const rect = optionsBtn.getBoundingClientRect();
+                
+                // Validar permisos visuales para la opción de Editar
+                const canModify = (authUserRole === 1 || event.user_id === authUserId);
+                const editBtnElement = globalDropdown.querySelector('.btn-edit');
+                if (editBtnElement) {
+                    editBtnElement.style.display = canModify ? 'block' : 'none';
+                }
+
                 globalDropdown.style.display = 'block';
                 globalDropdown.style.top = `${rect.bottom + 4}px`;
                 globalDropdown.style.left = `${rect.right - 100}px`;
@@ -305,6 +314,12 @@ export function initScheduleDate() {
         if (timeInput) timeInput.value = event.event_time;
         if (colorInput) colorInput.value = event.color;
         if (descInput) descInput.value = event.description || '';
+
+        // Ocultar o mostrar el botón de eliminar según corresponda (Admin o Dueño)
+        if (deleteBtn) {
+            const canDelete = (authUserRole === 1 || event.user_id === authUserId);
+            deleteBtn.style.display = canDelete ? 'inline-block' : 'none';
+        }
 
         openCustomModal(editModal, '9999');
     }
@@ -500,7 +515,6 @@ export function initScheduleDate() {
         });
     }
 
-    // Listener de Laravel Reverb en tiempo real
     if (window.Echo) {
         window.Echo.channel('schedules-channel')
             .listen('.ScheduleActionBroadcast', (e) => {

@@ -24,6 +24,7 @@ import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
 
 import { initBarcodes } from './actions/barcodes/barcodes.js';
 
+import { initEcho } from './reverb/echo.js';
 import { initScheduleDate } from './actions/schedule/ScheduleDate.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initVatSet();
     initUserStatusMonitor();
     initBarcodes();
+    initEcho();
     initScheduleDate();
+
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');
