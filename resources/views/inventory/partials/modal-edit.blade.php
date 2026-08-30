@@ -24,7 +24,7 @@
 
             <div>
                 <label for="edit_image">Actualizar Fotografía:</label>
-                <input type="file" name="image" id="edit_image" accept="image/*">
+                <input type="file" name="image" id="edit_image" accept="image/jpeg,image/png,image/jpg,image/webp">
             </div>
 
             <div>
@@ -41,7 +41,7 @@
                 <label for="price_update_scope">Ámbito de Actualización de Precio:</label>
                 <select name="price_update_scope" id="price_update_scope" required>
                     <option value="none">Solo datos básicos (Mantener precios actuales)</option>
-                    <option value="all_batches">Actualizar precio en TODOS los lotes activos</option>
+                    <option value="all_batches">Actualizar precio en todos los lotes activos</option>
                     <option value="specific_batch">Actualizar un lote específico</option>
                 </select>
             </div>
@@ -53,7 +53,7 @@
                 </select>
             </div>
 
-            <div id="pricing-fields-container">
+            <div id="pricing-fields-container" style="display: none;">
                 <div>
                     <label for="edit_cost">Costo ($):</label>
                     <input type="number" step="0.01" name="cost" id="edit_cost" min="0">

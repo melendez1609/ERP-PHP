@@ -12,7 +12,7 @@ export function initPurchaseOrderActions() {
         }
 
         try {
-            const response = await fetch('/inventory/active-products', {
+            const response = await fetch('/purchase-orders/active-products', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -264,7 +264,7 @@ export function initPurchaseOrderActions() {
                     if (matchingActive) {
                         const currentCost = matchingActive.cost ?? matchingActive.purchase_cost;
                         if (currentCost !== undefined) {
-                            p.cost = currentCost; // Se actualiza al precio actual del inventario
+                            p.cost = currentCost;
                         }
                     }
                     appendEditProductRow(activeProducts, p);

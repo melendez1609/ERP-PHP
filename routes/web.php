@@ -50,8 +50,7 @@ Route::middleware(['auth', 'active.user'])->group(function () {
         Route::patch('/purchase-orders/{id}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
         Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.destroy');
         Route::get('/purchase-orders/{id}/pdf', [PurchaseOrderController::class, 'streamPdf'])->name('purchase-orders.pdf');
-
-        Route::get('/inventory/active-products', [ProductController::class, 'getActiveProducts'])->name('inventory.activeProducts');
+        Route::get('/purchase-orders/active-products', [PurchaseOrderController::class, 'activeProducts'])->name('purchase-orders.activeProducts');
 
         Route::get('/settings/vat', [SettingController::class, 'vat'])->name('settings.vat');
         Route::post('/settings/vat', [SettingController::class, 'storeVat'])->name('settings.vat.store');
@@ -83,15 +82,16 @@ Route::middleware(['auth', 'admin', 'active.user', 'session.not_locked'])->group
     Route::delete('/inventory/{id}', [ProductController::class, 'destroy'])->name('inventory.destroy');
     Route::patch('/inventory/{id}/disable', [ProductController::class, 'disable'])->name('inventory.disable');
     Route::get('/inventory/{product}/batches', [ProductController::class, 'getBatches'])->name('inventory.batches');
+    Route::get('/inventory/active-products', [ProductController::class, 'getActiveProducts'])->name('inventory.activeProducts');
     Route::post('/inventory/add-stock', [ProductController::class, 'addStock'])->name('inventory.addStock');
-    Route::get('/storage/products/{filename}', [ProductController::class, 'showImage'])->name('product.image');
+    Route::get('/inventory/image/{filename}', [ProductController::class, 'showImage'])->name('product.image');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::patch('/users/{id}/disable', [UserController::class, 'disable'])->name('users.disable');
-    Route::get('/storage/users/{filename}', [App\Http\Controllers\UserController::class, 'showImage'])->name('user.image');
+    Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
 
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
@@ -101,6 +101,3 @@ Route::middleware(['auth', 'admin', 'active.user', 'session.not_locked'])->group
     Route::post('/barcodes/generate', [BarcodeController::class, 'generate'])->name('barcodes.generate');
     Route::get('/barcodes/search', [BarcodeController::class, 'search'])->name('barcodes.search');
 });
-
-
-Route::get('/inventory/active-products', [PurchaseOrderController::class, 'activeProducts']);
