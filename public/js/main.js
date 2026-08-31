@@ -21,6 +21,8 @@ import { initScheduleDate } from './actions/schedule/ScheduleDate.js';
 import { initUserStatusMonitor } from './functionalities/UserStatusMonitor.js';
 import { initEditContact } from './actions/contacts/EditContact.js';
 import { initLockscreen } from './actions/auth/lockscreen.js';
+import { initPOS, processSale, handleNumericInput, clearCart, removeLastItem, handleReprint } from './actions/cash-register/pos.js';
+import { initPOSKeyboard } from './actions/cash-register/keyboard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -45,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initUserStatusMonitor();
     initEditContact();
     initLockscreen();
+    initPOS();
+    initPOSKeyboard(processSale, handleNumericInput, clearCart, removeLastItem, handleReprint);
 
     initSelectFinder('product-search', 'select-product');
     initSelectFinder('supplier-search', 'supplier_id');

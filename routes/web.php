@@ -15,6 +15,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SaleController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
@@ -27,8 +28,9 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::get('/lockscreen', [AuthController::class, 'showLockscreen'])->name('lockscreen.show');
     Route::post('/lockscreen/unlock', [AuthController::class, 'unlock'])->name('lockscreen.unlock');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
 
-            Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
+    Route::post('/cash-register/sale', [SaleController::class, 'store'])->name('sales.store');
 
 Route::middleware(['session.not_locked'])->group(function () {
 
@@ -38,7 +40,10 @@ Route::middleware(['session.not_locked'])->group(function () {
             return view('dashboard', compact('products', 'suppliers')); 
         })->name('dashboard');
 
-        Route::get('/cash-register', function () { return view('cash-register.index'); })->name('cash-register.index');
+        Route::get('/cash-register', [SaleController::class, 'index'])->name('cash-register.index');
+        Route::post('/cash-register/sale', [SaleController::class, 'store'])->name('sales.store');
+        Route::get('/cash-register/ticket/{id}', [SaleController::class, 'ticket'])->name('sales.ticket');
+        Route::post('/cash-register/preview-ticket', [SaleController::class, 'previewTicket'])->name('sales.preview');
 
         Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
         Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');

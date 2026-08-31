@@ -912,7 +912,7 @@ input:checked + .slider:before {
 .pos-ticket-header {
     display: grid;
     grid-template-columns: 50px 1fr 60px 60px;
-    background: #1e293b;
+    background: #132873;
     color: white;
     padding: 8px 10px;
     font-size: 0.85rem;
@@ -1110,6 +1110,36 @@ input:checked + .slider:before {
     font-size: 0.85rem;
     font-weight: bold;
     color: #059669;
+}
+
+.key-btn {
+    transition: background 0.1s, transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.key-btn:hover {
+    background: #e2e8f0;
+}
+
+.key-btn:active,
+.key-btn.key-pressed {
+    transform: scale(0.93);
+    background: #cbd5e1 !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.action-key:active, 
+.action-key.key-pressed {
+    background: #1d4ed8 !important;
+}
+
+.pay-key:active, 
+.pay-key.key-pressed {
+    background: #047857 !important;
+}
+
+.print-key:active, 
+.print-key.key-pressed {
+    background: #b45309 !important;
 }
 
 /* Media Query ***********************************************************************/
