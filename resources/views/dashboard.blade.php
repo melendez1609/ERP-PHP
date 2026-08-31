@@ -30,7 +30,7 @@
                 <img class="icon" src="{{ asset('icons/in-inventory.png') }}" alt="in-inventory">
                 <h4 class="icon-name">Inventario</h4>
             </a>
-            <a href="{{ route('reports.index') }}" class="option">
+            <a href="{{ route('sales.reports') }}" class="option">
                 <img class="icon" src="{{ asset('icons/sales-report.png') }}" alt="sales-report">
                 <h4 class="icon-name">Reporte de Ventas</h4>
             </a>

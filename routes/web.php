@@ -17,6 +17,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SalesChartController;
 
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -31,6 +32,8 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::post('/lockscreen/unlock', [AuthController::class, 'unlock'])->name('lockscreen.unlock');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
+    Route::get('/reports/sales', function () {return view('sales-report.index');})->name('sales.reports');
+    Route::get('/reports/sales-data', [SalesChartController::class, 'salesData'])->name('sales.reports.data');
 
 Route::middleware(['session.not_locked'])->group(function () {
 
