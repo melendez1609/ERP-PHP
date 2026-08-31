@@ -442,6 +442,17 @@ body {
   background-color: #28a745;
 }
 
+/* Botón de Lotes integrado limpiamente con tu patrón */
+.inventory-table-button.view-batches {
+  font-weight: bold;
+  color: #FFFFFF;
+  background-color: #0284c7;
+}
+
+.inventory-table-button.view-batches:hover {
+  background-color: #0369a1;
+}
+
 .table-action-select {
   font-size: 1.80vh;
   padding: 0.8vh 1vh;

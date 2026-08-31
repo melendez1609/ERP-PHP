@@ -44,9 +44,6 @@ class ProductController extends Controller
     {
         $batches = $product->batches()
             ->where('quantity_remaining', '>', 0)
-            ->where(function($query) {
-                $query->whereNull('status')->orWhere('status', '!=', 'eliminado');
-            })
             ->orderBy('created_at', 'desc')
             ->get([
                 'id', 
@@ -55,8 +52,7 @@ class ProductController extends Controller
                 'cost', 
                 'margin_percentage', 
                 'price', 
-                'created_at',
-                'status'
+                'created_at'
             ]);
 
         return response()->json($batches);
@@ -124,6 +120,7 @@ class ProductController extends Controller
                     'price'             => $validated['price'],
                     'quantity_received' => $validated['stock'],
                     'quantity_remaining'=> $validated['stock'],
+                    'status'            => 'activo',
                 ]);
 
                 $this->generateSkusForBatch($product->id, $batch->id, $validated['stock']);
@@ -155,6 +152,7 @@ class ProductController extends Controller
                 'price'             => $validated['price'],
                 'quantity_received' => $validated['stock'],
                 'quantity_remaining'=> $validated['stock'],
+                'status'            => 'activo',
             ]);
 
             $this->generateSkusForBatch($product->id, $batch->id, $validated['stock']);
@@ -329,7 +327,7 @@ class ProductController extends Controller
         ProductSku::insert($skus);
     }
 
-public function destroyBatch($id)
+    public function destroyBatch($id)
     {
         $batch = ProductBatch::findOrFail($id);
 
@@ -343,16 +341,22 @@ public function destroyBatch($id)
 
             ProductSku::where('product_batch_id', $batch->id)->update(['status' => 'deleted']);
 
-            $batch->update([
-                'quantity_remaining' => 0,
-                'status'             => 'eliminado'
-            ]);
+            $batch->delete(); 
 
             if ($product->stock < 0) {
                 $product->update(['stock' => 0]);
             }
+
+            if ($batch->purchase_order_id) {
+                $purchaseOrder = \App\Models\PurchaseOrder::find($batch->purchase_order_id);
+                if ($purchaseOrder) {
+                    $purchaseOrder->update([
+                        'status' => 'Eliminado'
+                    ]);
+                }
+            }
         });
 
-        return back()->with('success', 'Lote marcado como eliminado correctamente para auditoría del sistema.');
+        return back()->with('success', 'Lote borrado permanentemente de los registros y stock sincronizado.');
     }
 }

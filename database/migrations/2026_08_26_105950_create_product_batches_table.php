@@ -17,7 +17,6 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->integer('quantity_received');
             $table->integer('quantity_remaining');
-            $table->string('status')->default('activo'); // <-- Agregado para control de auditoría
             $table->timestamps();
         });
     }

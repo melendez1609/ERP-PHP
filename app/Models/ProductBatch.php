@@ -15,7 +15,6 @@ class ProductBatch extends Model
         'price',
         'quantity_received',
         'quantity_remaining',
-        'status',
     ];
 
     public function product(): BelongsTo
