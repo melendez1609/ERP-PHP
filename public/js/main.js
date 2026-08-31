@@ -23,6 +23,7 @@ import { initEditContact } from './actions/contacts/EditContact.js';
 import { initLockscreen } from './actions/auth/lockscreen.js';
 import { initPOS, processSale, handleNumericInput, clearCart, removeLastItem, handleReprint } from './actions/cash-register/pos.js';
 import { initPOSKeyboard } from './actions/cash-register/keyboard.js';
+import { initSalesChart } from './actions/sales-report/ChartSales.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initEditContact();
     initLockscreen();
     initPOS();
+    initSalesChart();
     initPOSKeyboard(processSale, handleNumericInput, clearCart, removeLastItem, handleReprint);
 
     initSelectFinder('product-search', 'select-product');

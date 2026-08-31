@@ -14,13 +14,13 @@
         <img class="audio-control volume-icon" src="{{ asset('icons/audio.png') }}" alt="audio">
     </div>
 
-    <main class="erp-reports-container" style="padding: 20px;">
-        <section class="reports-section-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <div class="reports-section-top-tittle">
-                <h3 style="margin: 0;">Reporte de Ventas</h3>
+    <main class="erp-sales-reports-container">
+        <section class="sales-reports-section-top">
+            <div class="sales-reports-section-top-tittle">
+                <h3>Panel Analítico de Ventas</h3>
             </div>
             <div>
-                <select id="filterSelect" class="form-control" style="padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <select id="filterSelect" class="table-action-select">
                     <option value="year">Por Año</option>
                     <option value="month" selected>Por Mes</option>
                     <option value="day">Por Día (Últimos 7 días)</option>
@@ -28,64 +28,38 @@
             </div>
         </section>
 
-        <section class="reports-section-table" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-            <div style="position: relative; height: 400px; width: 100%;">
-                <canvas id="salesChart"></canvas>
+        <div class="sales-reports-grid-wrapper">
+            <div class="sales-reports-card">
+                <div class="sales-reports-card-title">Monto Total de Ventas ($)</div>
+                <div class="sales-reports-chart-box">
+                    <canvas id="areaChart"></canvas>
+                </div>
             </div>
-        </section>
+
+            <div class="sales-reports-card">
+                <div class="sales-reports-card-title">N° de Transacciones Realizadas</div>
+                <div class="sales-reports-chart-box">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="sales-reports-card">
+                <div class="sales-reports-card-title">Ventas por Día de Semana</div>
+                <div class="sales-reports-chart-box">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="sales-reports-card">
+                <div class="sales-reports-card-title">Proporción por Estado</div>
+                <div class="sales-reports-chart-box">
+                    <canvas id="donutChart"></canvas>
+                </div>
+            </div>
+        </div>
     </main>
 
     @include('partials.footer')
     <script type="module" src="{{ asset('js/main.js') }}"></script>
-
-    <script>
-        let salesChart;
-
-        async function initSalesChart() {
-            try {
-                const response = await fetch("{{ route('sales.reports.data') }}");
-                const chartData = await response.json();
-
-                const ctx = document.getElementById('salesChart').getContext('2d');
-                
-                salesChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: chartData.month.labels,
-                        datasets: [{
-                            label: 'Ventas Totales ($)',
-                            data: chartData.month.data,
-                            backgroundColor: 'rgba(37, 99, 235, 0.6)',
-                            borderColor: 'rgba(37, 99, 235, 1)',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
-                });
-
-                document.getElementById('filterSelect').addEventListener('change', function(e) {
-                    const selected = e.target.value;
-                    
-                    if (chartData[selected]) {
-                        salesChart.data.labels = chartData[selected].labels;
-                        salesChart.data.datasets[0].data = chartData[selected].data;
-                        salesChart.update();
-                    }
-                });
-
-            } catch (error) {
-                console.error('Error al obtener los datos reales de ventas:', error);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', initSalesChart);
-    </script>
 </body>
 </html>

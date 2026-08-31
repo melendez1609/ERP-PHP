@@ -1155,6 +1155,106 @@ input:checked + .slider:before {
     background: #b45309 !important;
 }
 
+/* Sales Reports Module Styles *******************************************************/
+.erp-sales-reports-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 89vh;
+    background-color: #FFFFFF;
+    padding: 2vh 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.sales-reports-section-top {
+    display: flex;
+    gap: 1vh;
+    padding: 0 0 1.5vh 0;
+    width: 85%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sales-reports-section-top-tittle {
+    font-size: 3vh;
+    font-weight: bold;
+    color: #132873;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.sales-reports-section-top-tittle h3 {
+    margin: 0;
+    font-size: inherit;
+}
+
+.sales-reports-grid-wrapper {
+    width: 85%;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1.5vh;
+    min-height: 0;
+    margin-bottom: 2vh;
+}
+
+.sales-reports-card {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 1vh;
+    padding: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    min-height: 0;
+}
+
+.sales-reports-card-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.8vh;
+    font-weight: bold;
+    color: #132873;
+    margin-bottom: 1vh;
+    padding-bottom: 0.5vh;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sales-reports-chart-box {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    width: 100%;
+}
+
+@media screen and (max-width: 1366px) {
+    .sales-reports-section-top,
+    .sales-reports-grid-wrapper {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .erp-sales-reports-container {
+        height: auto !important;
+        min-height: 89vh !important;
+        overflow-y: auto !important;
+    }
+    .sales-reports-grid-wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto;
+    }
+    .sales-reports-chart-box {
+        height: 220px;
+    }
+}
+
 /* Media Query ***********************************************************************/
 @media screen and (max-width: 1366px) {
   .erp-menu {
