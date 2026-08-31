@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\SystemLog;
 
 class SaleController extends Controller
 {
@@ -20,7 +21,6 @@ class SaleController extends Controller
         return view('cash-register.index', compact('products'));
     }
 
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -31,9 +31,10 @@ class SaleController extends Controller
         ]);
 
         $saleId = null;
+        $subtotalGeneral = 0;
 
         try {
-            DB::transaction(function () use ($request, &$saleId) {
+            DB::transaction(function () use ($request, &$saleId, &$subtotalGeneral) {
                 $subtotalGeneral = 0;
                 $itemsData = [];
 
@@ -76,7 +77,7 @@ class SaleController extends Controller
 
                         if ($batch->quantity_remaining <= $pendingToDeduct) {
                             $pendingToDeduct -= $batch->quantity_remaining;
-                            $batch->delete(); // Eliminación física directa si queda en 0
+                            $batch->delete();
                         } else {
                             $batch->decrement('quantity_remaining', $pendingToDeduct);
                             $pendingToDeduct = 0;
@@ -105,6 +106,12 @@ class SaleController extends Controller
                 Storage::disk('local')->put('private/invoice/' . $fileName, $invoiceHtml);
             });
 
+            SystemLog::log('VENTA_PROCESADA', [
+                'sale_id'     => $saleId,
+                'total'       => $subtotalGeneral,
+                'items_count' => count($request->items),
+            ]);
+
             return response()->json([
                 'success'    => true,
                 'message'    => '¡Venta procesada con éxito!',
@@ -113,6 +120,10 @@ class SaleController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
+            SystemLog::log('ERROR_VENTA', [
+                'error' => $e->getMessage(),
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -123,6 +134,12 @@ class SaleController extends Controller
     public function ticket($id)
     {
         $sale = Sale::with(['items', 'user'])->findOrFail($id);
+
+        SystemLog::log('TICKET_IMPRESO', [
+            'sale_id' => $sale->id,
+            'total'   => $sale->total,
+        ]);
+
         return view('cash-register.partials.sales-invoice', compact('sale'));
     }
 

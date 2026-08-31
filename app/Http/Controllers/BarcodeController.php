@@ -8,6 +8,7 @@ use App\Models\ProductSku;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Milon\Barcode\DNS1D;
+use App\Models\SystemLog;
 
 class BarcodeController extends Controller
 {
@@ -62,6 +63,13 @@ class BarcodeController extends Controller
 
         file_put_contents($fullPath, $pdf->output());
 
+        SystemLog::log('GENERAR_CODIGOS_BARRA', [
+            'product_code' => $code,
+            'batch_id'     => $batchId,
+            'skus_count'   => $skus->count(),
+            'filename'     => $fileName,
+        ]);
+
         return $pdf->stream($fileName);
     }
 
@@ -81,6 +89,12 @@ class BarcodeController extends Controller
         if (!file_exists($filePath)) {
             return back()->with('warning', "No existe un archivo PDF guardado para el lote ID '{$batchId}' del producto {$code}.");
         }
+
+        SystemLog::log('CONSULTAR_CODIGOS_BARRA', [
+            'product_code' => $code,
+            'batch_id'     => $batchId,
+            'filename'     => $fileName,
+        ]);
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',

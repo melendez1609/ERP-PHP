@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Schedule;
 use App\Events\ScheduleActionBroadcast;
 use Illuminate\Http\Request;
+use App\Models\SystemLog;
 
 class ScheduleController extends Controller
 {
@@ -32,6 +33,13 @@ class ScheduleController extends Controller
         $schedule->load('user');
 
         broadcast(new ScheduleActionBroadcast($schedule, 'created'))->toOthers();
+
+        SystemLog::log('AGENDA_EVENTO_CREADO', [
+            'schedule_id' => $schedule->id,
+            'title'       => $schedule->title,
+            'event_date'  => $schedule->event_date,
+            'event_time'  => $schedule->event_time,
+        ]);
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true, 'event' => $schedule]);
@@ -62,6 +70,13 @@ class ScheduleController extends Controller
 
         broadcast(new ScheduleActionBroadcast($schedule, 'updated'))->toOthers();
 
+        SystemLog::log('AGENDA_EVENTO_ACTUALIZADO', [
+            'schedule_id' => $schedule->id,
+            'title'       => $schedule->title,
+            'event_date'  => $schedule->event_date,
+            'event_time'  => $schedule->event_time,
+        ]);
+
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true, 'event' => $schedule]);
         }
@@ -78,10 +93,17 @@ class ScheduleController extends Controller
         }
 
         $scheduleData = $schedule->load('user');
+        $scheduleId = $schedule->id;
+        $scheduleTitle = $schedule->title;
 
         $schedule->delete();
 
         broadcast(new ScheduleActionBroadcast($scheduleData, 'deleted'))->toOthers();
+
+        SystemLog::log('AGENDA_EVENTO_ELIMINADO', [
+            'schedule_id' => $scheduleId,
+            'title'       => $scheduleTitle,
+        ]);
 
         if (request()->ajax() || request()->wantsJson()) {
             return response()->json(['success' => true]);

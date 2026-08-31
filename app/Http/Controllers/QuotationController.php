@@ -7,6 +7,7 @@ use App\Models\Quotation;
 use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use App\Models\SystemLog;
 
 class QuotationController extends Controller
 {
@@ -78,6 +79,13 @@ class QuotationController extends Controller
 
         $quotation->update(['pdf_path' => $relativePath]);
 
+        SystemLog::log('COTIZACION_CREADA', [
+            'quotation_id'  => $quotation->id,
+            'customer_name' => $request->customer_name,
+            'total'         => $total,
+            'items_count'   => count($items),
+        ]);
+
         return $pdf->stream("cotizacion_{$quotation->id}.pdf");
     }
 
@@ -89,18 +97,29 @@ class QuotationController extends Controller
             abort(404, 'El archivo de la cotización no existe.');
         }
 
+        SystemLog::log('COTIZACION_DESCARGADA', [
+            'quotation_id'  => $quotation->id,
+            'customer_name' => $quotation->customer_name,
+        ]);
+
         return Storage::disk('local')->response($quotation->pdf_path, "cotizacion_{$quotation->id}.pdf");
     }
 
     public function destroy($id)
     {
         $quotation = Quotation::findOrFail($id);
+        $customerName = $quotation->customer_name;
 
         if (Storage::disk('local')->exists($quotation->pdf_path)) {
             Storage::disk('local')->delete($quotation->pdf_path);
         }
 
         $quotation->delete();
+
+        SystemLog::log('COTIZACION_ELIMINADA', [
+            'quotation_id'  => $id,
+            'customer_name' => $customerName,
+        ]);
 
         return back()->with('success', 'Cotización eliminada con éxito.');
     }

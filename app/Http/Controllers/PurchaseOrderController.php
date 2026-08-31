@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Models\SystemLog;
 
 class PurchaseOrderController extends Controller
 {
@@ -102,6 +103,14 @@ class PurchaseOrderController extends Controller
 
         $emailSent = $this->sendPurchaseOrderEmail($purchaseOrder, $pdfPath);
 
+        SystemLog::log('ORDEN_COMPRA_CREADA', [
+            'purchase_order_id' => $purchaseOrder->id,
+            'order_number'      => $orderNumber,
+            'supplier'          => $purchaseOrder->supplier?->name,
+            'total'             => $total,
+            'email_sent'        => $emailSent,
+        ]);
+
         $message = $emailSent 
             ? 'Orden de Compra creada, guardada en PDF y enviada por correo correctamente.' 
             : 'Orden de Compra creada correctamente, pero no se pudo enviar el correo.';
@@ -163,6 +172,13 @@ class PurchaseOrderController extends Controller
             }
         });
 
+        SystemLog::log('ORDEN_COMPRA_ACTUALIZADA', [
+            'purchase_order_id' => $purchaseOrder->id,
+            'order_number'      => $purchaseOrder->order_number,
+            'supplier'          => $purchaseOrder->supplier?->name,
+            'total'             => $total,
+        ]);
+
         return redirect()->route('purchase-orders.index')
             ->with('success', 'Orden de Compra actualizada y PDF regenerado correctamente.');
     }
@@ -180,12 +196,12 @@ class PurchaseOrderController extends Controller
                 ? $purchaseOrder->products 
                 : json_decode($purchaseOrder->products, true);
 
-                foreach ($productsList as $item) {
-                    $productId = $item['product_id'] ?? $item['id'] ?? null;
-                    $product = Product::findOrFail($productId);
-                    
-                    $cost = (float) $item['cost'];
-                    $quantity = (int) $item['quantity'];
+            foreach ($productsList as $item) {
+                $productId = $item['product_id'] ?? $item['id'] ?? null;
+                $product = Product::findOrFail($productId);
+                
+                $cost = (float) $item['cost'];
+                $quantity = (int) $item['quantity'];
 
                 $profitMargin = $product->profitMargin;
                 $marginPercentage = $profitMargin ? $profitMargin->percentage : 0;
@@ -220,6 +236,11 @@ class PurchaseOrderController extends Controller
 
             $purchaseOrder->update(['status' => 'recibido']);
         });
+
+        SystemLog::log('ORDEN_COMPRA_RECIBIDA', [
+            'purchase_order_id' => $purchaseOrder->id,
+            'order_number'      => $purchaseOrder->order_number,
+        ]);
 
         return redirect()->route('purchase-orders.index')
             ->with('success', 'Orden de Compra recibida exitosamente. Stock, lotes e identificadores SKU agregados al inventario.');
@@ -291,6 +312,11 @@ class PurchaseOrderController extends Controller
             $logoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
 
+        SystemLog::log('ORDEN_COMPRA_DESCARGAR_PDF', [
+            'purchase_order_id' => $purchaseOrder->id,
+            'order_number'      => $purchaseOrder->order_number,
+        ]);
+
         if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
             $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('purchase-order.partials.purchase-order-invoice', compact('purchaseOrder', 'logoBase64'));
             return $pdf->download("Orden_de_Compra_{$purchaseOrder->order_number}.pdf");
@@ -322,6 +348,11 @@ class PurchaseOrderController extends Controller
             'status' => 'cancelado'
         ]);
 
+        SystemLog::log('ORDEN_COMPRA_CANCELADA', [
+            'purchase_order_id' => $purchaseOrder->id,
+            'order_number'      => $purchaseOrder->order_number,
+        ]);
+
         return redirect()->route('purchase-orders.index')
             ->with('success', "La orden de compra {$purchaseOrder->order_number} fue cancelada correctamente.");
     }
@@ -329,6 +360,7 @@ class PurchaseOrderController extends Controller
     public function destroy($id)
     {
         $purchaseOrder = PurchaseOrder::findOrFail($id);
+        $orderNumber = $purchaseOrder->order_number;
 
         $pdfPath = storage_path("app/private/purchase-orders/Orden_de_Compra_{$purchaseOrder->order_number}.pdf");
 
@@ -337,6 +369,11 @@ class PurchaseOrderController extends Controller
         }
 
         $purchaseOrder->delete();
+
+        SystemLog::log('ORDEN_COMPRA_ELIMINADA', [
+            'purchase_order_id' => $id,
+            'order_number'      => $orderNumber,
+        ]);
 
         return redirect()->route('purchase-orders.index')
             ->with('success', 'La Orden de Compra y su archivo PDF fueron eliminados correctamente.');

@@ -11,6 +11,7 @@ use App\Models\Vat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\SystemLog;
 
 class ProductController extends Controller
 {
@@ -84,7 +85,9 @@ class ProductController extends Controller
             'supplier_id'       => 'nullable|exists:suppliers,id',
         ]);
 
-        DB::transaction(function () use ($request, $validated) {
+        $product = null;
+
+        DB::transaction(function () use ($request, $validated, &$product) {
             $product = Product::create([
                 'code'              => $validated['code'],
                 'name'              => $validated['name'],
@@ -126,6 +129,14 @@ class ProductController extends Controller
                 $this->generateSkusForBatch($product->id, $batch->id, $validated['stock']);
             }
         });
+
+        SystemLog::log('PRODUCTO_CREADO', [
+            'product_id' => $product->id ?? null,
+            'code'       => $validated['code'],
+            'name'       => $validated['name'],
+            'stock'      => $validated['stock'],
+            'price'      => $validated['price'],
+        ]);
 
         return back()->with('success', 'Producto, lote e identificadores SKU creados exitosamente.');
     }
@@ -169,6 +180,13 @@ class ProductController extends Controller
                 ['percentage' => $validated['profit_percentage']]
             );
         });
+
+        SystemLog::log('STOCK_AGREGADO', [
+            'product_id'  => $validated['product_id'],
+            'stock_added' => $validated['stock'],
+            'cost'        => $validated['cost'],
+            'price'       => $validated['price'],
+        ]);
 
         return back()->with('success', 'Stock, nuevo lote y SKUs agregados exitosamente.');
     }
@@ -269,18 +287,33 @@ class ProductController extends Controller
             }
         });
 
+        SystemLog::log('PRODUCTO_ACTUALIZADO', [
+            'product_id'         => $id,
+            'code'               => $validated['code'],
+            'name'               => $validated['name'],
+            'price_update_scope' => $validated['price_update_scope'],
+        ]);
+
         return back()->with('success', 'Producto e inventario actualizados exitosamente.');
     }
 
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        $productCode = $product->code;
+        $productName = $product->name;
 
         if ($product->image && Storage::disk('public')->exists($product->image)) {
             Storage::disk('public')->delete($product->image);
         }
 
         $product->delete();
+
+        SystemLog::log('PRODUCTO_ELIMINADO', [
+            'product_id' => $id,
+            'code'       => $productCode,
+            'name'       => $productName,
+        ]);
 
         return back()->with('success', 'Producto eliminado exitosamente.');
     }
@@ -293,6 +326,13 @@ class ProductController extends Controller
         $product->save();
 
         $estado = ($product->product_status_id == 1) ? 'activado' : 'inactivado';
+
+        SystemLog::log('ESTADO_PRODUCTO_CAMBIADO', [
+            'product_id' => $product->id,
+            'code'       => $product->code,
+            'name'       => $product->name,
+            'status'     => $estado,
+        ]);
 
         return back()->with('success', "Producto {$estado} correctamente.");
     }
@@ -330,6 +370,8 @@ class ProductController extends Controller
     public function destroyBatch($id)
     {
         $batch = ProductBatch::findOrFail($id);
+        $productId = $batch->product_id;
+        $quantityToRemove = $batch->quantity_remaining;
 
         DB::transaction(function () use ($batch) {
             $product = Product::findOrFail($batch->product_id);
@@ -356,6 +398,12 @@ class ProductController extends Controller
                 }
             }
         });
+
+        SystemLog::log('LOTE_ELIMINADO', [
+            'batch_id'         => $id,
+            'product_id'       => $productId,
+            'quantity_removed' => $quantityToRemove,
+        ]);
 
         return back()->with('success', 'Lote borrado permanentemente de los registros y stock sincronizado.');
     }

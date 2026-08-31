@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Models\SystemLog;
 
 class SupplierController extends Controller
 {
@@ -30,7 +31,14 @@ class SupplierController extends Controller
             'address'      => 'nullable|string',
         ]);
 
-        Supplier::create($validatedData);
+        $supplier = Supplier::create($validatedData);
+
+        SystemLog::log('PROVEEDOR_CREADO', [
+            'supplier_id'  => $supplier->id,
+            'name'         => $supplier->name,
+            'contact_name' => $supplier->contact_name,
+            'email'        => $supplier->email,
+        ]);
 
         return back()->with('success', 'Proveedor creado con éxito.');
     }
@@ -48,13 +56,26 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);
         $supplier->update($validatedData);
 
+        SystemLog::log('PROVEEDOR_ACTUALIZADO', [
+            'supplier_id'  => $supplier->id,
+            'name'         => $supplier->name,
+            'contact_name' => $supplier->contact_name,
+            'email'        => $supplier->email,
+        ]);
+
         return back()->with('success', 'Proveedor actualizado con éxito.');
     }
 
     public function destroy($id)
     {
         $supplier = Supplier::findOrFail($id);
+        $supplierName = $supplier->name;
         $supplier->delete();
+
+        SystemLog::log('PROVEEDOR_ELIMINADO', [
+            'supplier_id' => $id,
+            'name'        => $supplierName,
+        ]);
 
         return back()->with('success', 'Proveedor eliminado con éxito.');
     }

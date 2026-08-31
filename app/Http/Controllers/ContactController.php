@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use App\Models\SystemLog;
 
 class ContactController extends Controller
 {
@@ -30,7 +31,14 @@ class ContactController extends Controller
             'address'      => 'nullable|string',
         ]);
 
-        Contact::create($validatedData);
+        $contact = Contact::create($validatedData);
+
+        SystemLog::log('CONTACTO_CREADO', [
+            'contact_id'   => $contact->id,
+            'name'         => $contact->name,
+            'contact_type' => $contact->contact_type,
+            'email'        => $contact->email,
+        ]);
 
         return back()->with('success', 'Contacto creado con éxito.');
     }
@@ -48,13 +56,26 @@ class ContactController extends Controller
         $contact = Contact::findOrFail($id);
         $contact->update($validatedData);
 
+        SystemLog::log('CONTACTO_ACTUALIZADO', [
+            'contact_id'   => $contact->id,
+            'name'         => $contact->name,
+            'contact_type' => $contact->contact_type,
+            'email'        => $contact->email,
+        ]);
+
         return back()->with('success', 'Contacto actualizado con éxito.');
     }
 
     public function destroy($id)
     {
         $contact = Contact::findOrFail($id);
+        $contactName = $contact->name;
         $contact->delete();
+
+        SystemLog::log('CONTACTO_ELIMINADO', [
+            'contact_id' => $id,
+            'name'       => $contactName,
+        ]);
 
         return back()->with('success', 'Contacto eliminado con éxito.');
     }

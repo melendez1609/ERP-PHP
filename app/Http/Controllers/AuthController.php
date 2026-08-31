@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\SystemLog;
 
 class AuthController extends Controller
 {
@@ -32,6 +33,10 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if (!$user->is_active) {
+                SystemLog::log('INTENTO_LOGIN_INACTIVO', [
+                    'email' => $user->email,
+                ]);
+
                 Auth::logout();
 
                 $request->session()->invalidate();
@@ -45,8 +50,17 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $request->session()->forget('is_locked');
 
+            SystemLog::log('INICIO_SESION', [
+                'email' => $user->email,
+                'role'  => $user->role_id ?? 'N/A',
+            ]);
+
             return redirect()->intended('/dashboard');
         }
+
+        SystemLog::log('LOGIN_FALLIDO', [
+            'email' => $request->email,
+        ]);
 
         return back()->withErrors([
             'email' => 'Las credenciales ingresadas no coinciden con nuestros registros.',
@@ -55,6 +69,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        if (Auth::check()) {
+            SystemLog::log('CIERRE_SESION', [
+                'email' => Auth::user()->email,
+            ]);
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
@@ -65,6 +85,12 @@ class AuthController extends Controller
 
     public function lock()
     {
+        if (Auth::check()) {
+            SystemLog::log('BLOQUEO_PANTALLA', [
+                'email' => Auth::user()->email,
+            ]);
+        }
+
         session(['is_locked' => true]);
         return redirect()->route('lockscreen.show');
     }
@@ -86,12 +112,20 @@ class AuthController extends Controller
         ]);
 
         if (!Hash::check($request->password, Auth::user()->password)) {
+            SystemLog::log('DESBLOQUEO_FALLIDO', [
+                'email' => Auth::user()->email,
+            ]);
+
             return back()->withErrors([
                 'password' => 'La contraseña ingresada es incorrecta.',
             ]);
         }
 
         session()->forget('is_locked');
+
+        SystemLog::log('DESBLOQUEO_PANTALLA', [
+            'email' => Auth::user()->email,
+        ]);
 
         return redirect()->route('dashboard');
     }

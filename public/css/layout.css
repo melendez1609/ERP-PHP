@@ -28,7 +28,8 @@ body {
 .erp-inventory-container, .erp-users-container, 
 .erp-suppliers-container, .erp-cash-register-container, 
 .erp-quotations-container, .erp-purchase-orders-container,
-.settings-container, .erp-contacts-container {
+.settings-container, .erp-contacts-container,
+.erp-reports-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -280,7 +281,8 @@ body {
 .quotations-section-top,
 .purchase-orders-section-top,
 .settings-section-top,
-.contacts-section-top {
+.contacts-section-top,
+.reports-section-top {
   display: flex;
   gap: 1vh;
   padding: 3.5vh 0;
@@ -293,7 +295,8 @@ body {
 .quotations-section-top-tittle,
 .purchase-orders-section-top-tittle,
 .settings-section-top-tittle,
-.contacts-section-top-tittle {
+.contacts-section-top-tittle,
+.reports-section-top-tittle {
   font-size: 3vh;
   font-weight: bold;
   padding-right: 1.5vh;
@@ -310,7 +313,8 @@ body {
 .quotations-section-top-tittle h3,
 .purchase-orders-section-top-tittle h3,
 .settings-section-top-tittle h3,
-.contacts-section-top-tittle h3 {
+.contacts-section-top-tittle h3,
+.reports-section-top-tittle h3 {
   margin: 0;
   font-size: inherit;
 }
@@ -321,7 +325,8 @@ body {
 .quotations-create-button,
 .purchase-orders-create-button,
 .settings-create-button,
-.contacts-create-button {
+.contacts-create-button,
+.reports-create-button {
   font-size: 2vh;
   font-weight: bold;
   padding: 1vh 2vh;
@@ -343,7 +348,8 @@ body {
 .quotations-section-table,
 .purchase-orders-section-table,
 .settings-section-table,
-.contacts-section-table {
+.contacts-section-table,
+.reports-section-table {
   width: 85%;
   overflow-y: auto;
 }
@@ -354,7 +360,8 @@ body {
 .quotations-table,
 .purchase-orders-table,
 .settings-table,
-.contacts-table {
+.contacts-table,
+.reports-table {
   border-collapse: collapse;
   width: 100%;
 }
@@ -365,7 +372,8 @@ body {
 .quotations-table th, .quotations-table td,
 .purchase-orders-table th, .purchase-orders-table td,
 .settings-table th, .settings-table td,
-.contacts-table th, .contacts-table td {
+.contacts-table th, .contacts-table td,
+.reports-table th, .reports-table td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 5px;
@@ -377,7 +385,8 @@ body {
 .quotations-table tr:nth-child(even),
 .purchase-orders-table tr:nth-child(even),
 .settings-table tr:nth-child(even),
-.contacts-table tr:nth-child(even) {
+.contacts-table tr:nth-child(even),
+.reports-table tr:nth-child(even) {
   background-color: #dddddd;
 }
 
@@ -387,7 +396,8 @@ body {
 .quotations-table-button,
 .purchase-orders-table-button,
 .settings-table-button,
-.contacts-table-button {
+.contacts-table-button,
+.reports-table-button {
   font-size: 1.80vh;
   padding: 1vh;
   border: none;
@@ -401,7 +411,8 @@ body {
 .quotations-table-button.download,
 .purchase-orders-table-button.download,
 .settings-table-button.edit,
-.contacts-table-button.edit {
+.contacts-table-button.edit,
+.reports-table-button.edit {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #132873;
@@ -413,7 +424,8 @@ body {
 .quotations-table-button.delete,
 .purchase-orders-table-button.delete,
 .settings-table-button.delete,
-.contacts-table-button.delete {
+.contacts-table-button.delete,
+.reports-table-button.delete {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #d84130;
@@ -425,7 +437,8 @@ body {
 .quotations-table-button.disable,
 .purchase-orders-table-button.disable,
 .settings-table-button.disable,
-.contacts-table-button.disable {
+.contacts-table-button.disable,
+.reports-table-button.disable {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #ecb912;
@@ -438,11 +451,11 @@ body {
 .quotations-table-button.disable.enable,
 .purchase-orders-table-button.disable.enable,
 .settings-table-button.disable.enable,
-.contacts-table-button.disable.enable {
+.contacts-table-button.disable.enable,
+.reports-table-button.disable.enable {
   background-color: #28a745;
 }
 
-/* Botón de Lotes integrado limpiamente con tu patrón */
 .inventory-table-button.view-batches {
   font-weight: bold;
   color: #FFFFFF;
@@ -472,61 +485,61 @@ body {
 }
 
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 44px;
-    height: 22px;
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
 }
 
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.3s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.3s;
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
 }
 
 input:checked + .slider {
-    background-color: #28a745;
+  background-color: #28a745;
 }
 
 input:checked + .slider:before {
-    transform: translateX(22px);
+  transform: translateX(22px);
 }
 
 .slider.round {
-    border-radius: 22px;
+  border-radius: 22px;
 }
 
 .slider.round:before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .no-wrap {
   white-space: nowrap;
 }
 
-.product-image, .profile-image{
+.product-image, .profile-image {
   width: 4vh;
   border-radius: 8px;
 }
@@ -1154,7 +1167,8 @@ input:checked + .slider:before {
   .quotations-section-top, .quotations-section-table,
   .purchase-orders-section-top, .purchase-orders-section-table,
   .settings-section-top, .settings-section-table,
-  .contacts-section-top, .contacts-section-table {
+  .contacts-section-top, .contacts-section-table,
+  .reports-section-top, .reports-section-table {
     width: 95%;
   }
 

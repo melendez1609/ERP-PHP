@@ -30,7 +30,7 @@
                 <img class="icon" src="{{ asset('icons/in-inventory.png') }}" alt="in-inventory">
                 <h4 class="icon-name">Inventario</h4>
             </a>
-            <a class="option">
+            <a href="{{ route('reports.index') }}" class="option">
                 <img class="icon" src="{{ asset('icons/sales-report.png') }}" alt="sales-report">
                 <h4 class="icon-name">Reporte de Ventas</h4>
             </a>
@@ -55,7 +55,7 @@
                     <img class="icon" src="{{ asset('icons/purchase-order.png') }}" alt="purchase-order">
                     <h4 class="icon-name">Orden de Compra</h4>
                 </a>
-                <a class="option">
+                <a href="{{ route('reports.index') }}" class="option">
                     <img class="icon" src="{{ asset('icons/report-file.png') }}" alt="report-file">
                     <h4 class="icon-name">Reporte del Sistema</h4>
                 </a>
