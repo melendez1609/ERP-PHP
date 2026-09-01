@@ -3,6 +3,7 @@ import { initHoverSounds } from './functionalities/sound.js';
 import { initDateTime } from './functionalities/datetime.js';
 import { initAlertModal } from './functionalities/alert.js';
 import { initSelectFinder } from './functionalities/finder.js';
+import { initCreateInventory } from './actions/inventory/CreateInventory.js'
 import { initAddInventory } from './actions/inventory/AddInventory.js';
 import { initEditInventory } from './actions/inventory/EditInventory.js';
 import { initBatchesInventory } from './actions/inventory/BatchesInventory.js';
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAddInventory();
     initEditInventory();
     initBatchesInventory();
+    initCreateInventory();
     initEditSupplier();
     initEditUser();
     initStatusUser();
