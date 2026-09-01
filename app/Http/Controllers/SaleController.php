@@ -5,24 +5,43 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\CashRegisterSession;
+use App\Models\SystemLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use App\Models\SystemLog;
 
 class SaleController extends Controller
 {
     public function index()
     {
+        $activeSession = CashRegisterSession::with('movements')->where('status', 'open')->latest()->first();
+
+        // Si intentan entrar por URL sin una caja abierta, los redirigimos al Dashboard con un mensaje
+        if (!$activeSession) {
+            return redirect()->route('dashboard')->with('error', 'Debe aperturar una caja antes de acceder al módulo de ventas.');
+        }
+
+        $users = User::all();
+
         $products = Product::where('product_status_id', 1)
             ->where('stock', '>', 0)
             ->get(['id', 'code', 'name', 'price', 'stock', 'image']);
 
-        return view('cash-register.index', compact('products'));
+        return view('cash-register.index', compact('products', 'activeSession', 'users'));
     }
 
     public function store(Request $request)
     {
+        $activeSession = CashRegisterSession::where('status', 'open')->latest()->first();
+        if (!$activeSession) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay una caja abierta. Debe aperturar caja para procesar ventas.'
+            ], 422);
+        }
+
         $validated = $request->validate([
             'items'              => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
@@ -34,7 +53,7 @@ class SaleController extends Controller
         $subtotalGeneral = 0;
 
         try {
-            DB::transaction(function () use ($request, &$saleId, &$subtotalGeneral) {
+            DB::transaction(function () use ($request, &$saleId, &$subtotalGeneral, $activeSession) {
                 $subtotalGeneral = 0;
                 $itemsData = [];
 
@@ -71,9 +90,7 @@ class SaleController extends Controller
                         ->get();
 
                     foreach ($batches as $batch) {
-                        if ($pendingToDeduct <= 0) {
-                            break;
-                        }
+                        if ($pendingToDeduct <= 0) break;
 
                         if ($batch->quantity_remaining <= $pendingToDeduct) {
                             $pendingToDeduct -= $batch->quantity_remaining;
@@ -85,10 +102,12 @@ class SaleController extends Controller
                     }
                 }
 
+                // Guardar la venta vinculada a la sesión de caja activa
                 $sale = Sale::create([
-                    'user_id'  => auth()->id(),
-                    'subtotal' => $subtotalGeneral,
-                    'total'    => $subtotalGeneral,
+                    'user_id'                  => auth()->id(),
+                    'cash_register_session_id' => $activeSession->id,
+                    'subtotal'                 => $subtotalGeneral,
+                    'total'                    => $subtotalGeneral,
                 ]);
 
                 $saleId = $sale->id;
@@ -112,11 +131,19 @@ class SaleController extends Controller
                 'items_count' => count($request->items),
             ]);
 
+            // Recalcular saldo total de la sesión actual
+            $inMovements = $activeSession->movements()->where('type', 'in')->sum('amount');
+            $outMovements = $activeSession->movements()->where('type', 'out')->sum('amount');
+            $salesTotal = Sale::where('cash_register_session_id', $activeSession->id)->sum('total');
+
+            $newBalance = $activeSession->opening_amount + $inMovements - $outMovements + $salesTotal;
+
             return response()->json([
-                'success'    => true,
-                'message'    => '¡Venta procesada con éxito!',
-                'sale_id'    => $saleId,
-                'ticket_url' => route('sales.ticket', $saleId)
+                'success'     => true,
+                'message'     => '¡Venta procesada con éxito!',
+                'sale_id'     => $saleId,
+                'ticket_url'  => route('sales.ticket', $saleId),
+                'new_balance' => number_format($newBalance, 2)
             ], 201);
 
         } catch (\Exception $e) {

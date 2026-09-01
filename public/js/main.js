@@ -24,6 +24,8 @@ import { initLockscreen } from './actions/auth/lockscreen.js';
 import { initPOS, processSale, handleNumericInput, clearCart, removeLastItem, handleReprint } from './actions/cash-register/pos.js';
 import { initPOSKeyboard } from './actions/cash-register/keyboard.js';
 import { initSalesChart } from './actions/sales-report/ChartSales.js';
+import { initCashRegisterSession } from './actions/cash-register/CashRegisterSession.js';
+import { initPosOptions } from './actions/cash-register/PosOptions.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -50,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initLockscreen();
     initPOS();
     initSalesChart();
+    initCashRegisterSession();
+    initPosOptions();
     initPOSKeyboard(processSale, handleNumericInput, clearCart, removeLastItem, handleReprint);
 
     initSelectFinder('product-search', 'select-product');

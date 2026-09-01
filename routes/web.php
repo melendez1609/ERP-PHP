@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\Supplier;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\CashRegisterSession;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
@@ -18,7 +20,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesChartController;
-
+use App\Http\Controllers\CashRegisterSessionController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/', [AuthController::class, 'login']);
@@ -34,13 +36,18 @@ Route::middleware(['auth', 'active.user'])->group(function () {
     Route::get('/users/image/{filename}', [UserController::class, 'showImage'])->name('user.image');
     Route::get('/reports/sales', function () {return view('sales-report.index');})->name('sales.reports');
     Route::get('/reports/sales-data', [SalesChartController::class, 'salesData'])->name('sales.reports.data');
+    Route::post('/cash-register/open', [CashRegisterSessionController::class, 'open'])->name('cash-register.open');
+    Route::post('/cash-register/close', [CashRegisterSessionController::class, 'close'])->name('cash-register.close');
+    Route::post('/cash-register/movement', [CashRegisterSessionController::class, 'movement'])->name('cash-register.movement');
 
-Route::middleware(['session.not_locked'])->group(function () {
+    Route::middleware(['session.not_locked'])->group(function () {
 
         Route::get('/dashboard', function () { 
             $products = Product::with('batches')->get(); 
             $suppliers = Supplier::all(); 
-            return view('dashboard', compact('products', 'suppliers')); 
+            $activeSession = CashRegisterSession::where('status', 'open')->latest()->first();
+            $users = User::all();
+            return view('dashboard', compact('products', 'suppliers', 'activeSession', 'users')); 
         })->name('dashboard');
 
         Route::get('/cash-register', [SaleController::class, 'index'])->name('cash-register.index');

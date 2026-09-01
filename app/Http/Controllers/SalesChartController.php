@@ -12,14 +12,12 @@ class SalesChartController extends Controller
     public function salesData()
     {
         try {
-            // 1. Datos por Año
             $byYear = Sale::select(
                 DB::raw('YEAR(created_at) as label'),
                 DB::raw('SUM(total) as total'),
                 DB::raw('COUNT(id) as count')
             )->groupBy(DB::raw('YEAR(created_at)'))->get();
 
-            // 2. Datos por Mes (Año Actual)
             $byMonth = Sale::select(
                 DB::raw('MONTH(created_at) as month_num'),
                 DB::raw('SUM(total) as total'),
@@ -37,7 +35,6 @@ class SalesChartController extends Controller
                 $monthCounts[] = (int) $row->count;
             }
 
-            // 3. Datos por Día (Últimos 7 días)
             $byDay = Sale::select(
                 DB::raw('DATE_FORMAT(created_at, "%d/%m") as label'),
                 DB::raw('SUM(total) as total'),
@@ -47,7 +44,6 @@ class SalesChartController extends Controller
             ->groupBy(DB::raw('DATE_FORMAT(created_at, "%d/%m")'))
             ->get();
 
-            // 4. Datos por Día de la Semana (Radar)
             $radarValues = [0, 0, 0, 0, 0, 0, 0];
             $byDayOfWeek = Sale::select(
                 DB::raw('DAYOFWEEK(created_at) as day_idx'),
@@ -61,7 +57,6 @@ class SalesChartController extends Controller
                 }
             }
 
-            // 5. Proporción/Estado (Dona)
             $donutLabels = ['Ventas Realizadas'];
             $donutData = [(float) Sale::sum('total')];
 

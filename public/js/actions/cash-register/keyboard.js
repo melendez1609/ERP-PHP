@@ -1,3 +1,5 @@
+import { openPaymentModal } from './pos.js';
+
 export function initPOSKeyboard(onEnterPay, onNumInput, onClear, onBackspace, onPrintLast) {
     const container = document.querySelector('.erp-cash-register-container');
     if (!container) return;
@@ -37,7 +39,7 @@ export function initPOSKeyboard(onEnterPay, onNumInput, onClear, onBackspace, on
 
     document.getElementById('btn-pay')?.addEventListener('click', (e) => {
         animateButton(e.currentTarget);
-        onEnterPay();
+        openPaymentModal();
     });
 
     document.getElementById('btn-print-last')?.addEventListener('click', (e) => {
@@ -46,6 +48,15 @@ export function initPOSKeyboard(onEnterPay, onNumInput, onClear, onBackspace, on
     });
 
     window.addEventListener('keydown', (e) => {
+        const isModalOpen = Array.from(document.querySelectorAll('.modal')).some(modal => {
+            const style = window.getComputedStyle(modal);
+            return style.display === 'flex' || modal.classList.contains('active') || modal.classList.contains('show');
+        });
+
+        if (isModalOpen || document.activeElement.closest('.modal')) {
+            return;
+        }
+
         const searchInput = document.getElementById('pos-search-input');
         const isSearchFocused = document.activeElement === searchInput;
 
@@ -53,7 +64,7 @@ export function initPOSKeyboard(onEnterPay, onNumInput, onClear, onBackspace, on
             if (isSearchFocused && searchInput.value.trim() !== '') return;
             e.preventDefault();
             animateButton(findButton('Enter'));
-            onEnterPay();
+            openPaymentModal();
             return;
         }
 

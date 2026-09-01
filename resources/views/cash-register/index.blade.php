@@ -11,7 +11,17 @@
 <body>
     @include('partials.header')
 
-    <main class="erp-cash-register-container">
+    @php
+        $currentBalance = 0;
+        if (isset($activeSession) && $activeSession) {
+            $inMovements = $activeSession->movements()->where('type', 'in')->sum('amount');
+            $outMovements = $activeSession->movements()->where('type', 'out')->sum('amount');
+            $salesTotal = \App\Models\Sale::where('cash_register_session_id', $activeSession->id)->sum('total');
+            $currentBalance = $activeSession->opening_amount + $inMovements - $outMovements + $salesTotal;
+        }
+    @endphp
+
+    <main class="erp-cash-register-container" data-has-session="{{ isset($activeSession) && $activeSession ? 'true' : 'false' }}">
         <section class="pos-left-panel">
             <div class="pos-cart-section">
                 <div class="pos-ticket-header">
@@ -41,12 +51,23 @@
                     <button class="key-btn num-key" data-key="1">1</button>
                     <button class="key-btn num-key" data-key="2">2</button>
                     <button class="key-btn num-key" data-key="3">3</button>
-                    <button class="key-btn print-key" id="btn-print-last">🖨️</button>
+                    <button class="key-btn print-key" id="btn-print-last">IMP</button>
                     
                     <button class="key-btn num-key zero-btn" data-key="0">0</button>
                     <button class="key-btn num-key" data-key=".">.</button>
                     <button class="key-btn pay-key" id="btn-pay">Pagar ↵</button>
                 </div>
+            </div>
+
+            <div class="pos-balance-card" style="margin-top: 10px; padding: 8px 12px; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #334155;">Efectivo Actual en Caja:</span>
+                <span id="pos-current-balance" style="font-size: 1rem; font-weight: bold; color: #15803d;">${{ number_format($currentBalance, 2) }}</span>
+            </div>
+
+            <div style="margin-top: 8px;">
+                <button type="button" class="btn btn-save" data-modal-target="modal-pos-options" style="width: 100%; padding: 10px; background-color: #132873; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                    Opciones de Caja (Cierre / Movimientos)
+                </button>
             </div>
         </section>
 
@@ -80,11 +101,14 @@
         </section>
 
         @include('cash-register.partials.preview-invoice')
+        @include('cash-register.partials.pos-options')
+        @include('cash-register.partials.payment')
     </main>
 
     <iframe id="ticket-print-frame" style="display: none;"></iframe>
 
     @include('partials.footer')
+    @include('cash-register.partials.alert')
     <script type="module" src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>

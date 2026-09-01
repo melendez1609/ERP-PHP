@@ -22,10 +22,19 @@
                 <img class="icon" src="{{ asset('icons/invoice.png') }}" alt="invoice">
                 <h4 class="icon-name">Facturas</h4>
             </a>
-            <a class="option" href="{{ route('cash-register.index') }}">
-                <img class="icon" src="{{ asset('icons/cash-register.png') }}" alt="cash-register">
-                <h4 class="icon-name">Caja Registradora</h4>
-            </a>
+            
+            @if(isset($activeSession) && $activeSession)
+                <a class="option" href="{{ route('cash-register.index') }}">
+                    <img class="icon" src="{{ asset('icons/cash-register.png') }}" alt="cash-register">
+                    <h4 class="icon-name">Caja Registradora</h4>
+                </a>
+            @else
+                <a href="javascript:void(0)" class="option" data-modal-target="modal-cash-opening">
+                    <img class="icon" src="{{ asset('icons/cash-register.png') }}" alt="cash-register">
+                    <h4 class="icon-name">Caja Registradora</h4>
+                </a>
+            @endif
+
             <a class="option" href="{{ route('inventory.index') }}">
                 <img class="icon" src="{{ asset('icons/in-inventory.png') }}" alt="in-inventory">
                 <h4 class="icon-name">Inventario</h4>
@@ -93,6 +102,7 @@
     @include('schedule.partials.modal-content')
     @include('users.partials.modal-password')
     @include('settings.partials.modal-volume')
+    @include('cash-register.partials.authorization')
 
     <script type="module" src="{{ asset('js/main.js') }}"></script> 
 </body>
@@ -101,4 +111,3 @@
 <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
 
 </html>
-
