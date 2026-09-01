@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Ticket #{{ str_pad($sale->id, 8, '0', STR_PAD_LEFT) }}</title>
     <style>
+        @page {
+            size: 80mm auto;
+            margin: 0;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -13,10 +17,10 @@
             color: #000;
         }
         body {
-            width: 72mm;
+            width: 76mm;
             margin: 0 auto;
             background: #fff;
-            padding: 5px;
+            padding: 4mm 2mm;
         }
         .center { text-align: center; }
         .right { text-align: right; }

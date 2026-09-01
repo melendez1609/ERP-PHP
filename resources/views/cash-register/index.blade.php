@@ -78,13 +78,21 @@
 
             <div class="pos-catalog-section" id="pos-catalog-section">
                 @forelse($products as $product)
+                @php
+                    $isAgotado = $product->stock <= 0;
+                @endphp
                 <div class="pos-product-card" 
-                     data-id="{{ $product->id }}" 
-                     data-code="{{ $product->code }}"
-                     data-name="{{ $product->name }}" 
-                     data-price="{{ $product->price }}"
-                     data-stock="{{ $product->stock }}">
+                    data-id="{{ $product->id }}" 
+                    data-code="{{ $product->code }}"
+                    data-name="{{ $product->name }}" 
+                    data-price="{{ $product->price }}"
+                    data-stock="{{ $product->stock }}"
+                    style="{{ $isAgotado ? 'opacity: 0.4; pointer-events: none; position: relative;' : 'position: relative;' }}">
                     
+                    @if($isAgotado)
+                        <span class="out-of-stock-badge" style="position:absolute; background:#dc2626; color:white; font-size:10px; padding:2px 6px; top:5px; right:5px; border-radius:4px; font-weight:bold; z-index:10;">AGOTADO</span>
+                    @endif
+
                     @if($product->image && Storage::disk('public')->exists($product->image))
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                     @else

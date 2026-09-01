@@ -50,7 +50,6 @@ export function initPOS() {
         }
     });
 
-    // Eventos del Modal de Pago
     receivedInput?.addEventListener('input', calculateChange);
 
     paymentForm?.addEventListener('submit', (e) => {
@@ -157,6 +156,30 @@ export async function processSale() {
 
             lastTicketUrl = data.ticket_url;
             printTicket(data.ticket_url);
+            
+            cart.forEach(item => {
+                const card = document.querySelector(`.pos-product-card[data-id="${item.product_id}"]`);
+                if (card) {
+                    let currentStock = parseInt(card.dataset.stock) || 0;
+                    let newStock = Math.max(0, currentStock - item.quantity);
+                    card.dataset.stock = newStock;
+
+                    if (newStock <= 0) {
+                        card.style.opacity = '0.4';
+                        card.style.pointerEvents = 'none';
+                        let badge = card.querySelector('.out-of-stock-badge');
+                        if (!badge) {
+                            badge = document.createElement('span');
+                            badge.className = 'out-of-stock-badge';
+                            badge.style.cssText = 'position:absolute; background:#dc2626; color:white; font-size:10px; padding:2px 6px; top:5px; right:5px; border-radius:4px; font-weight:bold; z-index:10;';
+                            badge.textContent = 'AGOTADO';
+                            card.style.position = 'relative';
+                            card.appendChild(badge);
+                        }
+                    }
+                }
+            });
+
             cart = [];
             renderCart();
 
@@ -174,12 +197,18 @@ export async function processSale() {
 }
 
 function addToCart(product) {
+    const card = document.querySelector(`.pos-product-card[data-id="${product.id}"]`);
+    const totalStock = card ? parseInt(card.dataset.stock) : product.stock;
+
     const existing = cart.find(item => item.product_id === product.id);
+    const quantityInCart = existing ? existing.quantity : 0;
+
+    if (quantityInCart + 1 > totalStock) {
+        alert(`Stock insuficiente. Stock disponible: ${totalStock - quantityInCart}`);
+        return;
+    }
+
     if (existing) {
-        if (existing.quantity + 1 > product.stock) {
-            alert(`Stock máximo alcanzado (${product.stock})`);
-            return;
-        }
         existing.quantity++;
         existing.subtotal = existing.quantity * existing.price;
     } else {
@@ -189,10 +218,40 @@ function addToCart(product) {
             price: product.price,
             quantity: 1,
             subtotal: product.price,
-            stock: product.stock
+            stock: totalStock
         });
     }
     renderCart();
+    updateCardVisualState(product.id, totalStock);
+}
+
+function updateCardVisualState(productId, totalStock) {
+    const card = document.querySelector(`.pos-product-card[data-id="${productId}"]`);
+    if (!card) return;
+
+    const cartItem = cart.find(item => item.product_id === productId);
+    const quantityInCart = cartItem ? cartItem.quantity : 0;
+    const remaining = totalStock - quantityInCart;
+
+    if (remaining <= 0) {
+        card.style.opacity = '0.4';
+        card.style.pointerEvents = 'none';
+        
+        let badge = card.querySelector('.out-of-stock-badge');
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'out-of-stock-badge';
+            badge.style.cssText = 'position:absolute; background:#dc2626; color:white; font-size:10px; padding:2px 6px; top:5px; right:5px; border-radius:4px; font-weight:bold; z-index:10;';
+            badge.textContent = 'AGOTADO';
+            card.style.position = 'relative';
+            card.appendChild(badge);
+        }
+    } else {
+        card.style.opacity = '1';
+        card.style.pointerEvents = 'auto';
+        const badge = card.querySelector('.out-of-stock-badge');
+        if (badge) badge.remove();
+    }
 }
 
 function renderCart() {
@@ -214,8 +273,14 @@ function renderCart() {
             <span>$${item.subtotal.toFixed(2)}</span>
         `;
         row.addEventListener('click', () => {
+            const productId = item.product_id;
             cart.splice(index, 1);
             renderCart();
+            
+            const card = document.querySelector(`.pos-product-card[data-id="${productId}"]`);
+            if (card) {
+                updateCardVisualState(productId, parseInt(card.dataset.stock));
+            }
         });
         ticketContainer.appendChild(row);
     });
@@ -238,28 +303,46 @@ export function handleNumericInput(key) {
     if (cart.length === 0 || key === '.') return;
 
     const lastItem = cart[cart.length - 1];
+    const card = document.querySelector(`.pos-product-card[data-id="${lastItem.product_id}"]`);
+    const totalStock = card ? parseInt(card.dataset.stock) : lastItem.stock;
+
     let currentQtyStr = lastItem.quantity.toString();
     let newQty = parseInt(currentQtyStr + key);
 
-    if (newQty > lastItem.stock) {
-        alert(`Stock máximo disponible: ${lastItem.stock}`);
+    if (newQty > totalStock) {
+        alert(`Stock máximo disponible: ${totalStock}`);
         return;
     }
 
     lastItem.quantity = newQty;
     lastItem.subtotal = lastItem.quantity * lastItem.price;
     renderCart();
+    updateCardVisualState(lastItem.product_id, totalStock);
 }
 
 export function clearCart() {
     cart = [];
     renderCart();
+    document.querySelectorAll('.pos-product-card').forEach(card => {
+        // Solo restauramos las tarjetas que aún tienen stock mayor a 0
+        const stock = parseInt(card.dataset.stock) || 0;
+        if (stock > 0) {
+            card.style.opacity = '1';
+            card.style.pointerEvents = 'auto';
+            const badge = card.querySelector('.out-of-stock-badge');
+            if (badge) badge.remove();
+        }
+    });
 }
 
 export function removeLastItem() {
     if (cart.length > 0) {
-        cart.pop();
+        const lastItem = cart.pop();
         renderCart();
+        const card = document.querySelector(`.pos-product-card[data-id="${lastItem.product_id}"]`);
+        if (card) {
+            updateCardVisualState(lastItem.product_id, parseInt(card.dataset.stock));
+        }
     }
 }
 
@@ -301,4 +384,46 @@ export async function handleReprint() {
     } catch (err) {
         alert('Ocurrió un error al generar la vista previa del ticket.');
     }
+}
+
+export function initPosOptions() {
+    const modal = document.getElementById('modal-alert');
+    if (!modal) return;
+
+    const autoOpen = modal.dataset.autoOpen === 'true';
+    if (!autoOpen) return;
+
+    const titleEl = modal.querySelector('.modal-title');
+    const messageEl = modal.querySelector('.modal-message');
+    const confirmBtn = modal.querySelector('.btn-alert-confirm');
+    const cancelBtn = modal.querySelector('.modal-footer .btn-cancel');
+    const isDiscrepancy = modal.dataset.isDiscrepancy === 'true';
+
+    if (titleEl && modal.dataset.title) {
+        titleEl.textContent = modal.dataset.title;
+    }
+
+    if (messageEl && modal.dataset.message) {
+        messageEl.textContent = modal.dataset.message;
+    }
+
+    if (isDiscrepancy) {
+        if (confirmBtn) {
+            confirmBtn.style.display = 'inline-block';
+            confirmBtn.textContent = 'Confirmar Cierre';
+        }
+        if (cancelBtn) {
+            cancelBtn.textContent = 'Cancelar';
+        }
+    } else {
+        if (confirmBtn) {
+            confirmBtn.style.display = 'none';
+        }
+        if (cancelBtn) {
+            cancelBtn.textContent = 'Entendido';
+        }
+    }
+
+    modal.style.display = 'flex';
+    modal.classList.add('active', 'show');
 }

@@ -26,7 +26,7 @@ class SaleController extends Controller
         $users = User::all();
 
         $products = Product::where('product_status_id', 1)
-            ->where('stock', '>', 0)
+            ->where('stock', '>=', 0) 
             ->get(['id', 'code', 'name', 'price', 'stock', 'image']);
 
         return view('cash-register.index', compact('products', 'activeSession', 'users'));
@@ -122,7 +122,7 @@ class SaleController extends Controller
                 $invoiceHtml = view('cash-register.partials.sales-invoice', compact('sale'))->render();
                 $fileName = 'invoice-' . str_pad($sale->id, 8, '0', STR_PAD_LEFT) . '.html';
                 
-                Storage::disk('local')->put('private/invoice/' . $fileName, $invoiceHtml);
+                Storage::disk('local')->put('sales-invoice/' . $fileName, $invoiceHtml);
             });
 
             SystemLog::log('VENTA_PROCESADA', [
@@ -208,5 +208,30 @@ class SaleController extends Controller
         ];
 
         return view('cash-register.partials.sales-invoice', compact('sale'));
+    }
+
+    public function searchTickets(Request $request)
+    {
+        $query = Sale::with(['user', 'items']);
+
+        if ($request->filled('ticket_number')) {
+            $ticketId = ltrim($request->ticket_number, '0'); // Remueve ceros a la izquierda para buscar por ID
+            $query->where('id', $ticketId);
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        if ($request->filled('time')) {
+            $query->whereTime('created_at', '>=', $request->time);
+        }
+
+        $sales = $query->latest()->take(10)->get();
+
+        return response()->json([
+            'success' => true,
+            'sales' => $sales
+        ]);
     }
 }

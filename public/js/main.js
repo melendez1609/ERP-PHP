@@ -27,6 +27,7 @@ import { initPOSKeyboard } from './actions/cash-register/keyboard.js';
 import { initSalesChart } from './actions/sales-report/ChartSales.js';
 import { initCashRegisterSession } from './actions/cash-register/CashRegisterSession.js';
 import { initPosOptions } from './actions/cash-register/PosOptions.js';
+import { initInvoiceSearch } from './actions/invoice/InvoiceSearch.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHoverSounds();
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPOS();
     initSalesChart();
     initCashRegisterSession();
+    initInvoiceSearch();
     initPosOptions();
     initPOSKeyboard(processSale, handleNumericInput, clearCart, removeLastItem, handleReprint);
 

@@ -54,6 +54,7 @@ Route::middleware(['auth', 'active.user'])->group(function () {
         Route::post('/cash-register/sale', [SaleController::class, 'store'])->name('sales.store');
         Route::get('/cash-register/ticket/{id}', [SaleController::class, 'ticket'])->name('sales.ticket');
         Route::post('/cash-register/preview-ticket', [SaleController::class, 'previewTicket'])->name('sales.preview');
+        Route::get('/sales/search', [SaleController::class, 'searchTickets']);
 
         Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
         Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
